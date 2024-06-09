@@ -1,0 +1,78 @@
+[tool.poetry]
+package-mode = false
+name = "telegram-nextcloud-bot"
+version = "0.1.0"
+description = ""
+authors = ["blvd <blvd@bagoont.ru>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiogram = "^3.2.0"
+redis = "^5.0.1"
+sqlalchemy = "^2.0.23"
+pydantic-settings = "^2.1.0"
+alembic = "^1.13.0"
+asyncpg = "^0.29.0"
+pytest = "^7.4.4"
+pytest-asyncio = "^0.23.3"
+fluentogram = "^1.1.6"
+rich = "^13.7.1"
+uvloop = "^0.19.0"
+nc-py-api = {git = "https://github.com/cloud-py-api/nc_py_api.git"}
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.7.1"
+ruff = "^0.1.7"
+pre-commit = "^3.7.0"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+select = ["ALL"]
+ignore = ["D105", "D107", "D203", "D213", "D401", "RUF100", "ANN101", "ANN102", "ANN401", "TD003"]
+extend-exclude = ["logs", "migrations"]
+
+[tool.ruff.isort]
+no-lines-before = ["future", "standard-library"]
+known-local-folder = ["bot"]
+
+[tool.ruff.extend-per-file-ignores]
+"tests/*.py" = ["ANN401", "S101", "S311"]
+
+[tool.ruff.lint.pylint]
+max-args = 10
+
+[tool.mypy]
+python_version = "3.10"
+files = "bot/*.py"
+plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
+ignore_missing_imports = false
+warn_return_any = true
+warn_unused_configs = true
+show_error_codes = true
+show_error_context = true
+pretty = true
+disallow_subclassing_any = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+follow_imports_for_stubs = true
+namespace_packages = true
+show_absolute_path = true
+enable_incomplete_feature = "Unpack"
+
+[[tool.mypy.overrides]]
+module = ["asyncpg.*", "nc_py_api.*"]
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
