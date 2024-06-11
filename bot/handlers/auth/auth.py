@@ -6,7 +6,7 @@ from nc_py_api import AsyncNextcloud, NextcloudException
 from bot.core import settings
 from bot.db import UnitOfWork
 from bot.db.models import User
-from bot.keyboards import reply_board
+from bot.keyboards import menu_board
 from bot.language import LocalizedTranslator
 
 AUTH_TIMEOUT = 60 * 20
@@ -17,13 +17,13 @@ async def auth(
     message: Message,
     translator: LocalizedTranslator,
     nc: AsyncNextcloud,
-    db: UnitOfWork,
+    uow: UnitOfWork,
 ) -> None:
     if message.from_user is None:
-        text = translator.get("msg_user_not_found")
+        text = translator.get("msg_is_inaccessible")
         await message.reply(text=text)
         return
-    if await db.users.get_by_id(message.from_user.id):
+    if await uow.users.get_by_id(message.from_user.id):
         text = translator.get("already-authorized")
         await message.reply(text=text)
         return
@@ -50,17 +50,12 @@ async def auth(
         first_name=message.from_user.first_name,
         last_name=message.from_user.last_name,
     )
-    await db.users.add(user)
-    await db.commit()
+    await uow.users.add(user)
+    await uow.commit()
 
     text = translator.get("auth-success")
     await init_message.edit_text(text)
 
     text = translator.get("auth-welcome")
-    reply_markup = reply_board(
-        translator.get("files-menu-button"),
-        is_persistent=True,
-        resize_keyboard=True,
-        selective=True,
-    )
+    reply_markup = menu_board(translator, is_persistent=True, resize_keyboard=True, selective=True)
     await message.reply(text=text, reply_markup=reply_markup)

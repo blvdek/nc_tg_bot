@@ -1,11 +1,11 @@
 import io
 import pathlib
 from abc import ABC
-from typing import TypedDict, Any
+from typing import Any
 
 from aiogram.types import BufferedInputFile
 from nc_py_api import AsyncNextcloud, FsNode
-from typing_extensions import Self, Unpack
+from typing_extensions import Self
 
 from bot.core import settings
 

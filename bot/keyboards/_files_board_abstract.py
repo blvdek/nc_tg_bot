@@ -18,6 +18,7 @@ class _FilesBoardAbstract(ABC):
     def __init__(
         self,
         translator: LocalizedTranslator,
+        author_id: int,
         file: FsNode,
         files: list[FsNode],
         page: int = 0,
@@ -25,15 +26,16 @@ class _FilesBoardAbstract(ABC):
     ) -> None:
         self.builder = InlineKeyboardBuilder()
         self.translator = translator
+        self.author_id = author_id
         self.file = file
         self.files = sorted(files, key=lambda x: x.is_dir, reverse=True)
         self.page = page
         self.page_size = page_size
 
-    def __call__(self) -> InlineKeyboardMarkup:
+    def get_kb(self) -> InlineKeyboardMarkup:
         self.builder.attach(self._build_files_buttons())
         self.builder.attach(self._build_files_pag_buttons())
-        self.builder.attach(self._build_file_actions_buttons())
+        self.builder.attach(self.build_file_actions_buttons())
         return self.builder.as_markup()
 
     def _build_files_buttons(self) -> InlineKeyboardBuilder:
@@ -53,6 +55,7 @@ class _FilesBoardAbstract(ABC):
                     action=self.actions.SELECT,
                     page=self.page,
                     file_id=file.file_id,
+                    author_id=self.author_id,
                 ).pack(),
             )
 
@@ -77,6 +80,7 @@ class _FilesBoardAbstract(ABC):
                         action=self.actions.PAG_BACK,
                         page=self.page,
                         file_id=self.file.file_id,
+                        author_id=self.author_id,
                     ).pack(),
                 )
 
@@ -89,6 +93,7 @@ class _FilesBoardAbstract(ABC):
                         action=self.actions.PAG_NEXT,
                         page=self.page,
                         file_id=self.file.file_id,
+                        author_id=self.author_id,
                     ).pack(),
                 )
 
@@ -96,5 +101,5 @@ class _FilesBoardAbstract(ABC):
         return pag_builder
 
     @abstractmethod
-    def _build_file_actions_buttons(self) -> InlineKeyboardBuilder:
+    def build_file_actions_buttons(self) -> InlineKeyboardBuilder:
         raise NotImplementedError

@@ -2,14 +2,14 @@ from aiogram.types import CallbackQuery
 from nc_py_api import AsyncNextcloud
 
 from bot.core import settings
-from bot.keyboards.callback_data_factories import FilesMenuData
+from bot.keyboards.callback_data_factories import FilesData
 from bot.language import LocalizedTranslator
-from bot.nextcloud import FileManager
+from bot.utils.nextcloud import FileManager
 
 
 async def download(
     query: CallbackQuery,
-    callback_data: FilesMenuData,
+    callback_data: FilesData,
     translator: LocalizedTranslator,
     nc: AsyncNextcloud,
 ) -> None:
@@ -24,5 +24,4 @@ async def download(
         return
 
     await query.message.answer_document(await fm.download())
-
     await query.answer()

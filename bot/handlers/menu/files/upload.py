@@ -4,24 +4,27 @@ from aiogram.types import CallbackQuery, Message
 from nc_py_api import AsyncNextcloud
 
 from bot.core.config import settings
-from bot.keyboards import reply_board, FilesMenuBoard
-from bot.keyboards.callback_data_factories import FilesMenuData
+from bot.keyboards import reply_board
+from bot.keyboards.callback_data_factories import FilesData
 from bot.language import LocalizedTranslator
-from bot.nextcloud import FileManager
 from bot.states import FilesMenuStatesGroup
+from bot.utils.nextcloud import FileManager
 
 
 async def upload_start(
     query: CallbackQuery,
     state: FSMContext,
-    callback_data: FilesMenuData,
+    callback_data: FilesData,
     translator: LocalizedTranslator,
 ) -> None:
     await state.set_state(FilesMenuStatesGroup.UPLOAD)
     await state.update_data(file_id=callback_data.file_id)
 
+    text = translator.get("file-upload-description")
+    await query.message.edit_text(text=text, reply_markup=None)
+
     reply_markup = reply_board(
-        translator.get("cancel-button"),
+        translator.get("stop-button"),
         is_persistent=True,
         resize_keyboard=True,
         selective=True,
@@ -52,13 +55,6 @@ async def upload(
 
     text = translator.get("file-upload-success")
     await message.reply(text=text)
-
-    reply_markup = FilesMenuBoard(translator=translator, file=fm.file, files=await fm.listdir())
-    await bot.edit_message_reply_markup(
-        chat_id=message.chat.id,
-        message_id=data["menu_msg_id"],
-        reply_markup=reply_markup(),
-    )
 
 
 async def upload_incorrectly(message: Message, translator: LocalizedTranslator) -> None:

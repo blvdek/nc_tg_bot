@@ -18,11 +18,11 @@ class NextcloudMD(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
-        db: UnitOfWork | None = data.get("db")
-        if db is None:
+        uow: UnitOfWork | None = data.get("uow")
+        if uow is None:
             msg = "'UnitOfWork' object not found."
             raise RuntimeError(msg)
-        user = await db.users.get_by_id(event.from_user.id)
+        user = await uow.users.get_by_id(event.from_user.id)
         data["nc"] = AsyncNextcloud(
             nextcloud_url=settings.nextcloud.url,
             nc_auth_user=user.nc_login if user else None,

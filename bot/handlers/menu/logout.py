@@ -8,22 +8,26 @@ from bot.language import LocalizedTranslator
 
 
 async def logout(message: Message, translator: LocalizedTranslator) -> None:
-    await message.answer(text=translator.get("logout"), reply_markup=logout_board(translator))
+    text = translator.get("logout")
+    reply_markup = logout_board(translator)
+    await message.answer(text=text, reply_markup=reply_markup)
 
 
 async def logout_confirm(
     query: CallbackQuery,
     state: FSMContext,
     nc: AsyncNextcloud,
-    db: UnitOfWork,
+    uow: UnitOfWork,
     translator: LocalizedTranslator,
 ) -> None:
     await nc.ocs("DELETE", "/ocs/v2.php/core/apppassword")
-    await db.users.delete(query.from_user.id)
-    await db.commit()
+    await uow.users.delete(query.from_user.id)
+    await uow.commit()
 
     await state.clear()
-    await query.message.reply(text=translator.get("logout-confirm"), reply_markup=ReplyKeyboardRemove())
+
+    text = translator.get("logout-confirm")
+    await query.message.answer(text=text, reply_markup=ReplyKeyboardRemove())
     await query.message.delete()
     await query.answer()
 
@@ -32,4 +36,5 @@ async def logout_cancel(
     query: CallbackQuery,
     translator: LocalizedTranslator,
 ) -> None:
-    await query.message.edit_text(translator.get("logout-cancel"), reply_markup=None)
+    text = translator.get("logout-cancel")
+    await query.message.edit_text(text=text, reply_markup=None)

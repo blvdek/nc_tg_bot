@@ -4,7 +4,7 @@ from enum import IntEnum
 from aiogram.filters.callback_data import CallbackData
 
 
-class FilesMenuActions(IntEnum):
+class FilesActions(IntEnum):
     """Actions that can be performed in the files keyboard.
 
     :param SELECT: Select a file.
@@ -32,14 +32,16 @@ class FilesMenuActions(IntEnum):
     CANCEL = 9
 
 
-class FilesMenuData(CallbackData, prefix="files_menu"):
+class FilesData(CallbackData, prefix="files_menu"):
     """The data passed when file button is clicked.
 
     :param action: The action to be performed.
     :param page: The page number of the file.
     :param file_id: The ID of the file.
+    :param author_id: Telegram ID of the user who triggered the message.
     """
 
-    action: FilesMenuActions
+    action: FilesActions
     page: int
     file_id: str
+    author_id: int

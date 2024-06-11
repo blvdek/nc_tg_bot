@@ -7,7 +7,7 @@ from aiogram.types import TelegramObject
 from bot.db import UnitOfWork
 
 
-class DatabaseMD(BaseMiddleware):
+class UnitOfWorkMD(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
@@ -18,6 +18,6 @@ class DatabaseMD(BaseMiddleware):
         if session_maker is None:
             msg = "'async_sessionmaker' object not found."
             raise RuntimeError(msg)
-        async with UnitOfWork(session_maker) as db:
-            data["db"] = db
+        async with UnitOfWork(session_maker) as uow:
+            data["uow"] = uow
             return await handler(event, data)

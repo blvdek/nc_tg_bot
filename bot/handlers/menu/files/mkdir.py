@@ -1,23 +1,25 @@
-from aiogram import Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 from nc_py_api import AsyncNextcloud
 
 from bot.keyboards import FilesMenuBoard, reply_board
-from bot.keyboards.callback_data_factories import FilesMenuData
+from bot.keyboards.callback_data_factories import FilesData
 from bot.language import LocalizedTranslator
-from bot.nextcloud import FileManager
 from bot.states import FilesMenuStatesGroup
+from bot.utils.nextcloud import FileManager
 
 
 async def start_mkdir(
     query: CallbackQuery,
     state: FSMContext,
-    callback_data: FilesMenuData,
+    callback_data: FilesData,
     translator: LocalizedTranslator,
 ) -> None:
     await state.set_state(FilesMenuStatesGroup.MKDIR)
     await state.update_data(file_id=callback_data.file_id)
+
+    text = translator.get("file-mkdir-description")
+    await query.message.edit_text(text=text, reply_markup=None)
 
     reply_markup = reply_board(
         translator.get("cancel-button"),
@@ -33,7 +35,6 @@ async def start_mkdir(
 
 async def mkdir(
     message: Message,
-    bot: Bot,
     state: FSMContext,
     translator: LocalizedTranslator,
     nc: AsyncNextcloud,
@@ -56,12 +57,16 @@ async def mkdir(
     text = translator.get("file-mkdir-success")
     await message.reply(text=text, reply_markup=reply_markup)
 
-    reply_markup = FilesMenuBoard(translator=translator, file=fm.file, files=await fm.listdir())
-    await bot.edit_message_reply_markup(
-        chat_id=message.chat.id,
-        message_id=data["menu_msg_id"],
-        reply_markup=reply_markup(),
-    )
+    await state.clear()
+
+    text = translator.get("file", name=fm.file.name)
+    files_menu_reply_markup = FilesMenuBoard(
+        translator,
+        author_id=message.from_user.id,
+        file=fm.file,
+        files=await fm.listdir(),
+    ).get_kb()
+    await message.reply(text=text, reply_markup=files_menu_reply_markup)
 
 
 async def incorrectly_mkdir(message: Message, translator: LocalizedTranslator) -> None:
