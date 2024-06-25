@@ -7,7 +7,7 @@ from nc_py_api import AsyncNextcloud, FsNode
 
 from bot.core import settings
 from bot.nextcloud.exceptions import FsNodeNotFoundError
-from bot.nextcloud.factory import FactorySubject
+from bot.nextcloud.factory import FactorySubject, T
 
 
 class BaseFsNodeService:
@@ -74,14 +74,14 @@ class BaseFsNodeService:
         return res["url"]
 
 
-class RootFsNodeService(BaseFsNodeService, FactorySubject):
+class RootFsNodeService(FactorySubject[BaseFsNodeService], BaseFsNodeService):
     @classmethod
     async def create_instance(cls, nc: AsyncNextcloud) -> Self:
         fsnodes_list = await nc.files.listdir(exclude_self=False)
         return cls(nc, fsnodes_list[0], fsnodes_list[1:])
 
 
-class FsNodeService(BaseFsNodeService, FactorySubject):
+class FsNodeService(FactorySubject[BaseFsNodeService], BaseFsNodeService):
     @classmethod
     async def create_instance(cls, nc: AsyncNextcloud, file_id: str) -> Self:
         fsnode = await nc.files.by_id(file_id)
@@ -92,7 +92,7 @@ class FsNodeService(BaseFsNodeService, FactorySubject):
         return cls(nc, fsnode, attached_fsnodes)
 
 
-class PrevFsNodeService(BaseFsNodeService, FactorySubject):
+class PrevFsNodeService(FactorySubject[BaseFsNodeService], BaseFsNodeService):
     @classmethod
     async def create_instance(cls, nc: AsyncNextcloud, file_id: str) -> Self:
         fsnode = await nc.files.by_id(file_id)

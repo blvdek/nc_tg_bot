@@ -25,7 +25,6 @@ class BaseTrashbinService:
         self.trashbin.remove(trashbin_item)
 
     async def restore(self, file_id: str) -> None:
-        print("YOOOOOOLLLOOO")
         trashbin_item = self._get_trashbin_item_by_id(file_id)
         if trashbin_item is None:
             raise ValueError
@@ -38,7 +37,7 @@ class BaseTrashbinService:
         self.trashbin = []
 
 
-class TrashbinService(BaseTrashbinService, FactorySubject):
+class TrashbinService(FactorySubject[BaseTrashbinService], BaseTrashbinService):
     @classmethod
     async def create_instance(cls, nc: AsyncNextcloud) -> Self:
         trashbin = await nc.files.trashbin_list()

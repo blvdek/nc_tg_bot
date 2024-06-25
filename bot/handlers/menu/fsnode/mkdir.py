@@ -58,9 +58,9 @@ async def mkdir(
 
     await srv.mkdir(text)
 
-    reply_markup = menu_board()
-    text = i18n.get("fsnode-mkdir-success")
-    await message.reply(text=text, reply_markup=reply_markup)
+    menu_reply_markup = menu_board()
+    menu_text = i18n.get("fsnode-mkdir-success")
+    await message.reply(text=menu_text, reply_markup=menu_reply_markup)
 
     await state.clear()
 

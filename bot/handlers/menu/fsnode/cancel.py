@@ -61,9 +61,9 @@ async def cancel_message(
 
     await state.clear()
 
-    reply_markup = menu_board()
-    text = i18n.get("cancel")
-    await message.reply(text=text, reply_markup=reply_markup)
+    menu_reply_markup = menu_board()
+    menu_text = i18n.get("cancel")
+    await message.reply(text=menu_text, reply_markup=menu_reply_markup)
 
     text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes, msg_user.id)
     with suppress(TelegramBadRequest):

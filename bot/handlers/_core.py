@@ -14,30 +14,39 @@ R = TypeVar("R")
 
 def validate_msg_text(f: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R | None]]:
     @wraps(f)
-    async def wrapper(message: Message, *args: P.args, **kwargs: P.kwargs) -> R | None:
+    async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
+        message = args[0]
+        if not isinstance(message, Message):
+            return None
         if not isinstance(message.text, str):
             return None
-        return await f(message, *args, **kwargs)
+        return await f(*args, **kwargs)
 
     return wrapper
 
 
 def validate_msg_user(f: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R | None]]:
     @wraps(f)
-    async def wrapper(message: Message, *args: P.args, **kwargs: P.kwargs) -> R | None:
+    async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
+        message = args[0]
+        if not isinstance(message, Message):
+            return None
         if not isinstance(message.from_user, User):
             return None
-        return await f(message, *args, **kwargs)
+        return await f(*args, **kwargs)
 
     return wrapper
 
 
 def validate_query_msg(f: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R | None]]:
     @wraps(f)
-    async def wrapper(query: CallbackQuery, *args: P.args, **kwargs: P.kwargs) -> R | None:
+    async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
+        query = args[0]
+        if not isinstance(query, CallbackQuery):
+            return None
         if not isinstance(query.message, Message):
             return None
-        return await f(query, *args, **kwargs)
+        return await f(*args, **kwargs)
 
     return wrapper
 

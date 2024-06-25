@@ -11,7 +11,7 @@ class BaseSearchService:
         self.fsnodes = fsnodes
 
 
-class SearchService(BaseSearchService, FactorySubject):
+class SearchService(FactorySubject[BaseSearchService], BaseSearchService):
     @classmethod
     async def create_instance(cls, nc: AsyncNextcloud, req: list[str], **kwargs: Any) -> Self:
         fsnodes = await nc.files.find(req, **kwargs)

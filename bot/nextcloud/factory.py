@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import Any, TypeVar
+from typing import Any, TypeVar, Generic
 
 from bot.nextcloud.exceptions import ClassNotFoundError
 
 T = TypeVar("T")
 
 
-class FactorySubject(ABC):
+class FactorySubject(ABC, Generic[T]):
     @classmethod
     @abstractmethod
     async def create_instance(cls, *args: Any, **kwargs: Any) -> T:
@@ -15,7 +15,7 @@ class FactorySubject(ABC):
 
 class NCSrvFactory:
     @staticmethod
-    def get(class_name: str) -> type[FactorySubject]:
+    def get(class_name: str) -> type[FactorySubject[Any]]:
         raw_subclasses_ = FactorySubject.__subclasses__()
         classes = {c.__name__: c for c in raw_subclasses_}
         class_ = classes.get(class_name, None)
