@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from types import TracebackType
+from typing import Self
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
-from typing_extensions import Self
 
 from bot.db.repositories import _UserRepository
 

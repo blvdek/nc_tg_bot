@@ -4,7 +4,7 @@ from aiogram import Router
 from aiogram.filters.command import Command
 
 from .auth import auth
-from bot.middlewares import UnitOfWorkMD, NextcloudMD
+from bot.middlewares import NextcloudMD, UnitOfWorkMD
 
 
 def auth_router() -> Router:

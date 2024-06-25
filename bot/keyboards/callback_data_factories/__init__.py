@@ -1,11 +1,21 @@
 """Package with data for keyboards buttons."""
 
-from .files_data import FilesActions, FilesData
+from .fsnode_data import FsNodeData, FsNodeMenuActions, FsNodeMenuData
 from .logout_data import LogoutActions, LogoutData
+from .search_data import SearchActions, SearchData, SearchFsNodeData
+from .trashbin_data import TrashbinActions, TrashbinData, TrashbinFsNodeActions, TrashbinFsNodeData
 
 __all__ = (
-    "FilesData",
-    "FilesActions",
+    "FsNodeData",
+    "FsNodeMenuData",
+    "FsNodeMenuActions",
+    "TrashbinData",
+    "TrashbinActions",
+    "TrashbinFsNodeData",
+    "TrashbinFsNodeActions",
     "LogoutData",
     "LogoutActions",
+    "SearchData",
+    "SearchActions",
+    "SearchFsNodeData",
 )

@@ -1,9 +1,11 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
+from aiogram_i18n import LazyProxy
+from aiogram_i18n.types import KeyboardButton
 
 
 def reply_board(
-    *texts: str,
+    *texts: LazyProxy,
     is_persistent: bool | None = None,
     resize_keyboard: bool | None = None,
     one_time_keyboard: bool | None = None,

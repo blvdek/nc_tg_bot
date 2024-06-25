@@ -10,11 +10,11 @@ MAX_CHUNK_SIZE = 5368709120
 class Database(BaseModel):
     """Represent database connection settings."""
 
+    host: str
     user: str
     name: str
     password: str
     port: int = 5432
-    host: str
     driver: str = "asyncpg"
     database_system: str = "postgresql"
 
@@ -37,8 +37,8 @@ class Database(BaseModel):
 class Redis(BaseModel):
     """Represent Redis connection settings."""
 
+    host: str
     db: int = 1
-    host: str = "redis"
     port: int = 6379
     user: str | None = None
     password: str | None = None
@@ -63,7 +63,6 @@ class Nextcloud(BaseModel):
     host: str
     port: int = 80
     chunk_size: int = 5242880
-    domain: str | None = None
 
     @property
     def url(self) -> str:
@@ -92,11 +91,11 @@ class Settings(BaseSettings):
     """Represents the configuration settings for the bot"""
 
     model_config = SettingsConfigDict(
-        env_file=(".env.prod", ".env"),
+        env_file=(".env", ".env.prod"),
         env_file_encoding="utf-8",
         env_nested_delimiter="_",
     )
-    appname: str
+    appname: str = "Nextcloud Telegram Bot"
     logging: str = "INFO"
     telegram: Telegram
     nextcloud: Nextcloud

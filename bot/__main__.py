@@ -4,13 +4,12 @@ import asyncio
 import logging
 
 import uvloop
-from aiogram.enums import MenuButtonType
-from aiogram.types import BotCommand, MenuButtonWebApp, WebAppInfo
-from rich.logging import RichHandler
+from aiogram.types import BotCommand
+from aiogram_i18n import I18nMiddleware
+from aiogram_i18n.cores.fluent_runtime_core import FluentRuntimeCore
 
 from bot.core import bot, dp, settings
 from bot.handlers import routers
-from bot.middlewares import TranslatorMD
 
 if settings.webhook:
     from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
@@ -24,17 +23,8 @@ async def on_startup() -> None:
     for router in routers:
         dp.include_router(router())
 
-    dp.message.outer_middleware(TranslatorMD())
-    dp.callback_query.outer_middleware(TranslatorMD())
-
-    if settings.nextcloud.domain and settings.nextcloud.domain.startswith("https"):
-        await bot.set_chat_menu_button(
-            menu_button=MenuButtonWebApp(
-                type=MenuButtonType.WEB_APP,
-                text="Nextcloud",
-                web_app=WebAppInfo(url=settings.nextcloud.domain_url),
-            ),
-        )
+    i18n_middleware = I18nMiddleware(core=FluentRuntimeCore(path="./bot/locales/{locale}/", default_locale="en"))
+    i18n_middleware.setup(dispatcher=dp)
 
     commands = [
         BotCommand(command="help", description="Get message with help text"),
@@ -101,7 +91,7 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.getLevelName(settings.logging), handlers=(RichHandler(),))
+    logging.basicConfig(level=logging.getLevelName(settings.logging))
     logger = logging.getLogger("aiogram.dispatcher")
 
     uvloop.run(main())

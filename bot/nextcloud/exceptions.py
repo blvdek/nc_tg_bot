@@ -1,0 +1,6 @@
+class ClassNotFoundError(ValueError):
+    ...
+
+
+class FsNodeNotFoundError(BaseException):
+    ...

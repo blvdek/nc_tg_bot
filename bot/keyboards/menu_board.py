@@ -1,10 +1,19 @@
 from typing import Any
 
 from aiogram.types import ReplyKeyboardMarkup
+from aiogram_i18n import LazyProxy
 
 from bot import keyboards
-from bot.language import LocalizedTranslator
 
 
-def menu_board(translator: LocalizedTranslator, **kwargs: Any) -> ReplyKeyboardMarkup:
-    return keyboards.reply_board(translator.get("files-menu-button"), **kwargs)
+def menu_board(**kwargs: Any) -> ReplyKeyboardMarkup:
+    return keyboards.reply_board(
+        LazyProxy("fsnode-menu-button"),
+        LazyProxy("search-button"),
+        LazyProxy("trashbin-button"),
+        row_width=1,
+        is_persistent=True,
+        resize_keyboard=True,
+        selective=True,
+        **kwargs,
+    )

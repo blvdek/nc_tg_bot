@@ -1,5 +1,4 @@
-"""This package is used for states"""
+from .fsnode_menu import FsNodeMenuStatesGroup
+from .search import SearchStatesGroup
 
-from .files_state import FilesMenuStatesGroup
-
-__all__ = ("FilesMenuStatesGroup",)
+__all__ = ("FsNodeMenuStatesGroup", "SearchStatesGroup")

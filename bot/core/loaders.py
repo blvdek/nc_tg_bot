@@ -9,7 +9,6 @@ from redis.asyncio import Redis
 
 from bot.core.config import settings
 from bot.db import session_maker
-from bot.language import Translator
 
 bot = Bot(token=settings.telegram.token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
@@ -29,8 +28,4 @@ _storage = (
     else MemoryStorage()
 )
 
-dp = Dispatcher(
-    storage=_storage,
-    _session_maker=session_maker,
-    _translator_hub=Translator(),
-)
+dp = Dispatcher(storage=_storage, _session_maker=session_maker)
