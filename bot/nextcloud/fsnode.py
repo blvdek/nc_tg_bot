@@ -7,7 +7,7 @@ from nc_py_api import AsyncNextcloud, FsNode
 
 from bot.core import settings
 from bot.nextcloud.exceptions import FsNodeNotFoundError
-from bot.nextcloud.factory import FactorySubject, T
+from bot.nextcloud.factory import FactorySubject
 
 
 class BaseFsNodeService:
@@ -33,13 +33,15 @@ class BaseFsNodeService:
 
     async def mkdir(self, name: str) -> FsNode:
         if not self.fsnode.is_dir:
-            msg = "..."
-            raise RuntimeError(msg)
+            msg = "Cannot create directory because the parent node is not a directory."
+            raise ValueError(msg)
 
         name = self._generate_unique_name(name)
         new_dir = await self.nc.files.mkdir(f"{self.fsnode.user_path}{name}")
 
         self.attached_fsnodes.append(new_dir)
+
+        return new_dir
 
     async def delete(self) -> None:
         await self.nc.files.delete(self.fsnode)
@@ -51,15 +53,15 @@ class BaseFsNodeService:
         buff.seek(0)
         return BufferedInputFile(buff.read(), filename=self.fsnode.name)
 
-    async def upload(self, buff: io.BytesIO, name: str) -> None:
+    async def upload(self, buff: io.BytesIO, name: str) -> FsNode:
         if not self.fsnode.is_dir:
-            msg = "..."
-            raise RuntimeError(msg)
+            msg = "Cannot upload file because the parent node is not a directory."
+            raise ValueError(msg)
 
         name = self._generate_unique_name(name)
 
         buff.seek(0)
-        await self.nc.files.upload_stream(
+        return await self.nc.files.upload_stream(
             f"{self.fsnode.user_path}{name}",
             buff,
             chunk_size=settings.nextcloud.chunk_size,

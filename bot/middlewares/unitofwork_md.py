@@ -17,7 +17,7 @@ class UnitOfWorkMD(BaseMiddleware):
         session_maker = data.get("_session_maker")
         if session_maker is None:
             msg = "'async_sessionmaker' object not found."
-            raise RuntimeError(msg)
+            raise ValueError(msg)
         async with UnitOfWork(session_maker) as uow:
             data["uow"] = uow
             return await handler(event, data)

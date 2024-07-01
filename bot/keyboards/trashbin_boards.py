@@ -95,7 +95,7 @@ def trashbin_fsnode_board(
             ],
             [
                 InlineKeyboardButton(
-                    text=LazyProxy("cancel-button"),
+                    text=LazyProxy("back-button"),
                     callback_data=TrashbinData(
                         action=TrashbinActions.CANCEL,
                         page=page,

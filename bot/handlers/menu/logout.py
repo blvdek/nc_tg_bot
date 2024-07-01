@@ -1,4 +1,3 @@
-from typing import cast
 
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message, ReplyKeyboardRemove
@@ -6,7 +5,7 @@ from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
 
 from bot.db import UnitOfWork
-from bot.handlers._core import validate_query_msg
+from bot.handlers._core import get_query_msg
 from bot.keyboards import logout_board
 
 
@@ -16,16 +15,15 @@ async def logout(message: Message, i18n: I18nContext) -> None:
     await message.answer(text=text, reply_markup=reply_markup)
 
 
-@validate_query_msg
+@get_query_msg
 async def logout_confirm(
     query: CallbackQuery,
+    query_msg: Message,
     state: FSMContext,
     i18n: I18nContext,
     nc: AsyncNextcloud,
     uow: UnitOfWork,
 ) -> None:
-    query_msg = cast(Message, query.message)
-
     await nc.ocs("DELETE", "/ocs/v2.php/core/apppassword")
     await uow.users.delete(query.from_user.id)
     await uow.commit()
@@ -34,13 +32,11 @@ async def logout_confirm(
 
     text = i18n.get("logout-confirm")
     await query_msg.answer(text=text, reply_markup=ReplyKeyboardRemove())
-    await query_msg.delete()
+    await query_msg.edit_reply_markup(None)
     await query.answer()
 
 
-@validate_query_msg
-async def logout_cancel(query: CallbackQuery, i18n: I18nContext) -> None:
-    query_msg = cast(Message, query.message)
-
+@get_query_msg
+async def logout_cancel(query: CallbackQuery, query_msg: Message, i18n: I18nContext) -> None:
     text = i18n.get("logout-cancel")
     await query_msg.edit_text(text=text, reply_markup=None)

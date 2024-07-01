@@ -81,7 +81,7 @@ class FsNodeMenuBoard(FsNodeBaseBoard):
         if self.fsnode.user_path != "":
             builder.add(
                 InlineKeyboardButton(
-                    text=LazyProxy("fsnode-back-button"),
+                    text=LazyProxy("back-button"),
                     callback_data=self.actions_callback_data(
                         action=self.actions.BACK,
                         file_id=self.fsnode.file_id,

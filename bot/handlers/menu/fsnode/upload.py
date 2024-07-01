@@ -1,5 +1,3 @@
-from typing import cast
-
 from aiogram import Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
@@ -7,7 +5,7 @@ from aiogram_i18n import I18nContext, LazyProxy
 from nc_py_api import AsyncNextcloud
 
 from bot.core import settings
-from bot.handlers._core import validate_query_msg
+from bot.handlers._core import get_query_msg
 from bot.keyboards import reply_board
 from bot.keyboards.callback_data_factories import FsNodeMenuData
 from bot.nextcloud import NCSrvFactory
@@ -15,15 +13,14 @@ from bot.nextcloud.exceptions import FsNodeNotFoundError
 from bot.states import FsNodeMenuStatesGroup
 
 
-@validate_query_msg
+@get_query_msg
 async def upload_start(
     query: CallbackQuery,
+    query_msg: Message,
     state: FSMContext,
     callback_data: FsNodeMenuData,
     i18n: I18nContext,
 ) -> None:
-    query_msg = cast(Message, query.message)
-
     await state.set_state(FsNodeMenuStatesGroup.UPLOAD)
     await state.update_data(file_id=callback_data.file_id)
 
@@ -70,7 +67,7 @@ async def upload(
     buff = await bot.download_file(tg_file_obj.file_path, chunk_size=settings.telegram.chunk_size)
     await srv.upload(buff, message.document.file_name)
 
-    text = i18n.get("fsnode-upload-success")
+    text = i18n.get("fsnode-upload-success", name=message.document.file_name)
     await message.reply(text=text)
 
 

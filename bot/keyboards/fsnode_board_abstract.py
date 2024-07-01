@@ -8,9 +8,9 @@ from aiogram_i18n import LazyProxy
 from aiogram_i18n.types import InlineKeyboardButton
 from nc_py_api.files import FsNode
 
+from bot.core import settings
 from bot.utils import MIME_SYMBOLS
 
-DEFAULT_PAGE_SIZE = 8
 FSNODE_BUTTON_TEXT_LENGTH = 32
 
 
@@ -38,7 +38,7 @@ class FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
         fsnodes: list[FsNode],
         from_user_id: int,
         page: int = 0,
-        page_size: int = DEFAULT_PAGE_SIZE,
+        page_size: int = settings.telegram.page_size,
         **kwargs: Any,
     ) -> None:
         self.builder = InlineKeyboardBuilder()
@@ -59,6 +59,7 @@ class FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
 
         start_index = self.page * self.page_size
         end_index = (self.page + 1) * self.page_size
+        print(self.fsnodes)
 
         for fsnode in self.fsnodes[start_index:end_index]:
             prefix = MIME_SYMBOLS.get(fsnode.info.mimetype, "")
@@ -77,11 +78,12 @@ class FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
 
     def build_pag_buttons(self) -> InlineKeyboardBuilder:
         if not hasattr(self.actions, "PAG_BACK") or not hasattr(self.actions, "PAG_NEXT"):
-            raise RuntimeError
+            msg = "Pagination actions such as 'PAG_BACK' and 'PAG_NEXT' must be defined in the CallbackData's IntEnum."
+            raise AttributeError(msg)
 
         builder = InlineKeyboardBuilder()
 
-        total_fsnodes = len(self.fsnodes) - 1
+        total_fsnodes = len(self.fsnodes)
         total_pages = (total_fsnodes + self.page_size - 1) // self.page_size
 
         if total_pages > 1:

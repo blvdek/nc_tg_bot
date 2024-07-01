@@ -84,6 +84,7 @@ class Telegram(BaseModel):
 
     token: str
     chunk_size: int = 5242880
+    page_size: int = 8
     max_upload_size: int = 20971520
 
 

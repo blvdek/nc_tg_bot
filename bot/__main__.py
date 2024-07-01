@@ -23,7 +23,7 @@ async def on_startup() -> None:
     for router in routers:
         dp.include_router(router())
 
-    i18n_middleware = I18nMiddleware(core=FluentRuntimeCore(path="./bot/locales/{locale}/", default_locale="en"))
+    i18n_middleware = I18nMiddleware(core=FluentRuntimeCore(path="./bot/locales/{locale}/"))
     i18n_middleware.setup(dispatcher=dp)
 
     commands = [

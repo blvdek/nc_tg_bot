@@ -1,35 +1,55 @@
-### Сообщения и кнопки fsnode меню.
+### Text messages and file management menu buttons.
 
-## Заглавное сообщение файлового меню.
-fsnode = Файл { $name }
+## The title message.
+fsnode =
+    <b><i>{ $type ->
+        [dir] Folder
+        *[file] File
+    }</i> { $symbol }: { $name }</b>
 
-## Сообщения процесса удаления файла.
-fsnode-delete = Удалить файл?
-fsnode-delete-success = Файл был удален.
+    <i>{ $path }</i>
+    ---
+    🔸 <u><i>Owner:</i></u> { $user }
+    🔸 <u><i>In favorites:</i></u> { $favorite }
+    🔸 <u><i>Size:</i></u> { $size }
+    🔸 <u><i>Recent changes:</i></u> { $last_modified }
 
-## Сообщения процесса создания папки.
-fsnode-mkdir-description = Правила создания папки вместе с описанием файла.
-fsnode-mkdir-start = Отправьте название папки, чтобы ее создать.
-fsnode-mkdir-success = Папка успешно создана.
-fsnode-mkdir-incorrectly = Папка не может быть так названа.
+## Deleting a file.
+fsnode-delete = 
+    Are you sure you want to delete the file <b>{ $name }</b>? 💣
 
-##
-fsnode-upload-start = Отправьте файлы в виде документа, чтобы их загрузить.
-fsnode-upload-error = Загрузка не удалась
-fsnode-upload-success = Файл загружен успешно.
-fsnode-upload-incorrectly = Файл должен быть в виде документа.
-fsnode-upload-stop = Загрузка файлов прекращена.
-fsnode-url = Ссылка на файл { $url }
+    <b>This action cannot be undone.</b>
+fsnode-delete-alert = The file "{ $name }" was successfully deleted. 💀
 
-## Кнопки fsnode меню.
-fsnode-delete-button = ❌ Удалить
-fsnode-download-button = ⬇️ Скачать
-fsnode-upload-button = ⬆️ Загрузить
-fsnode-mkdir-button = 🆕 Создать папку
-fsnode-back-button = ⏮️ Вернуться
-fsnode-update-button = 🔄️ Обновить
+## Create a folder.
+fsnode-mkdir-start = Enter the name of the folder you want to create. 📂
+fsnode-mkdir-success = Folder <b>{ $name }</b> successfully created. 👍
+fsnode-mkdir-incorrectly = The folder cannot be named that way. 🫷
+
+## Upload files.
+fsnode-upload-start = 
+    Send the files as a document to download them. 📄
+
+    Or click "{stop-button}" to finish the download.
+fsnode-upload-error = An error occurred while trying to upload files. 😵‍💫
+fsnode-upload-success =
+    Your file <b>"{$name }"</b> has been successfully uploaded to Nextcloud. 
+    
+    <i>You can continue working with other files or complete the download process.</i>
+fsnode-upload-incorrectly = The file must be in the form of a document. 🙅‍♂️
+
+## Download file.
+fsnode-url =
+The weight of this file <b>{ $size}</b> exceeds the allowed <i>{ $size_limit }</i>. 🏋️‍♂️
+
+    You can follow the link and download this file yourself.
+
+    <i><u>File link</u></i>: { $url }
+
+## File management menu buttons.
+fsnode-delete-button = ❌ Delete
+fsnode-download-button = ⬇️ Download
+fsnode-upload-button = ⬆️ Upload
+fsnode-mkdir-button = 🆕 Create folder
 fsnode-pag-back-button = ⬅️
 fsnode-pag-next-button = ➡️
-
-##
-fsnode-not-found = Файл не надйен.

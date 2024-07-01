@@ -10,18 +10,20 @@ class MsgAuthorFilter(BaseFilter):
 
     async def __call__(self, event: TelegramObject, i18n: I18nContext) -> bool:
         if not isinstance(event, CallbackQuery):
-            msg = "'MsgAuthorFilter' works only with 'CallbackQuery'."
+            msg = "MsgAuthorFilter works only with CallbackQuery."
             raise TypeError(msg)
         if event.data is None:
-            msg = "'CallbackData' is not specified in 'CallbackQuery'."
-            raise RuntimeError(msg)
+            msg = "CallbackData is not specified in CallbackQuery."
+            raise ValueError(msg)
+
         data = self.callback_data.unpack(event.data)
 
         if not hasattr(data, "from_user_id"):
-            raise RuntimeError
+            msg = "Callback data does not contain 'from_user_id' attribute."
+            raise AttributeError(msg)
 
         if data.from_user_id == event.from_user.id:
             return True
 
-        await event.answer(text=i18n.get("not_author"))
+        await event.answer(text=i18n.get("not_from_user"))
         return False

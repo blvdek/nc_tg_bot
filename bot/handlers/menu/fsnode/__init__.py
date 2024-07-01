@@ -64,7 +64,7 @@ def fsnode_menu_router() -> Router:
     router.message.register(
         mkdir,
         FsNodeMenuStatesGroup.MKDIR,
-        F.text.regexp(r'^[^\s\/:*?"<>|]+$'),
+        F.text.regexp(r"^[\w\-.]{1,255}$"),
     )
     router.message.register(
         incorrectly_mkdir,

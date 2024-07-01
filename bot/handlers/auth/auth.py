@@ -1,5 +1,4 @@
 """Authentication in Nextcloud handler."""
-from typing import cast
 
 from aiogram import Bot
 from aiogram.enums import MenuButtonType
@@ -11,23 +10,22 @@ from nc_py_api import AsyncNextcloud, NextcloudException
 from bot.core import settings
 from bot.db import UnitOfWork
 from bot.db.models import User
-from bot.handlers._core import validate_msg_user
+from bot.handlers._core import get_msg_user
 from bot.keyboards import menu_board
 
 AUTH_TIMEOUT = 60 * 20
 AUTH_TIMEOUT_IN_MIN = AUTH_TIMEOUT // 60
 
 
-@validate_msg_user
+@get_msg_user
 async def auth(
     message: Message,
+    msg_user: TgUser,
     bot: Bot,
     i18n: I18nContext,
     nc: AsyncNextcloud,
     uow: UnitOfWork,
 ) -> None:
-    msg_user = cast(TgUser, message.from_user)
-
     if await uow.users.get_by_id(msg_user.id):
         text = i18n.get("already-authorized")
         reply_markup = menu_board()
@@ -73,4 +71,4 @@ async def auth(
 
     text = i18n.get("auth-welcome")
     reply_markup = menu_board()
-    await message.reply(text=text, reply_markup=reply_markup)
+    await message.answer(text=text, reply_markup=reply_markup)

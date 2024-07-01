@@ -1,25 +1,23 @@
 from contextlib import suppress
-from typing import cast
 
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import CallbackQuery, Message
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
 
-from bot.handlers._core import get_search_msg, validate_query_msg
+from bot.handlers._core import get_query_msg, get_search_msg
 from bot.keyboards.callback_data_factories import SearchActions, SearchData
 from bot.nextcloud import NCSrvFactory
 
 
-@validate_query_msg
+@get_query_msg
 async def pag(
     query: CallbackQuery,
+    query_msg: Message,
     i18n: I18nContext,
     callback_data: SearchData,
     nc: AsyncNextcloud,
 ) -> None:
-    query_msg = cast(Message, query.message)
-
     class_ = NCSrvFactory.get("SearchService")
     srv = await class_.create_instance(nc, ["like", "name", f"%{callback_data.query}%"])
 

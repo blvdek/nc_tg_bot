@@ -1,16 +1,24 @@
-###
+### Text messages and menu buttons for managing the trash bin.
 
-##
-trashbin = Корзина
-trashbin-empty = Корзина пуста
+## Trash bin.
+trashbin =
+    There
+    { $count ->
+        [one] is <b>{ $count }</b> file
+        [few] are <b>{ $count }</b> files
+        *[other] are <b>{ $count }</b> files
+    } in the trash bin.
+    The trash bin takes <b>{ $size }</b>.
+trashbin-item = 🔹 <i>{ $path }</i>
+trashbin-empty = The trash bin is empty.
 
-##
-trashbin-cleanup-button = Очистить корзину
-trashbin-cleanup-start = Вы уверены, что хотите очистить корзину?
+## Cleanup.
+trashbin-cleanup-button = Cleanup
+trashbin-cleanup-start = Are you sure you want to empty the trash bin?
 
-##
-trashbin-fsnode = Выберите действие.
-trashbin-delete-button = ❌ Удалить 
-trashbin-restore-button = 🔃 Восстановить
-trashbin-delete-alert = Файл удален.
-trashbin-restore-alert = Файл восстановлен.
+## Actions with a file inside the trash bin.
+trashbin-fsnode = Choose an action
+trashbin-delete-button = ❌ Delete 
+trashbin-restore-button = 🔃 Restore
+trashbin-delete-alert = File deleted
+trashbin-restore-alert = File restored

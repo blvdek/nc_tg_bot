@@ -1,20 +1,34 @@
-### Сообщения процесса авторизации.
+### Text messages related to authorization in Nextcloud.
 
-## Авторизация.
-auth-init = Чтобы авторизироваться вам необходимо перейти по ссылке, перейдя по ссылке, предоставьте боту доступ к вашей учетной записи.
+## Authentication in Nextcloud.
+auth-init = 
+    To authorize, you need to follow the link below and grant the bot access to your account. 👇
 
     { $url }
 
-    К сожалению, время ограничено и для выполнения авторизации выделяется лишь { $timeout } минут.
-auth-timeout = Вышло время для авторизации.
-auth-success = Авторизация прошла успешно.
-auth-welcome = Добро пожаловать.
+    Unfortunately, time is limited and you only have <b>{ $timeout } minutes</b> to complete the authorization process. 🕐
+auth-timeout = 
+    The waiting time has exceeded { $timeout } minutes. 🐢
 
-## Выход.
-logout = Вы уверены, что хотите выйти?
-logout-confirm = Вы успешно вышли.
-logout-cancel = Выход отменен.
+    Send /auth to retry.
+auth-success = ✨ <i>Authorization successful.</i> ✨
+auth-welcome = 
+    Welcome. 🎉
 
-## Фильтры.
-not-authorized = Вы не авторизованы.
-already-authorized = Вы уже авторизованы.
+    Press { fsnode-menu-button } to go to the file menu.
+    Press { search-button } to search for a file by name.
+    Press { trashbin-button } to manage the trash bin.
+
+## Logout from Nextcloud.
+logout = 
+    Are you sure you want to log out? <b>This action cannot be undone.</b> 😦
+
+    Logging out will result in losing access to the bot's functionality, including file management on Nextcloud. If you decide to return, you will need to reauthorize.
+logout-confirm = 
+    You have successfully logged out. 🚪
+
+    To use the bot again, <b>send the command /auth to start the authorization process again.</b>
+logout-cancel =
+    Logout canceled. 🥳
+
+    You remain logged in. If you wish to continue working, simply use the available commands.

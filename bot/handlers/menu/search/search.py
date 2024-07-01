@@ -1,13 +1,14 @@
-from typing import cast
-
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, User
+from aiogram.types import Message
+from aiogram.types import User as TgUser
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
 
-from bot.handlers._core import get_search_msg, validate_msg_text, validate_msg_user
+from bot.handlers._core import get_msg_text, get_msg_user, get_search_msg
 from bot.nextcloud import NCSrvFactory
 from bot.states import SearchStatesGroup
+
+from rich import print
 
 
 async def start_search(message: Message, state: FSMContext, i18n: I18nContext) -> None:
@@ -17,12 +18,16 @@ async def start_search(message: Message, state: FSMContext, i18n: I18nContext) -
     await message.reply(text=text)
 
 
-@validate_msg_user
-@validate_msg_text
-async def search(message: Message, state: FSMContext, i18n: I18nContext, nc: AsyncNextcloud) -> None:
-    msg_user = cast(User, message.from_user)
-    msg_text = cast(str, message.text)
-
+@get_msg_user
+@get_msg_text
+async def search(
+    message: Message,
+    msg_user: TgUser,
+    msg_text: str,
+    state: FSMContext,
+    i18n: I18nContext,
+    nc: AsyncNextcloud,
+) -> None:
     await state.clear()
 
     class_ = NCSrvFactory.get("SearchService")

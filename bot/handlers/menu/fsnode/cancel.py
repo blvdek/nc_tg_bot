@@ -1,30 +1,29 @@
 from contextlib import suppress
-from typing import cast
 
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery, Message, User
+from aiogram.types import CallbackQuery, Message
+from aiogram.types import User as TgUser
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
 
-from bot.handlers._core import get_fsnode_msg, validate_msg_user, validate_query_msg
+from bot.handlers._core import get_fsnode_msg, get_msg_user, get_query_msg
 from bot.keyboards import menu_board
 from bot.keyboards.callback_data_factories import FsNodeMenuData
 from bot.nextcloud import NCSrvFactory
 from bot.nextcloud.exceptions import FsNodeNotFoundError
 
 
-@validate_query_msg
+@get_query_msg
 async def cancel_callback(
     query: CallbackQuery,
+    query_msg: Message,
     state: FSMContext,
     callback_data: FsNodeMenuData,
     i18n: I18nContext,
     nc: AsyncNextcloud,
 ) -> None:
     await state.clear()
-
-    query_msg = cast(Message, query.message)
 
     try:
         class_ = NCSrvFactory.get("FsNodeService")
@@ -40,16 +39,15 @@ async def cancel_callback(
     await query.answer()
 
 
-@validate_msg_user
+@get_msg_user
 async def cancel_message(
     message: Message,
+    msg_user: TgUser,
     state: FSMContext,
     i18n: I18nContext,
     nc: AsyncNextcloud,
 ) -> None:
     data = await state.get_data()
-
-    msg_user = cast(User, message.from_user)
 
     try:
         class_ = NCSrvFactory.get("FsNodeService")
@@ -67,4 +65,4 @@ async def cancel_message(
 
     text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes, msg_user.id)
     with suppress(TelegramBadRequest):
-        await message.reply(text=text, reply_markup=reply_markup)
+        await message.answer(text=text, reply_markup=reply_markup)

@@ -19,7 +19,8 @@ class BaseTrashbinService:
     async def delete(self, file_id: str) -> None:
         trashbin_item = self._get_trashbin_item_by_id(file_id)
         if trashbin_item is None:
-            raise ValueError
+            msg = "The file ID not found in the trashbin."
+            raise ValueError(msg)
 
         await self.nc.files.trashbin_delete(trashbin_item)
         self.trashbin.remove(trashbin_item)
@@ -27,7 +28,8 @@ class BaseTrashbinService:
     async def restore(self, file_id: str) -> None:
         trashbin_item = self._get_trashbin_item_by_id(file_id)
         if trashbin_item is None:
-            raise ValueError
+            msg = "The file ID not found in the trashbin."
+            raise ValueError(msg)
 
         await self.nc.files.trashbin_restore(trashbin_item)
         self.trashbin.remove(trashbin_item)
@@ -35,6 +37,12 @@ class BaseTrashbinService:
     async def cleanup(self) -> None:
         await self.nc.files.trashbin_cleanup()
         self.trashbin = []
+
+    def get_size(self) -> int:
+        size = 0
+        for fsnode in self.trashbin:
+            size += fsnode.info.size
+        return size
 
 
 class TrashbinService(FactorySubject[BaseTrashbinService], BaseTrashbinService):
