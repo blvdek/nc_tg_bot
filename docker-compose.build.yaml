@@ -1,4 +1,12 @@
 services:
+   nextcloud:
+      image: nextcloud:latest
+      restart: always
+      ports:
+      - 8080:80
+      volumes:
+      - nextcloud-data:/var/www/html
+
    redis:
       image: redis:alpine
       env_file: .env
@@ -27,3 +35,4 @@ services:
 volumes:
    redis-data:
    db-data:
+   nextcloud-data:

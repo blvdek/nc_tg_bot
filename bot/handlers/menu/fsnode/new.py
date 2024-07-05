@@ -84,7 +84,7 @@ async def upload_start(
         resize_keyboard=True,
         selective=True,
     )
-    text = i18n.get("fsnode-upload-start")
+    text = i18n.get("fsnode-upload-start", username=query.from_user.username)
     await query_msg.answer(text=text, reply_markup=reply_markup)
 
     await query.answer()
@@ -173,7 +173,7 @@ async def mkdir_start(
         resize_keyboard=True,
         selective=True,
     )
-    text = i18n.get("fsnode-mkdir-start")
+    text = i18n.get("fsnode-mkdir-start", username=query.from_user.username)
     await query_msg.answer(text=text, reply_markup=reply_markup)
 
     await query.answer()

@@ -24,12 +24,12 @@ fsnode-delete-alert = The file "{ $name }" was successfully deleted. 💀
 ## New file.
 fsnode-new = Choose how you want to create a new file inside the <b>{ $name }</b> folder. 🔨
 
-fsnode-mkdir-start = Enter the name of the folder you want to create. 📂
+fsnode-mkdir-start = @{ $username }, enter the name of the folder you want to create. 📂
 fsnode-mkdir-success = Folder <b>{ $name }</b> successfully created. 👍
 fsnode-mkdir-incorrectly = The folder cannot be named that way. 🫷
 
 fsnode-upload-start =
-    Send the files as a document to download them. 📄
+    @{ $username }, send the files as a document to download them. 📄
 
     Or click "{stop-button}" to finish the download.
 fsnode-upload-error = An error occurred while trying to upload files. 😵‍💫

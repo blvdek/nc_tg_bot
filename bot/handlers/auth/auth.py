@@ -77,4 +77,4 @@ async def auth(
 
     text = i18n.get("auth-welcome")
     reply_markup = menu_board()
-    await message.answer(text=text, reply_markup=reply_markup)
+    await message.reply(text=text, reply_markup=reply_markup)
