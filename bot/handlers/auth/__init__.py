@@ -1,4 +1,4 @@
-"""Authentication router."""
+"""Router with authentication message."""
 
 from aiogram import Router
 from aiogram.filters.command import Command
@@ -8,6 +8,10 @@ from bot.middlewares import NextcloudMD, UnitOfWorkMD
 
 
 def auth_router() -> Router:
+    """Build router with authentication message.
+
+    :return: Router with authentication message.
+    """
     router = Router()
 
     router.message.outer_middleware(UnitOfWorkMD())

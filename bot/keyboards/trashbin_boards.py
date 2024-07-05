@@ -1,19 +1,23 @@
+"""Trash bin keyboards."""
+
 from typing import Any
 
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram_i18n import LazyProxy
 from aiogram_i18n.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+from bot.keyboards._fsnode_board_abstract import _FsNodeBaseBoard
 from bot.keyboards.callback_data_factories import (
     TrashbinActions,
     TrashbinData,
     TrashbinFsNodeActions,
     TrashbinFsNodeData,
 )
-from bot.keyboards.fsnode_board_abstract import FsNodeBaseBoard
 
 
-class TrashbinBoard(FsNodeBaseBoard):
+class TrashbinBoard(_FsNodeBaseBoard):
+    """Keyboard for trashbin menu."""
+
     fsnode_callback_data = TrashbinFsNodeData
     actions_callback_data = TrashbinData
     actions = TrashbinActions
@@ -22,8 +26,12 @@ class TrashbinBoard(FsNodeBaseBoard):
         super().__init__(**kwargs)
 
     def build_actions_buttons(self) -> InlineKeyboardBuilder:
-        act_builder = InlineKeyboardBuilder()
-        act_builder.add(
+        """Build buttons for trashbin actions.
+
+        :return: InlineKeyboardBuilder object.
+        """
+        builder = InlineKeyboardBuilder()
+        builder.add(
             InlineKeyboardButton(
                 text=LazyProxy("trashbin-cleanup-button"),
                 callback_data=TrashbinData(
@@ -33,13 +41,19 @@ class TrashbinBoard(FsNodeBaseBoard):
                 ).pack(),
             ),
         )
-        return act_builder
+        return builder
 
 
 def trashbin_cleanup_board(
     from_user_id: int,
     page: int = 0,
 ) -> InlineKeyboardMarkup:
+    """Build keyboard for cleanup action.
+
+    :param from_user_id: Telegram user ID.
+    :param page: Page number.
+    :return: InlineKeyboardMarkup object.
+    """
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [
@@ -69,6 +83,13 @@ def trashbin_fsnode_board(
     file_id: str,
     page: int = 0,
 ) -> InlineKeyboardMarkup:
+    """Build keyboard for fsnode in trashbin.
+
+    :param from_user_id: Telegram user ID.
+    :param file_id: The file id of the fsnode.
+    :param page: Page number.
+    :return: InlineKeyboardMarkup object.
+    """
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [

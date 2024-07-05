@@ -20,13 +20,24 @@ AUTH_TIMEOUT_IN_MIN = AUTH_TIMEOUT // 60
 @get_msg_user
 async def auth(
     message: Message,
-    msg_user: TgUser,
+    msg_from_user: TgUser,
     bot: Bot,
     i18n: I18nContext,
     nc: AsyncNextcloud,
     uow: UnitOfWork,
 ) -> None:
-    if await uow.users.get_by_id(msg_user.id):
+    """Authenticate a user in Nextcloud.
+
+    Initialize the login flow, polling for credentials, and add user to the database.
+
+    :param message: Message object.
+    :param msg_from_user: User who sent the message.
+    :param bot: Bot object.
+    :param i18n: Internationalization context.
+    :param nc: Nextcloud API client.
+    :param uow: Unit of work.
+    """
+    if await uow.users.get_by_id(msg_from_user.id):
         text = i18n.get("already-authorized")
         reply_markup = menu_board()
         await message.reply(text=text, reply_markup=reply_markup)
@@ -47,12 +58,12 @@ async def auth(
         return
 
     user = User(
-        id=msg_user.id,
+        id=msg_from_user.id,
         nc_login=credentials.login_name,
         nc_app_password=credentials.app_password,
-        name=msg_user.username,
-        first_name=msg_user.first_name,
-        last_name=msg_user.last_name,
+        name=msg_from_user.username,
+        first_name=msg_from_user.first_name,
+        last_name=msg_from_user.last_name,
     )
     await uow.users.add(user)
     await uow.commit()

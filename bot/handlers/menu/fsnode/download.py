@@ -1,3 +1,4 @@
+"""Download fsnode handler."""
 from aiogram.types import CallbackQuery, Message
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
@@ -17,6 +18,16 @@ async def download(
     i18n: I18nContext,
     nc: AsyncNextcloud,
 ) -> None:
+    """Downloads a file from Nextcloud server.
+
+    If the file is larger than the specified size, then a link will be sent, which will be valid for 8 hours.
+
+    :param query: Callback query object.
+    :param query_msg: The message object associated with the query.
+    :param callback_data: The callback data object containing the necessary data for the action with fsnode.
+    :param i18n: I18nContext.
+    :param nc: AsyncNextcloud.
+    """
     try:
         class_ = NCSrvFactory.get("FsNodeService")
         srv = await class_.create_instance(nc, file_id=callback_data.file_id)

@@ -1,5 +1,4 @@
-"""Sqlaclhemy models."""
-
+"""Database-related functionalities."""
 from .database import session_maker
 from .uow import UnitOfWork
 

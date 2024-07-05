@@ -1,6 +1,6 @@
 """Package with reply and inline keyboards."""
 
-from .fsnode_boards import FsNodeMenuBoard, fsnode_delete_board
+from .fsnode_boards import FsNodeMenuBoard, fsnode_delete_board, fsnode_new_board
 from .logout_board import logout_board
 from .menu_board import menu_board
 from .reply_board import reply_board
@@ -11,8 +11,8 @@ __all__ = (
     "logout_board",
     "reply_board",
     "menu_board",
-    "FsNodeBaseBoard",
     "FsNodeMenuBoard",
+    "fsnode_new_board",
     "fsnode_delete_board",
     "TrashbinBoard",
     "trashbin_fsnode_board",

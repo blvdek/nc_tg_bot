@@ -1,4 +1,4 @@
-"""Menu router."""
+"""Router with trash bin messages."""
 
 from aiogram import F, Router
 from aiogram_i18n import LazyFilter
@@ -8,7 +8,7 @@ from .cleanup import cleanup, cleanup_confirm
 from .fsnode import delete, restore, select
 from .menu import menu
 from .pag import pag
-from bot.filters import AuthorizedFilter, MsgAuthorFilter
+from bot.filters import AuthorizedFilter, FromUserFilter
 from bot.keyboards.callback_data_factories import (
     TrashbinActions,
     TrashbinData,
@@ -18,6 +18,10 @@ from bot.keyboards.callback_data_factories import (
 
 
 def trashbin_router() -> Router:
+    """Build router with trash bin messages.
+
+    :return: Router with trash bin messages.
+    """
     router = Router()
 
     router.message.register(menu, LazyFilter("trashbin-button"), AuthorizedFilter())
@@ -34,7 +38,7 @@ def trashbin_router() -> Router:
     router.callback_query.register(
         pag,
         TrashbinData.filter(F.action.in_({TrashbinActions.PAG_BACK, TrashbinActions.PAG_NEXT})),
-        MsgAuthorFilter(TrashbinData),
+        FromUserFilter(TrashbinData),
     )
 
     return router

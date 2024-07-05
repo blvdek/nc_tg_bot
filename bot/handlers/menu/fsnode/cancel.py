@@ -1,3 +1,4 @@
+"""Cancel operation with fsnode handlers."""
 from contextlib import suppress
 
 from aiogram.exceptions import TelegramBadRequest
@@ -23,6 +24,14 @@ async def cancel_callback(
     i18n: I18nContext,
     nc: AsyncNextcloud,
 ) -> None:
+    """Cancel operation with fsnode in callback form.
+
+    :param query: Callback query object.
+    :param query_msg: The message object associated with the query.
+    :param callback_data: The callback data object containing the necessary data for the action with fsnode.
+    :param i18n: I18nContext.
+    :param nc: AsyncNextcloud.
+    """
     await state.clear()
 
     try:
@@ -33,7 +42,13 @@ async def cancel_callback(
         await query_msg.edit_text(text=text)
         return
 
-    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes, query.from_user.id)
+    text, reply_markup = get_fsnode_msg(
+        i18n,
+        srv.fsnode,
+        srv.attached_fsnodes,
+        query.from_user.id,
+        page=callback_data.page,
+    )
     with suppress(TelegramBadRequest):
         await query_msg.edit_text(text=text, reply_markup=reply_markup)
     await query.answer()
@@ -42,11 +57,19 @@ async def cancel_callback(
 @get_msg_user
 async def cancel_message(
     message: Message,
-    msg_user: TgUser,
+    msg_from_user: TgUser,
     state: FSMContext,
     i18n: I18nContext,
     nc: AsyncNextcloud,
 ) -> None:
+    """Cancel operation with fsnode in message form.
+
+    :param message: Message object.
+    :param msg_from_user: User who sent the message.
+    :param state: State machine context.
+    :param i18n: Internationalization context.
+    :param nc: AsyncNextcloud.
+    """
     data = await state.get_data()
 
     try:
@@ -63,6 +86,6 @@ async def cancel_message(
     menu_text = i18n.get("cancel")
     await message.reply(text=menu_text, reply_markup=menu_reply_markup)
 
-    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes, msg_user.id)
+    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes, msg_from_user.id)
     with suppress(TelegramBadRequest):
         await message.answer(text=text, reply_markup=reply_markup)

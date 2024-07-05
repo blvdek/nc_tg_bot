@@ -1,4 +1,4 @@
-
+"""Fsnode menu handler."""
 from aiogram.types import Message
 from aiogram.types import User as TgUser
 from aiogram_i18n import I18nContext
@@ -10,7 +10,16 @@ from bot.nextcloud.exceptions import FsNodeNotFoundError
 
 
 @get_msg_user
-async def menu(message: Message, msg_user: TgUser, i18n: I18nContext, nc: AsyncNextcloud) -> None:
+async def menu(message: Message, msg_from_user: TgUser, i18n: I18nContext, nc: AsyncNextcloud) -> None:
+    """Fsnode menu.
+
+    Fsnode entry point.
+
+    :param message: Message object.
+    :param msg_from_user: User who sent the message.
+    :param i18n: Internationalization context.
+    :param nc: AsyncNextcloud.
+    """
     try:
         class_ = NCSrvFactory.get("RootFsNodeService")
         srv = await class_.create_instance(nc)
@@ -19,5 +28,5 @@ async def menu(message: Message, msg_user: TgUser, i18n: I18nContext, nc: AsyncN
         await message.reply(text=text)
         return
 
-    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes, msg_user.id)
+    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes, msg_from_user.id)
     await message.reply(text=text, reply_markup=reply_markup)

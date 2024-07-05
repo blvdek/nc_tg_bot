@@ -1,4 +1,4 @@
-"""Menu router."""
+"""Router with main menu messages and main menu partitions routers."""
 
 from aiogram import F, Router
 from aiogram.filters.command import Command
@@ -13,6 +13,10 @@ from bot.middlewares import NextcloudMD, UnitOfWorkMD
 
 
 def menu_router() -> Router:
+    """Build router with main menu messages and main menu partitions routers.
+
+    :return: Router with main menu messages and main menu partitions routers.
+    """
     router = Router()
     router.include_router(fsnode_menu_router())
     router.include_router(trashbin_router())

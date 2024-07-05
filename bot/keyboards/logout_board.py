@@ -1,3 +1,4 @@
+"""Logout keyboard."""
 from aiogram_i18n import LazyProxy
 from aiogram_i18n.types import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -5,6 +6,10 @@ from bot.keyboards.callback_data_factories import LogoutActions, LogoutData
 
 
 def logout_board() -> InlineKeyboardMarkup:
+    """Create logout keyboard.
+
+    :return: InlineKeyboardMarkup object.
+    """
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [

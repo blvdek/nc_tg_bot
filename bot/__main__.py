@@ -1,97 +1,38 @@
-"""Startup and shutdown bot logick."""
+"""Module for launching the bot.
 
-import asyncio
+This module handles the initialization and control flow of the bot, including setting up logging,
+launching the asynchronous event loop via uvloop, and registering event handlers for startup and shutdown events.
+"""
+
 import logging
 
 import uvloop
-from aiogram.types import BotCommand
-from aiogram_i18n import I18nMiddleware
-from aiogram_i18n.cores.fluent_runtime_core import FluentRuntimeCore
 
-from bot.core import bot, dp, settings
-from bot.handlers import routers
-
-if settings.webhook:
-    from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
-    from aiohttp import web
-
-
-async def on_startup() -> None:
-    """Register routers, middlewares, commands and changes the menu button on startup."""
-    logger.info("Bot starting...")
-
-    for router in routers:
-        dp.include_router(router())
-
-    i18n_middleware = I18nMiddleware(core=FluentRuntimeCore(path="./bot/locales/{locale}/"))
-    i18n_middleware.setup(dispatcher=dp)
-
-    commands = [
-        BotCommand(command="help", description="Get message with help text"),
-        BotCommand(command="auth", description="Start authentification in Nextcloud"),
-        BotCommand(command="logout", description="Logout from Nextcloud"),
-    ]
-    await bot.set_my_commands(commands)
-
-    logger.info("Bot started.")
-
-
-async def on_shutdown() -> None:
-    """Close storage, cache, webhook and telegram session on shutdown."""
-    logger.info("Bot stopping...")
-
-    await dp.storage.close()
-    await dp.fsm.storage.close()
-
-    await bot.delete_webhook()
-    await bot.session.close()
-
-    logger.info("Bot stopped.")
-
-
-async def setup_webhook() -> None:
-    """Set up a webhook for receiving updates from a Telegram.
-
-    :raises NameError: If the webhook settings are not specified in the application's settings.
-    """
-    if settings.webhook:
-        await bot.set_webhook(
-            settings.webhook.url,
-            allowed_updates=dp.resolve_used_update_types(),
-            secret_token=settings.webhook.secret,
-        )
-        webhook_requests_handler = SimpleRequestHandler(
-            dispatcher=dp,
-            bot=bot,
-            secret_token=settings.webhook.secret,
-        )
-        app = web.Application()
-        webhook_requests_handler.register(app, path=settings.webhook.path)
-        setup_application(app, dp, bot=bot)
-
-        runner = web.AppRunner(app)
-        await runner.setup()
-        site = web.TCPSite(runner, host=settings.webhook.host, port=settings.webhook.port)
-        await site.start()
-
-        await asyncio.Event().wait()
-    else:
-        msg = "The settings don't specify the data for connecting to the server to use the Webhook."
-        raise NameError(msg)
+from bot.core import bot, dp, on_shutdown, on_startup, settings, webhook_run
 
 
 async def main() -> None:
-    """Entry point of bot."""
+    """Asynchronous entry point for the application.
+
+    This function initializes the bot, registers event handlers, and starts the polling process or webhook,
+    depending on the configuration settings.
+    """
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
     if settings.webhook:
-        await setup_webhook()
-    else:
-        await dp.start_polling(bot)
+        await webhook_run(
+            dp,
+            bot,
+            settings.webhook.path,
+            settings.webhook.host,
+            settings.webhook.port,
+            settings.webhook.secret,
+        )
+        return
+    await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.getLevelName(settings.logging))
-    logger = logging.getLogger("aiogram.dispatcher")
 
     uvloop.run(main())

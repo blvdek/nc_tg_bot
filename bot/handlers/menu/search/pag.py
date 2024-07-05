@@ -1,3 +1,4 @@
+"""Handler with pagination for search results."""
 from contextlib import suppress
 
 from aiogram.exceptions import TelegramBadRequest
@@ -14,10 +15,18 @@ from bot.nextcloud import NCSrvFactory
 async def pag(
     query: CallbackQuery,
     query_msg: Message,
-    i18n: I18nContext,
     callback_data: SearchData,
+    i18n: I18nContext,
     nc: AsyncNextcloud,
 ) -> None:
+    """Pagination for search results.
+
+    :param query: Callback query object.
+    :param query_msg: Message object associated with the query.
+    :param callback_data: Callback data object containing the necessary data for the search result.
+    :param i18n: Internationalization context.
+    :param nc: Nextcloud API client.
+    """
     class_ = NCSrvFactory.get("SearchService")
     srv = await class_.create_instance(nc, ["like", "name", f"%{callback_data.query}%"])
 

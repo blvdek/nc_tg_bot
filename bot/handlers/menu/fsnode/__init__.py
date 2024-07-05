@@ -1,3 +1,4 @@
+"""Router with fsnode menu messages."""
 from aiogram import F, Router
 from aiogram.types import ContentType
 from aiogram_i18n import LazyFilter
@@ -7,16 +8,19 @@ from .cancel import cancel_callback, cancel_message
 from .delete import delete, delete_confirm
 from .download import download
 from .menu import menu
-from .mkdir import incorrectly_mkdir, mkdir, start_mkdir
+from .new import incorrectly_mkdir, mkdir, mkdir_start, new, upload, upload_incorrectly, upload_start
 from .pag import pag
 from .select import select
-from .upload import upload, upload_incorrectly, upload_start
-from bot.filters import AuthorizedFilter, MsgAuthorFilter
+from bot.filters import AuthorizedFilter, FromUserFilter
 from bot.keyboards.callback_data_factories import FsNodeData, FsNodeMenuActions, FsNodeMenuData
 from bot.states import FsNodeMenuStatesGroup
 
 
 def fsnode_menu_router() -> Router:
+    """Build router with fsnode menu messages.
+
+    :return: Router with fsnode menu messages.
+    """
     router = Router()
 
     # Menu block.
@@ -26,7 +30,7 @@ def fsnode_menu_router() -> Router:
     router.callback_query.register(
         cancel_callback,
         FsNodeMenuData.filter(F.action == FsNodeMenuActions.CANCEL),
-        MsgAuthorFilter(FsNodeMenuData),
+        FromUserFilter(FsNodeMenuData),
     )
     router.message.register(
         cancel_message,
@@ -39,11 +43,17 @@ def fsnode_menu_router() -> Router:
         LazyFilter("cancel-button"),
     )
 
-    # Upload block.
+    # New fsnode block.
+    router.callback_query.register(
+        new,
+        FsNodeMenuData.filter(F.action == FsNodeMenuActions.NEW),
+        FromUserFilter(FsNodeMenuData),
+    )
+
     router.callback_query.register(
         upload_start,
         FsNodeMenuData.filter(F.action == FsNodeMenuActions.UPLOAD),
-        MsgAuthorFilter(FsNodeMenuData),
+        FromUserFilter(FsNodeMenuData),
     )
     router.message.register(
         upload,
@@ -55,16 +65,15 @@ def fsnode_menu_router() -> Router:
         FsNodeMenuStatesGroup.UPLOAD,
     )
 
-    # Mkdir block.
     router.callback_query.register(
-        start_mkdir,
+        mkdir_start,
         FsNodeMenuData.filter(F.action == FsNodeMenuActions.MKDIR),
-        MsgAuthorFilter(FsNodeMenuData),
+        FromUserFilter(FsNodeMenuData),
     )
     router.message.register(
         mkdir,
         FsNodeMenuStatesGroup.MKDIR,
-        F.text.regexp(r"^[\w\-.]{1,255}$"),
+        F.text.regexp(r"^[a-zA-Z0-9][-a-zA-Z0-9]*[a-zA-Z0-9]?$"),
     )
     router.message.register(
         incorrectly_mkdir,
@@ -75,33 +84,33 @@ def fsnode_menu_router() -> Router:
     router.callback_query.register(
         pag,
         FsNodeMenuData.filter(F.action.in_({FsNodeMenuActions.PAG_BACK, FsNodeMenuActions.PAG_NEXT})),
-        MsgAuthorFilter(FsNodeMenuData),
+        FromUserFilter(FsNodeMenuData),
     )
 
     # Delete block.
     router.callback_query.register(
         delete,
         FsNodeMenuData.filter(F.action == FsNodeMenuActions.DELETE),
-        MsgAuthorFilter(FsNodeMenuData),
+        FromUserFilter(FsNodeMenuData),
     )
     router.callback_query.register(
         delete_confirm,
         FsNodeMenuData.filter(F.action == FsNodeMenuActions.DELETE_CONFIRM),
-        MsgAuthorFilter(FsNodeMenuData),
+        FromUserFilter(FsNodeMenuData),
     )
 
     # Download block.
     router.callback_query.register(
         download,
         FsNodeMenuData.filter(F.action == FsNodeMenuActions.DOWNLOAD),
-        MsgAuthorFilter(FsNodeMenuData),
+        FromUserFilter(FsNodeMenuData),
     )
 
     # Back block.
     router.callback_query.register(
         back,
         FsNodeMenuData.filter(F.action == FsNodeMenuActions.BACK),
-        MsgAuthorFilter(FsNodeMenuData),
+        FromUserFilter(FsNodeMenuData),
     )
 
     # Select.

@@ -1,3 +1,4 @@
+"""Handler with pagination for fsnode menu."""
 from contextlib import suppress
 
 from aiogram.exceptions import TelegramBadRequest
@@ -15,10 +16,18 @@ from bot.nextcloud.exceptions import FsNodeNotFoundError
 async def pag(
     query: CallbackQuery,
     query_msg: Message,
-    i18n: I18nContext,
     callback_data: FsNodeMenuData,
+    i18n: I18nContext,
     nc: AsyncNextcloud,
 ) -> None:
+    """Pagination for fsnode menu.
+
+    :param query: Callback query object.
+    :param query_msg: Message object associated with the query.
+    :param callback_data: The callback data object containing the necessary data for the action with fsnode.
+    :param i18n: Internationalization context.
+    :param nc: Nextcloud API client.
+    """
     try:
         class_ = NCSrvFactory.get("FsNodeService")
         srv = await class_.create_instance(nc, file_id=callback_data.file_id)

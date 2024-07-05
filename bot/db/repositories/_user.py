@@ -5,7 +5,7 @@ from bot.db.repositories import _Repository
 
 
 class _UserRepository(_Repository[User]):
-    """User repository for CRUD and other SQL queries."""
+    """User repository for CRUD."""
 
     def __init__(self, session: AsyncSession) -> None:
         super().__init__(session, User)

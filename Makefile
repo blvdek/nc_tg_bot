@@ -1,11 +1,16 @@
 project_dir := .
 bot_dir := bot
+translations_dir := bot/locales
 
 .PHONY: lint
 lint:
-	@poetry run ruff check $(project_dir)
-	@poetry run mypy $(project_dir) --strict
+	ruff check $(bot_dir)
+	mypy $(bot_dir) --strict
 
 .PHONY: format
 format:
-	@poetry run ruff check $(project_dir) --fix
+	ruff check $(bot_dir) --fix
+
+.PHONY: migrate
+migrate:
+	alembic upgrade head

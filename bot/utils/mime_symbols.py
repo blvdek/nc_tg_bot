@@ -1,3 +1,5 @@
+"""Dictionary mapping MIME types to corresponding emojis."""
+
 MIME_SYMBOLS = {
     "text/plain": "📄",
     "image/jpeg": "🖼️",

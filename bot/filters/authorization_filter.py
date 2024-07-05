@@ -7,9 +7,14 @@ from bot.db import UnitOfWork
 
 
 class AuthorizedFilter(BaseFilter):
-    """Filter to check if the user is authorized with notice message."""
+    """Filter to check if the user is authorized.
+
+    This filter is used to verify whether the sender of a message is an authorized user.
+    If the user is not authorized in Nextcloud, the bot sends a notification and blocks the execution of the command.
+    """
 
     async def __call__(self, event: TelegramObject, uow: UnitOfWork, i18n: I18nContext) -> bool:
+        """Checks if the user is authorized."""
         if not isinstance(event, Message):
             msg = "This filter is only usable with 'Message' event type."
             raise TypeError(msg)

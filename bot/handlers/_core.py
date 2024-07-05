@@ -2,7 +2,7 @@ from collections.abc import Awaitable, Callable
 from functools import wraps
 from typing import Any, NotRequired, ParamSpec, TypedDict, TypeVar, Unpack
 
-from aiogram.types import CallbackQuery, InlineKeyboardMarkup, Message, User
+from aiogram.types import CallbackQuery, Document, InlineKeyboardMarkup, Message
 from aiogram_i18n import I18nContext
 from nc_py_api import FsNode
 
@@ -15,6 +15,12 @@ R = TypeVar("R")
 
 
 def get_msg_text(f: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R | None]]:
+    """Update message handler with message text argument.
+
+    Extracts text from a message and updates the keyword arguments with the extracted text if this text exists,
+    else handler will not be called.
+    """
+
     @wraps(f)
     async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
         message = args[0]
@@ -31,7 +37,36 @@ def get_msg_text(f: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R | None
     return wrapper
 
 
+def get_msg_doc(f: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R | None]]:
+    """Update message handler with message document argument.
+
+    Extracts a document from a message and updates the keyword arguments with the extracted document if document exists,
+    else handler will not be called.
+    """
+
+    @wraps(f)
+    async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
+        message = args[0]
+        if not isinstance(message, Message):
+            return None
+
+        if not isinstance(message.document, Document):
+            msg = "The message does not contain document."
+            raise TypeError(msg)
+
+        kwargs.update({"msg_doc": message.document})
+        return await f(*args, **kwargs)
+
+    return wrapper
+
+
 def get_msg_user(f: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R | None]]:
+    """Update mesage handler with message sender argument.
+
+    Extracts the sender of a message from the message and updates the keyword arguments with the sender
+    if sender is accessible, else handler will not be called.
+    """
+
     @wraps(f)
     async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
         message = args[0]
@@ -42,13 +77,20 @@ def get_msg_user(f: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R | None
             msg = "Sender of this message not found."
             raise ValueError(msg)
 
-        kwargs.update({"msg_user": message.from_user})
+        kwargs.update({"msg_from_user": message.from_user})
         return await f(*args, **kwargs)
 
     return wrapper
 
 
 def get_query_msg(f: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R | None]]:
+    """Update callback query handler with query message argument.
+
+    Extracts query message from the callback and updates the keyword arguments with the query message
+    if query message is accessible, else handler will not be called and a message will be sent to the user
+    that the request message is inaccessible.
+    """
+
     @wraps(f)
     async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
         query = args[0]
@@ -71,6 +113,12 @@ def get_query_msg(f: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R | Non
 
 
 def get_human_readable_bytes(num: float, suffix: str = "B") -> str:
+    """A function that convert a number of bytes into a human-readable format.
+
+    :param num: The number of bytes to convert.
+    :param suffix: The suffix to append to the converted value, defaults to "B".
+    :return: A human-readable string representing the converted byte value with the appropriate unit.
+    """
     for unit in ("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"):
         if abs(num) < 2**10:
             return f"{num:3.1f}{unit}{suffix}"
@@ -79,6 +127,13 @@ def get_human_readable_bytes(num: float, suffix: str = "B") -> str:
 
 
 def get_page_items(item_list: list[R], page: int = 0, page_size: int = settings.telegram.page_size) -> list[R]:
+    """Return a slice of the input list `item_list` based on the provided `page` and `page_size`.
+
+    :param item_list: The list from which to extract the items.
+    :param page: The page number to retrieve. Defaults to 0.
+    :param page_size: The number of items per page, defaults to the value of `settings.telegram.page_size`.
+    :return: A list containing the items on the specified page.
+    """
     start_index = page * page_size
     end_index = (page + 1) * page_size
     return item_list[start_index:end_index]

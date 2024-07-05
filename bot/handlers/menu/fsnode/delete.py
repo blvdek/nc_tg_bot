@@ -1,3 +1,4 @@
+"""Fsnode delete handlers."""
 from contextlib import suppress
 
 from aiogram.exceptions import TelegramBadRequest
@@ -20,6 +21,14 @@ async def delete(
     i18n: I18nContext,
     nc: AsyncNextcloud,
 ) -> None:
+    """Ask confirmation to delete fsnode.
+
+    :param query: Callback query object.
+    :param query_msg: The message object associated with the query.
+    :param callback_data: The callback data object containing the necessary data for the action with fsnode.
+    :param i18n: I18nContext.
+    :param nc: AsyncNextcloud.
+    """
     try:
         class_ = NCSrvFactory.get("FsNodeService")
         srv = await class_.create_instance(nc, file_id=callback_data.file_id)
@@ -47,6 +56,14 @@ async def delete_confirm(
     i18n: I18nContext,
     nc: AsyncNextcloud,
 ) -> None:
+    """Delete fsnode.
+
+    :param query: Callback query object.
+    :param query_msg: The message object associated with the query.
+    :param callback_data: The callback data object containing the necessary data for the action with fsnode.
+    :param i18n: I18nContext.
+    :param nc: AsyncNextcloud.
+    """
     try:
         class_ = NCSrvFactory.get("FsNodeService")
         srv = await class_.create_instance(nc, file_id=callback_data.file_id)

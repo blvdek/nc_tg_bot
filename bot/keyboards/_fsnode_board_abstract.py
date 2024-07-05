@@ -1,9 +1,11 @@
+"""Abstract and base inline keyboard classes for fsnode boards."""
 from abc import ABC, abstractmethod
 from enum import IntEnum
 from typing import Any
 
 from aiogram.filters.callback_data import CallbackData
-from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardMarkup
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram_i18n import LazyProxy
 from aiogram_i18n.types import InlineKeyboardButton
 from nc_py_api.files import FsNode
@@ -28,7 +30,9 @@ class _FsNodeAbstractBoard(ABC):
         raise NotImplementedError
 
 
-class FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
+class _FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
+    """Base class for fsnode boards."""
+
     fsnode_callback_data: type[CallbackData]
     actions_callback_data: type[CallbackData]
     actions: type[IntEnum]
@@ -49,17 +53,21 @@ class FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
         self.kwargs = kwargs
 
     def get_kb(self) -> InlineKeyboardMarkup:
+        """Return the InlineKeyboardMarkup with fsnode buttons, page buttons, and action buttons."""
         self.builder.attach(self.build_fsnode_buttons())
         self.builder.attach(self.build_pag_buttons())
         self.builder.attach(self.build_actions_buttons())
         return self.builder.as_markup()
 
     def build_fsnode_buttons(self) -> InlineKeyboardBuilder:
+        """Builds fsnode buttons based on the current page and page size.
+
+        :return: InlineKeyboardBuilder with fsnode buttons.
+        """
         builder = InlineKeyboardBuilder()
 
         start_index = self.page * self.page_size
         end_index = (self.page + 1) * self.page_size
-        print(self.fsnodes)
 
         for fsnode in self.fsnodes[start_index:end_index]:
             prefix = MIME_SYMBOLS.get(fsnode.info.mimetype, "")
@@ -77,6 +85,10 @@ class FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
         return builder
 
     def build_pag_buttons(self) -> InlineKeyboardBuilder:
+        """Builds the pagination buttons for navigating through fsnodes.
+
+        :return: InlineKeyboardBuilder with pagination buttons.
+        """
         if not hasattr(self.actions, "PAG_BACK") or not hasattr(self.actions, "PAG_NEXT"):
             msg = "Pagination actions such as 'PAG_BACK' and 'PAG_NEXT' must be defined in the CallbackData's IntEnum."
             raise AttributeError(msg)
@@ -120,4 +132,8 @@ class FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
 
     @abstractmethod
     def build_actions_buttons(self) -> InlineKeyboardBuilder:
+        """Builds the actions buttons for the keyboard.
+
+        :return: InlineKeyboardBuilder with actions buttons.
+        """
         raise NotImplementedError

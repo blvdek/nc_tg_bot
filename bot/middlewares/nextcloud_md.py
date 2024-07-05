@@ -1,3 +1,4 @@
+"""Async Nextcloud client middleware."""
 from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, Any
 
@@ -12,12 +13,22 @@ if TYPE_CHECKING:
 
 
 class NextcloudMD(BaseMiddleware):
+    """Middleware for Nextcloud.
+
+    Injects :class:`AsyncNextcloud` instance into the handler context.
+
+    :param handler: The handler function to be executed.
+    :param event: The event object.
+    :param data: The data dictionary containing the request context.
+    """
+
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
+        """Calls the handler function with the injected Nextcloud instance."""
         uow: UnitOfWork | None = data.get("uow")
         if uow is None:
             msg = "'UnitOfWork' object not found."

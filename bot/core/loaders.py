@@ -1,4 +1,8 @@
-"""Build dispatcher logick and bot instance."""
+"""Build dispatcher logic and bot instance.
+
+Build dispatcher and bot instance for the Nextcloud Telegram Bot, configuringthe
+storage backend and integrating with the Telegram API.
+"""
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties

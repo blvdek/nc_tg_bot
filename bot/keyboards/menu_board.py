@@ -1,3 +1,4 @@
+"""Main menu reply keyboard."""
 from typing import Any
 
 from aiogram.types import ReplyKeyboardMarkup
@@ -7,6 +8,10 @@ from bot import keyboards
 
 
 def menu_board(**kwargs: Any) -> ReplyKeyboardMarkup:
+    """Create a reply keyboard with main menu buttons.
+
+    :return: Reply keyboard markup with main menu buttons.
+    """
     return keyboards.reply_board(
         LazyProxy("fsnode-menu-button"),
         LazyProxy("search-button"),

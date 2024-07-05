@@ -1,4 +1,4 @@
-
+"""Handler with pagination for trash bin."""
 from aiogram.types import CallbackQuery, Message
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
@@ -16,6 +16,14 @@ async def pag(
     callback_data: TrashbinData,
     nc: AsyncNextcloud,
 ) -> None:
+    """Pagination for trash bin.
+
+    :param query: Callback query object.
+    :param query_msg: Message object associated with the query.
+    :param callback_data: Callback data object containing the necessary data for the search result.
+    :param i18n: Internationalization context.
+    :param nc: Nextcloud API client.
+    """
     page_num = int(callback_data.page)
     page = page_num + 1 if callback_data.action == TrashbinActions.PAG_NEXT else page_num - 1
 
