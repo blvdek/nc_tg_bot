@@ -78,7 +78,7 @@ class BaseFsNodeService:
         :return: The downloaded fsnode.
         """
         buff = io.BytesIO()
-        await self.nc.files.download2stream(self.fsnode, buff, chunk_size=settings.nextcloud.chunk_size)
+        await self.nc.files.download2stream(self.fsnode, buff, chunk_size=settings.nc.chunksize)
 
         buff.seek(0)
         return BufferedInputFile(buff.read(), filename=self.fsnode.name)
@@ -100,20 +100,8 @@ class BaseFsNodeService:
         return await self.nc.files.upload_stream(
             f"{self.fsnode.user_path}{name}",
             buff,
-            chunk_size=settings.nextcloud.chunk_size,
+            chunk_size=settings.nc.chunksize,
         )
-
-    async def direct_download(self) -> str:
-        """Get a unique public link to a single file. This link will be valid for 8 hours.
-
-        :return: The URL to download the file.
-        """
-        res: dict[str, str] = await self.nc.ocs(
-            "POST",
-            "/ocs/v2.php/apps/dav/api/v1/direct",
-            params={"fileId": self.fsnode.file_id},
-        )
-        return res["url"]
 
 
 class RootFsNodeService(FactorySubject[BaseFsNodeService], BaseFsNodeService):

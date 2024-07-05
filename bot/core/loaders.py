@@ -6,6 +6,8 @@ storage backend and integrating with the Telegram API.
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
+from aiogram.client.session.aiohttp import AiohttpSession
+from aiogram.client.telegram import TelegramAPIServer
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.storage.redis import RedisStorage
@@ -14,7 +16,11 @@ from redis.asyncio import Redis
 from bot.core.config import settings
 from bot.db import session_maker
 
-bot = Bot(token=settings.telegram.token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+session = None
+if settings.tg.api_server:
+    session = AiohttpSession(api=TelegramAPIServer.from_base(settings.tg.api_server))
+
+bot = Bot(token=settings.tg.token, default=DefaultBotProperties(parse_mode=ParseMode.HTML), session=session)
 
 _storage = (
     RedisStorage(

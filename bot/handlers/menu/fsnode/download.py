@@ -1,4 +1,5 @@
 """Download fsnode handler."""
+
 from aiogram.types import CallbackQuery, Message
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
@@ -36,16 +37,17 @@ async def download(
         await query_msg.edit_text(text=text)
         return
 
-    if srv.fsnode.info.size > settings.telegram.max_upload_size or srv.fsnode.info.size == 0:
-        file_url = await srv.direct_download()
+    if srv.fsnode.info.size == 0:
+        text = i18n.get("fsnode-empty")
+        await query.answer(text=text)
+        return
+    if srv.fsnode.info.size > settings.tg.max_upload_size:
         text = i18n.get(
-            "fsnode-url",
+            "fsnode-size-limit",
             size=get_human_readable_bytes(srv.fsnode.info.size),
-            size_limit=get_human_readable_bytes(settings.telegram.max_upload_size),
-            url=file_url,
+            size_limit=get_human_readable_bytes(settings.tg.max_upload_size),
         )
-        await query_msg.answer(text=text)
-        await query.answer()
+        await query.answer(text=text)
         return
 
     await query_msg.answer_document(await srv.download())

@@ -1,4 +1,5 @@
 """Selection of a search result handler."""
+
 from aiogram.types import CallbackQuery, Message
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud

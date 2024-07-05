@@ -1,4 +1,5 @@
 """Async Nextcloud client middleware."""
+
 from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, Any
 
@@ -38,7 +39,7 @@ class NextcloudMD(BaseMiddleware):
             raise AttributeError(msg)
         user = await uow.users.get_by_id(event.from_user.id)
         data["nc"] = AsyncNextcloud(
-            nextcloud_url=settings.nextcloud.url,
+            nextcloud_url=settings.nc.url,
             nc_auth_user=user.nc_login if user else None,
             nc_auth_pass=user.nc_app_password if user else None,
         )

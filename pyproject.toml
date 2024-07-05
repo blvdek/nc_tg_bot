@@ -23,14 +23,14 @@ sqlalchemy = "^2.0.31"
 pydantic-settings = "^2.3.4"
 alembic = "^1.13.2"
 asyncpg = "^0.29.0"
-pytest = "^8.2.2"
-pytest-asyncio = "^0.23.7"
 uvloop = "^0.19.0"
 aiogram-i18n = "^1.4"
 fluent-runtime = "^0.4.0"
 nc-py-api = { git = "https://github.com/cloud-py-api/nc_py_api.git" }
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.2"
+pytest-asyncio = "^0.23.7"
 mypy = "^1.10.1"
 ruff = "^0.5.0"
 pre-commit = "^3.7.1"

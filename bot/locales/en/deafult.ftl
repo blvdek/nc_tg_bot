@@ -1,12 +1,12 @@
-#### Basic command texts for the bot and button labels for the main keyboards.
+### Basic command texts for the bot and button labels for the main keyboards.
 
 ## Basic commands.
-start = 
-    Hello! 👋 
+start =
+    Hello! 👋
     I am @{ $bot_name }, which will help you manage and work with Nextcloud ☁️.
 
     Enter /auth to start authentication.
-help = 
+help =
     This is a Telegram bot for working with Nextcloud.
 
     It represents a convenient tool for managing files and folders in cloud storage. Thanks to the bot, users can easily and quickly delete, download, upload files, create new folders, manage the trash, and search for files by their name.

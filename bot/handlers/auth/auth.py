@@ -1,8 +1,8 @@
 """Authentication in Nextcloud handler."""
 
-from aiogram import Bot
-from aiogram.enums import MenuButtonType
-from aiogram.types import MenuButtonWebApp, Message, WebAppInfo
+from urllib.parse import urlparse
+
+from aiogram.types import Message
 from aiogram.types import User as TgUser
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud, NextcloudException
@@ -21,7 +21,6 @@ AUTH_TIMEOUT_IN_MIN = AUTH_TIMEOUT // 60
 async def auth(
     message: Message,
     msg_from_user: TgUser,
-    bot: Bot,
     i18n: I18nContext,
     nc: AsyncNextcloud,
     uow: UnitOfWork,
@@ -44,10 +43,15 @@ async def auth(
         return
 
     init = await nc.loginflow_v2.init(user_agent=settings.appname)
-    url_text = init.login
-    if not init.login.startswith("https"):
-        url_text = f"<code>{url_text}</code>"
-    text = i18n.get("auth-init", url=url_text, timeout=AUTH_TIMEOUT_IN_MIN)
+    url = init.login
+
+    if settings.nc.public_host:
+        parsed_url = urlparse(url)
+        url = parsed_url._replace(scheme=settings.nc.public_protocol, netloc=settings.nc.public_host).geturl()
+
+    if not url.startswith("https"):
+        url = f"<code>{url}</code>"
+    text = i18n.get("auth-init", url=url, timeout=AUTH_TIMEOUT_IN_MIN)
     init_message = await message.reply(text=text)
 
     try:
@@ -67,15 +71,6 @@ async def auth(
     )
     await uow.users.add(user)
     await uow.commit()
-
-    if credentials.server.startswith("https"):
-        await bot.set_chat_menu_button(
-            menu_button=MenuButtonWebApp(
-                type=MenuButtonType.WEB_APP,
-                text="Nextcloud",
-                web_app=WebAppInfo(url=credentials.server),
-            ),
-        )
 
     text = i18n.get("auth-success")
     await init_message.edit_text(text)

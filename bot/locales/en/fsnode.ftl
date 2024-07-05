@@ -40,12 +40,8 @@ fsnode-upload-success =
 fsnode-upload-incorrectly = The file must be in the form of a document. 🙅‍♂️
 
 ## Download file.
-fsnode-url =
-The weight of this file <b>{ $size}</b> exceeds the allowed <i>{ $size_limit }</i>. 🏋️‍♂️
-
-    You can follow the link and download this file yourself.
-
-    <i><u>File link</u></i>: { $url }
+fsnode-size-limit = The weight of this file { $size } exceeds the allowed { $size_limit }. 🏋️‍♂️
+fsnode-empty = The file cannot be empty. 🫗
 
 ## File management menu buttons.
 fsnode-delete-button = 🔴 Delete

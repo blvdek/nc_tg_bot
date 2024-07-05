@@ -1,4 +1,5 @@
 """Abstract and base inline keyboard classes for fsnode boards."""
+
 from abc import ABC, abstractmethod
 from enum import IntEnum
 from typing import Any
@@ -42,7 +43,7 @@ class _FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
         fsnodes: list[FsNode],
         from_user_id: int,
         page: int = 0,
-        page_size: int = settings.telegram.page_size,
+        page_size: int = settings.tg.page_size,
         **kwargs: Any,
     ) -> None:
         self.builder = InlineKeyboardBuilder()

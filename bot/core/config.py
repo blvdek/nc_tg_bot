@@ -4,12 +4,14 @@ This module contains classes that define the configuration settings necessary fo
 of the Nextcloud Telegram Bot. These settings include database connection details, Redis
 configuration, webhook settings, Nextcloud server details, and Telegram bot credentials.
 """
+
 from pydantic import BaseModel, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
 
-MIN_CHUNK_SIZE = 5242880
-MAX_CHUNK_SIZE = 5368709120
+MAX_TG_FILE_SIZE = 2**31
+MIN_CHUNK_SIZE = 5 * 2**20
+MAX_CHUNK_SIZE = MAX_TG_FILE_SIZE
 
 
 class Database(BaseModel):
@@ -26,7 +28,7 @@ class Database(BaseModel):
 
     host: str
     user: str
-    name: str
+    db: str
     password: str
     port: int = 5432
     driver: str = "asyncpg"
@@ -38,7 +40,7 @@ class Database(BaseModel):
         return URL.create(
             drivername=f"{self.database_system}+{self.driver}",
             username=self.user,
-            database=self.name,
+            database=self.db,
             password=self.password,
             port=self.port,
             host=self.host,
@@ -93,22 +95,26 @@ class Nextcloud(BaseModel):
     :param protocol: The protocol used to communicate with the Nextcloud server, defaults to "https".
     :param host: The hostname of the Nextcloud server.
     :param port: The port number on which the Nextcloud server listens, defaults to 80.
-    :param chunk_size: The maximum size of file chunks for uploads, defaults to 5242880.
+    :param chunksize: The maximum size of file chunks for uploads, defaults to 5242880.
+    :param public_protocol: The public protocol used to communicate with the Nextcloud server, defaults to "https".
+    :param public_host: The public hostname of the Nextcloud server.
     """
 
     protocol: str = "https"
     host: str
     port: int = 80
-    chunk_size: int = 5242880
+    chunksize: int = 5242880
+    public_protocol: str | None = "https"
+    public_host: str | None
 
     @property
     def url(self) -> str:
         """Constructs and returns the URL for connecting to the Nextcloud server."""
         return f"{self.protocol}://{self.host}:{self.port}"
 
-    @field_validator("chunk_size")
+    @field_validator("chunksize")
     @classmethod
-    def check_chunk_size(cls, v: int) -> int:
+    def check_chunksize(cls, v: int) -> int:
         """Validates the chunk size against minimum and maximum limits."""
         if MIN_CHUNK_SIZE > v > MAX_CHUNK_SIZE:
             msg = f"The size of chunks must be between {MIN_CHUNK_SIZE} and {MAX_CHUNK_SIZE}."
@@ -129,6 +135,16 @@ class Telegram(BaseModel):
     page_size: int = 8
     max_upload_size: int = 20971520
     drop_pending_updates: bool = True
+    api_server: str | None = None
+
+    @field_validator("max_upload_size")
+    @classmethod
+    def check_max_upload_size(cls, v: int) -> int:
+        """Validates the max upload size against maximum limit."""
+        if v > MAX_TG_FILE_SIZE:
+            msg = f"The max size must be less than {MAX_TG_FILE_SIZE}."
+            raise ValueError(msg)
+        return v
 
 
 class Settings(BaseSettings):
@@ -145,14 +161,14 @@ class Settings(BaseSettings):
     """
 
     model_config = SettingsConfigDict(
-        env_file=(".env", ".env.prod"),
+        env_file=".env",
         env_file_encoding="utf-8",
-        env_nested_delimiter="_",
+        env_nested_delimiter="__",
     )
     appname: str = "Nextcloud Telegram Bot"
     logging: str = "INFO"
-    telegram: Telegram
-    nextcloud: Nextcloud
+    tg: Telegram
+    nc: Nextcloud
     db: Database
     redis: Redis | None = None
     webhook: Webhook | None = None

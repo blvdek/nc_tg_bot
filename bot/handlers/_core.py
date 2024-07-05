@@ -126,12 +126,12 @@ def get_human_readable_bytes(num: float, suffix: str = "B") -> str:
     return f"{num:.1f}Yi{suffix}"
 
 
-def get_page_items(item_list: list[R], page: int = 0, page_size: int = settings.telegram.page_size) -> list[R]:
+def get_page_items(item_list: list[R], page: int = 0, page_size: int = settings.tg.page_size) -> list[R]:
     """Return a slice of the input list `item_list` based on the provided `page` and `page_size`.
 
     :param item_list: The list from which to extract the items.
     :param page: The page number to retrieve. Defaults to 0.
-    :param page_size: The number of items per page, defaults to the value of `settings.telegram.page_size`.
+    :param page_size: The number of items per page, defaults to the value of `settings.tg.page_size`.
     :return: A list containing the items on the specified page.
     """
     start_index = page * page_size

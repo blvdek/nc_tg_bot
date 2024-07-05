@@ -1,14 +1,35 @@
 """Functions to handle bot startup, shutdown, and webhook operations."""
 
 from aiogram import Bot, Dispatcher, loggers
-from aiogram.types import BotCommand
+from aiogram.enums import MenuButtonType
+from aiogram.types import BotCommand, MenuButtonWebApp, WebAppInfo
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores.fluent_runtime_core import FluentRuntimeCore
 from aiohttp import web
 
+from bot.core.config import settings
 from bot.handlers import routers
 from bot.middlewares import LocaleManager
+
+
+async def _set_bot_menu(bot: Bot) -> None:
+    if settings.nc.public_protocol == "https" and settings.nc.public_host:
+        await bot.set_chat_menu_button(
+            menu_button=MenuButtonWebApp(
+                type=MenuButtonType.WEB_APP,
+                text="Nextcloud",
+                web_app=WebAppInfo(url=f"{settings.nc.public_protocol}://{settings.nc.public_host}"),
+            ),
+        )
+
+    commands = [
+        BotCommand(command="help", description="Get message with help text"),
+        BotCommand(command="auth", description="Start authentification in Nextcloud"),
+        BotCommand(command="logout", description="Logout from Nextcloud"),
+    ]
+
+    await bot.set_my_commands(commands)
 
 
 async def on_startup(dispatcher: Dispatcher, bot: Bot) -> None:
@@ -19,18 +40,13 @@ async def on_startup(dispatcher: Dispatcher, bot: Bot) -> None:
     """
     loggers.dispatcher.info("Bot starting...")
 
+    await _set_bot_menu(bot)
+
     for router in routers:
         dispatcher.include_router(router())
 
     i18n_middleware = I18nMiddleware(core=FluentRuntimeCore(path="./bot/locales/{locale}/"), manager=LocaleManager())
     i18n_middleware.setup(dispatcher=dispatcher)
-
-    commands = [
-        BotCommand(command="help", description="Get message with help text"),
-        BotCommand(command="auth", description="Start authentification in Nextcloud"),
-        BotCommand(command="logout", description="Logout from Nextcloud"),
-    ]
-    await bot.set_my_commands(commands)
 
     loggers.dispatcher.info("Bot started.")
 
@@ -46,7 +62,7 @@ async def on_shutdown(dispatcher: Dispatcher, bot: Bot) -> None:
     await dispatcher.storage.close()
     await dispatcher.fsm.storage.close()
 
-    await bot.delete_webhook()
+    await bot.delete_webhook(drop_pending_updates=settings.tg.drop_pending_updates)
     await bot.session.close()
 
     loggers.dispatcher.info("Bot stopped.")
