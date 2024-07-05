@@ -7,6 +7,8 @@ Makefile
 README.md
 LICENSE
 .python-version
+poetry.lock
+.pre-commit-config.yaml
 
 # Cache
 __pycache__/
