@@ -1,0 +1,25 @@
+# Project
+.git
+.github/
+.*ignore
+tests/
+Makefile
+README.md
+LICENSE
+.python-version
+poetry.lock
+.pre-commit-config.yaml
+
+# Cache
+__pycache__/
+.mypy_cache
+.ruff_cache
+*.py[cod]
+
+# Environment
+.env*
+venv/
+
+# Docker
+docker-compose*.yml
+Dockerfile
