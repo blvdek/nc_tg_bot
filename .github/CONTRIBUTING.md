@@ -97,32 +97,30 @@ cd nc_tg_bot
 ```bash
 poetry install
 ```
-6. Create and edit .env.prod file:
+6. Create and edit .env file:
 ```bash
-cp .env .env.prod
+cp .env.exmaple .env
 vi .env
 ```
 7. Install pre-commit hooks:
 ```bash
 pre-commit install
 ```
-8. You can run bot with your changes using docker compose:
+8. 1. You can run bot with your changes using docker compose:
 ```bash
-docker compose -f docker-compose.build.yml
+docker compose -f docker-compose.build.yaml build
+docker compose -f docker-compose.build.yaml up
 ```
-8.1 Or without docker compose:
-  - Run db in any way convenient to you:
-  ```bash
-  docker compose -f docker-compose.build.yml up db -d
-  ```
+8. 2. Or without docker compose:
+  - Run db in any way convenient to you.
   - Make migrations:
-  ```bash
-  make migrate
-  ```
+```bash
+make migrate
+```
   - Run bot:
-  ```bash
-  poetry run python -m bot
-  ```
+```bash
+poetry run python -m bot
+```
 9. Run tests to check that everything works:
 ```bash
 poetry run python -m pytest
