@@ -25,5 +25,5 @@ services:
          - redis
          - db
 volumes:
-   reds-data:
+   redis-data:
    db-data:
