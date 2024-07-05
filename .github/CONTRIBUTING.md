@@ -23,7 +23,7 @@ All types of contributions are encouraged and valued. See the [Table of Contents
 ## Code of Conduct
 
 This project and everyone participating in it is governed by the
-[nc_tg_bot Code of Conduct](https://github.com/blvdek/nc_tg_bot/blob/main/CODE_OF_CONDUCT.md).
+[nc_tg_bot Code of Conduct](https://github.com/blvdek/nc_tg_bot/blob/main/.github/CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code.
 
 ## I Have a Question
@@ -86,24 +86,47 @@ Enhancement suggestions are tracked as [GitHub issues](https://github.com/blvdek
 
 ### Your First Code Contribution
 
-1. Setup Nextcloud locally or remotely. We highly recommend to use [Julius Haertl docker setup](https://github.com/juliushaertl/nextcloud-docker-dev) for Nextcloud dev setup.
-2. Clone the nc_tg_bot with shell:
-```bash
-git clone https://github.com/blvdek/nc_tg_bot.git
-```
-3. Set current working dir to the root folder of cloned nc_tg_bot with shell:
+1. `Fork` this repository
+2. Create a `branch`
+3. `Clone` your nc_tg_bot fork.
+4. Set current working dir to the root folder of cloned nc_tg_bot.
 ```bash
 cd nc_tg_bot
 ```
-4. Setup environment with shell:
+5. Setup environment:
 ```bash
 poetry install
 ```
-5. Install pre-commit hooks with shell:
+6. Create and edit .env.prod file:
+```bash
+cp .env .env.prod
+vi .env
+```
+7. Install pre-commit hooks:
 ```bash
 pre-commit install
 ```
-6. Edit .env file:
+8. You can run bot with your changes using docker compose:
 ```bash
-vim .env
+docker compose -f docker-compose.build.yml
 ```
+8.1 Or without docker compose:
+  - Run db in any way convenient to you:
+  ```bash
+  docker compose -f docker-compose.build.yml up db -d
+  ```
+  - Make migrations:
+  ```bash
+  make migrate
+  ```
+  - Run bot:
+  ```bash
+  poetry run python -m bot
+  ```
+9. Run tests to check that everything works:
+```bash
+poetry run python -m pytest
+```
+10. `Commit` your changes
+11. `Push` your commits to the branch
+12. Submit a `pull request`

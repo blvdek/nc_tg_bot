@@ -22,7 +22,7 @@ fsnode-delete =
 fsnode-delete-alert = The file "{ $name }" was successfully deleted. 💀
 
 ## New file.
-fsnode-new = ...
+fsnode-new = Choose how you want to create a new file inside the <b>{ $name }</b> folder. 🔨
 
 fsnode-mkdir-start = Enter the name of the folder you want to create. 📂
 fsnode-mkdir-success = Folder <b>{ $name }</b> successfully created. 👍

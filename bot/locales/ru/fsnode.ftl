@@ -22,7 +22,7 @@ fsnode-delete =
 fsnode-delete-alert = Файл "{ $name }" был успешно удален. 💀
 
 ## Новый файл.
-fsnode-new = ...
+fsnode-new = Выберите каким образом вы хотите создать новый файл внутри папки <b>{ $name }</b>. 🔨
 
 fsnode-mkdir-start = Введите название папки, которую вы хотите создать. 📂
 fsnode-mkdir-success = Папка <b>{ $name }</b> успешно создана. 👍
@@ -52,6 +52,6 @@ fsnode-delete-button = 🔴 Удалить
 fsnode-download-button = ⬇️ Скачать
 fsnode-new-button = 🆕 Создать
 fsnode-upload-button = ⬆️ Загрузить
-fsnode-mkdir-button = 🆕 Создать папку
+fsnode-mkdir-button = 📁 Создать папку
 fsnode-pag-back-button = ⬅️
 fsnode-pag-next-button = ➡️
