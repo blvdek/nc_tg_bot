@@ -3,6 +3,8 @@ services:
       image: redis:alpine
       env_file: .env
       restart: on-failure
+      volumes:
+         - redis-data:/redis_data
 
    db:
       image: postgres:alpine
@@ -23,5 +25,5 @@ services:
          - redis
          - db
 volumes:
+   reds-data:
    db-data:
-   nextcloud:

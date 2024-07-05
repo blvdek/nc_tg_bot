@@ -2,9 +2,8 @@
 
 from .fsnode_boards import FsNodeMenuBoard, fsnode_delete_board, fsnode_new_board
 from .logout_boards import logout_board
-from .menu_boards import menu_board
-from .reply_board import reply_board
-from .search_board import SearchBoard
+from .reply_boards import menu_board, reply_board
+from .search_boards import SearchBoard
 from .trashbin_boards import TrashbinBoard, trashbin_cleanup_board, trashbin_fsnode_board
 
 __all__ = (
