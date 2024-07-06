@@ -76,7 +76,7 @@ class Webhook(BaseModel):
     Webhook settings are optional and are used when the bot is configured
     to receive updates via a webhook.
 
-    :param host: The hostname where the webhook should be hosted.
+    :param host: The host of webhook.
     :param port: The port number on which the webhook server listens.
     :param url: The base URL for the webhook endpoint.
     :param path: The path under which the webhook endpoint is accessible.
@@ -96,15 +96,15 @@ class Nextcloud(BaseModel):
     :param protocol: Protocol used to communicate with the Nextcloud server, defaults to "https".
     :param host: Hostname of the Nextcloud server.
     :param port: Port number on which the Nextcloud server listens, defaults to 80.
-    :param chunksize: Mximum size of file chunks for uploads, defaults to 5242880.
+    :param chunksize: Maximum size of file chunks for uploads, defaults to MIN_CHUNK_SIZE.
     :param public_protocol: Public protocol, defaults to "https".
-    :param public_host: Public hostname.
+    :param public_host: Public hostname, defaults to None.
     """
 
     protocol: str = "https"
     host: str
     port: int = 80
-    chunksize: int = 5242880
+    chunksize: int = MIN_CHUNK_SIZE
     public_protocol: str | None = "https"
     public_host: str | None
 
@@ -127,9 +127,10 @@ class Telegram(BaseModel):
     """Configuration specific to the Telegram bot, such as the bot token and upload limits.
 
     :param token: Token used to authenticate the bot with the Telegram API.
-    :param page_size: Number of items to fetch per request, defaults to 8.
+    :param page_size: Page size for pagination for Telegram API, defaults to 8.
     :param max_upload_size: Maximum size of a file that can be uploaded, defaults to 20971520.
     :param drop_pending_updates: Whether to drop pending updates on bot restart, defaults to True.
+    :param api_server: The URL of the Telegram API server, defaults to None.
     """
 
     token: str

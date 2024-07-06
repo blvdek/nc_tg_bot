@@ -20,7 +20,6 @@ from bot.states import FsNodeMenuStatesGroup
 
 async def new(
     query: CallbackQuery,
-    query_msg: Message,
     callback_data: FsNodeMenuData,
     i18n: I18nContext,
     nc: AsyncNextcloud,
@@ -28,11 +27,12 @@ async def new(
     """Creating a new file or directory menu.
 
     :param query: Callback query object.
-    :param query_msg: Message object associated with the query.
     :param callback_data: Callback data object containing the necessary data for fsnode.
     :param i18n: I18nContext.
     :param nc: AsyncNextcloud.
     """
+    query_msg = cast(Message, query.message)
+
     try:
         srv = await FsNodeService.create_instance(nc, file_id=callback_data.file_id)
     except FsNodeNotFoundError:
@@ -51,7 +51,6 @@ async def new(
 
 async def upload_start(
     query: CallbackQuery,
-    query_msg: Message,
     state: FSMContext,
     callback_data: FsNodeMenuData,
     i18n: I18nContext,
@@ -59,12 +58,13 @@ async def upload_start(
     """Initiate file upload to Nextcloud process.
 
     :param query: Callback query object.
-    :param query_msg: Message object associated with the query.
     :param state: State machine context.
     :param callback_data: Callback data object containing the necessary data for fsnode.
     :param i18n: I18nContext.
     :param nc: AsyncNextcloud.
     """
+    query_msg = cast(Message, query.message)
+
     await state.set_state(FsNodeMenuStatesGroup.UPLOAD)
     await state.update_data(file_id=callback_data.file_id)
 
@@ -139,7 +139,6 @@ async def upload(  # noqa: PLR0911
 
 async def mkdir_start(
     query: CallbackQuery,
-    query_msg: Message,
     state: FSMContext,
     callback_data: FsNodeMenuData,
     i18n: I18nContext,
@@ -149,11 +148,12 @@ async def mkdir_start(
     Set state to MKDIR status and start waiting message with name for new directory or cancelation.
 
     :param query: Callback query object.
-    :param query_msg: Message object associated with the query.
     :param state: State machine context.
     :param callback_data: Callback data object containing the necessary data for fsnode.
     :param i18n: I18nContext.
     """
+    query_msg = cast(Message, query.message)
+
     await state.set_state(FsNodeMenuStatesGroup.MKDIR)
     await state.update_data(file_id=callback_data.file_id)
 

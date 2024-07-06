@@ -4,11 +4,11 @@ from collections.abc import Awaitable, Callable
 from typing import Any
 
 from aiogram import BaseMiddleware
-from aiogram.types import CallbackQuery, InaccessibleMessage, TelegramObject
+from aiogram.types import CallbackQuery, Message, TelegramObject
 
 
 class QueryMsgMD(BaseMiddleware):
-    """Retrieves the message associated with a callback query and adds it to the data dictionary.
+    """Retrieves the message associated with a callback query and check this message.
 
     If the message is inaccessible, it will answer with a message from i18n context.
 
@@ -23,10 +23,10 @@ class QueryMsgMD(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
-        """Calls the handler function with the injected Message instance."""
+        """Calls the handler function."""
         if not isinstance(event, CallbackQuery):
             return await handler(event, data)
-        if isinstance(event.message, InaccessibleMessage):
+        if not isinstance(event.message, Message):
             i18n = data.get("i18n")
             if i18n is None:
                 msg = "i18n context is required but was not provided."
@@ -34,5 +34,4 @@ class QueryMsgMD(BaseMiddleware):
             text = i18n.get("msg-is-inaccessible")
             await event.answer(text)
             return None
-        data.update({"query_msg": event.message})
         return await handler(event, data)

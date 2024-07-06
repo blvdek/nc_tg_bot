@@ -1,6 +1,7 @@
 """Fsnode delete handlers."""
 
 from contextlib import suppress
+from typing import cast
 
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import CallbackQuery, Message
@@ -16,7 +17,6 @@ from bot.nextcloud.exceptions import FsNodeNotFoundError
 
 async def delete(
     query: CallbackQuery,
-    query_msg: Message,
     callback_data: FsNodeMenuData,
     i18n: I18nContext,
     nc: AsyncNextcloud,
@@ -24,11 +24,12 @@ async def delete(
     """Ask confirmation to delete fsnode.
 
     :param query: Callback query object.
-    :param query_msg: Message object associated with the query.
     :param callback_data: Callback data object containing the necessary data for fsnode.
     :param i18n: I18nContext.
     :param nc: AsyncNextcloud.
     """
+    query_msg = cast(Message, query.message)
+
     try:
         srv = await FsNodeService.create_instance(nc, file_id=callback_data.file_id)
     except FsNodeNotFoundError:
@@ -47,7 +48,6 @@ async def delete(
 
 async def delete_confirm(
     query: CallbackQuery,
-    query_msg: Message,
     callback_data: FsNodeMenuData,
     i18n: I18nContext,
     nc: AsyncNextcloud,
@@ -55,11 +55,12 @@ async def delete_confirm(
     """Delete fsnode.
 
     :param query: Callback query object.
-    :param query_msg: Message object associated with the query.
     :param callback_data: Callback data object containing the necessary data for fsnode.
     :param i18n: I18nContext.
     :param nc: AsyncNextcloud.
     """
+    query_msg = cast(Message, query.message)
+
     try:
         srv = await FsNodeService.create_instance(nc, file_id=callback_data.file_id)
         prev_srv = await PrevFsNodeService.create_instance(nc, file_id=callback_data.file_id)

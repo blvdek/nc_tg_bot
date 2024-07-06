@@ -37,9 +37,10 @@ async def auth(
     msg_from_user = cast(TgUser, message.from_user)
 
     if await uow.users.get_by_id(msg_from_user.id):
-        text = i18n.get("already-authorized")
-        reply_markup = menu_board()
-        return await message.reply(text=text, reply_markup=reply_markup)
+        return await message.reply(text=i18n.get("already-authorized"), reply_markup=menu_board())
+
+    if message.chat.type != "private":
+        return await message.reply(text=i18n.get("only-private"))
 
     init = await nc.loginflow_v2.init(user_agent=settings.appname)
     url = init.login
@@ -47,7 +48,8 @@ async def auth(
     if settings.nc.public_host:
         parsed_url = urlparse(url)
         url = parsed_url._replace(
-            scheme=settings.nc.public_protocol, netloc=settings.nc.public_host,
+            scheme=settings.nc.public_protocol,
+            netloc=settings.nc.public_host,
         ).geturl()
 
     if not url.startswith("https"):
@@ -58,8 +60,7 @@ async def auth(
     try:
         credentials = await nc.loginflow_v2.poll(token=init.token, timeout=AUTH_TIMEOUT)
     except NextcloudException:
-        text = i18n.get("auth-timeout")
-        return await init_message.edit_text(text=text)
+        return await init_message.edit_text(text=i18n.get("auth-timeout"))
 
     user = User(
         id=msg_from_user.id,
@@ -72,9 +73,6 @@ async def auth(
     await uow.users.add(user)
     await uow.commit()
 
-    text = i18n.get("auth-success")
-    await init_message.edit_text(text)
+    await init_message.edit_text(text=i18n.get("auth-success"))
 
-    text = i18n.get("auth-welcome")
-    reply_markup = menu_board()
-    return await message.reply(text=text, reply_markup=reply_markup)
+    return await message.reply(text=i18n.get("auth-welcome"), reply_markup=menu_board())

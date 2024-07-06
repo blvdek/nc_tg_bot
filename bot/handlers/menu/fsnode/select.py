@@ -1,6 +1,7 @@
 """Select fsnode handler."""
 
 from contextlib import suppress
+from typing import cast
 
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import CallbackQuery, Message
@@ -15,7 +16,6 @@ from bot.nextcloud.exceptions import FsNodeNotFoundError
 
 async def select(
     query: CallbackQuery,
-    query_msg: Message,
     callback_data: FsNodeData,
     i18n: I18nContext,
     nc: AsyncNextcloud,
@@ -23,11 +23,12 @@ async def select(
     """Selection of fsnode.
 
     :param query: Callback query object.
-    :param query_msg: Message object associated with the query.
     :param callback_data: Callback data object containing the necessary data for fsnode.
     :param i18n: I18nContext.
     :param nc: AsyncNextcloud.
     """
+    query_msg = cast(Message, query.message)
+
     try:
         srv = await FsNodeService.create_instance(nc, file_id=callback_data.file_id)
     except FsNodeNotFoundError:

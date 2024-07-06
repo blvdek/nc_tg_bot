@@ -4,7 +4,7 @@
 msg-is-inaccessible = The message is unavailable.
 
 ## Filters.
-not-authorized = 
+not-authorized =
     You are not authorized to use this command. 🤔
 
     Send /auth to start the authorization process.
@@ -14,6 +14,7 @@ not-from-user = You can't use it.
 fsnode-not-found = Unfortunately, this file was not found. 🕵️
 already-authorized =
     You are already logged in. 🤷‍♂️
-    
+
     Before logging in again, you first need to log out using the /logout command.
+only-private = Available only in private messages. 🔒
 cancel = The operation has been canceled.

@@ -44,6 +44,7 @@ async def search(
     """
     msg_from_user = cast(TgUser, message.from_user)
     msg_text = cast(str, message.text)
+
     await state.clear()
 
     srv = await SearchService.create_instance(nc, ["like", "name", f"%{message.text}%"])

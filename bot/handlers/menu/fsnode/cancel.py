@@ -19,7 +19,6 @@ from bot.nextcloud.exceptions import FsNodeNotFoundError
 
 async def cancel_callback(
     query: CallbackQuery,
-    query_msg: Message,
     state: FSMContext,
     callback_data: FsNodeMenuData,
     i18n: I18nContext,
@@ -28,11 +27,13 @@ async def cancel_callback(
     """Cancel operation with fsnode in callback form.
 
     :param query: Callback query object.
-    :param query_msg: Message object associated with the query.
+    :param state: State machine context.
     :param callback_data: Callback data object containing the necessary data for fsnode.
     :param i18n: I18nContext.
     :param nc: AsyncNextcloud.
     """
+    query_msg = cast(Message, query.message)
+
     await state.clear()
 
     try:
@@ -66,6 +67,7 @@ async def cancel_message(
     :param nc: AsyncNextcloud.
     """
     msg_from_user = cast(TgUser, message.from_user)
+
     data = await state.get_data()
 
     try:
