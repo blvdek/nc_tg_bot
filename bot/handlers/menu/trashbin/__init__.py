@@ -26,14 +26,32 @@ def trashbin_router() -> Router:
 
     router.message.register(menu, LazyFilter("trashbin-button"), AuthorizedFilter())
 
-    router.callback_query.register(select, TrashbinFsNodeData.filter(F.action == TrashbinFsNodeActions.SELECT))
-    router.callback_query.register(delete, TrashbinFsNodeData.filter(F.action == TrashbinFsNodeActions.DELETE))
-    router.callback_query.register(restore, TrashbinFsNodeData.filter(F.action == TrashbinFsNodeActions.RESTORE))
+    router.callback_query.register(
+        select,
+        TrashbinFsNodeData.filter(F.action == TrashbinFsNodeActions.SELECT),
+    )
+    router.callback_query.register(
+        delete,
+        TrashbinFsNodeData.filter(F.action == TrashbinFsNodeActions.DELETE),
+    )
+    router.callback_query.register(
+        restore,
+        TrashbinFsNodeData.filter(F.action == TrashbinFsNodeActions.RESTORE),
+    )
 
-    router.callback_query.register(cancel_callback, TrashbinData.filter(F.action == TrashbinActions.CANCEL))
+    router.callback_query.register(
+        cancel_callback,
+        TrashbinData.filter(F.action == TrashbinActions.CANCEL),
+    )
 
-    router.callback_query.register(cleanup, TrashbinData.filter(F.action == TrashbinActions.CLEANUP))
-    router.callback_query.register(cleanup_confirm, TrashbinData.filter(F.action == TrashbinActions.CLEANUP_CONFIRM))
+    router.callback_query.register(
+        cleanup,
+        TrashbinData.filter(F.action == TrashbinActions.CLEANUP),
+    )
+    router.callback_query.register(
+        cleanup_confirm,
+        TrashbinData.filter(F.action == TrashbinActions.CLEANUP_CONFIRM),
+    )
 
     router.callback_query.register(
         pag,

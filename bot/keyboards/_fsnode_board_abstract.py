@@ -54,7 +54,7 @@ class _FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
         self.kwargs = kwargs
 
     def get_kb(self) -> InlineKeyboardMarkup:
-        """Return the InlineKeyboardMarkup with fsnode buttons, page buttons, and action buttons."""
+        """Return fsnode InlineKeyboardMarkup."""
         self.builder.attach(self.build_fsnode_buttons())
         self.builder.attach(self.build_pag_buttons())
         self.builder.attach(self.build_actions_buttons())
@@ -74,7 +74,10 @@ class _FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
             prefix = MIME_SYMBOLS.get(fsnode.info.mimetype, "")
 
             builder.button(
-                text=f"{prefix} {fsnode.name[:FSNODE_BUTTON_TEXT_LENGTH]}{'/' if fsnode.is_dir else ''}",
+                text=(
+                    f"{prefix} {fsnode.name[:FSNODE_BUTTON_TEXT_LENGTH]}"
+                    f"{'/' if fsnode.is_dir else ''}"
+                ),
                 callback_data=self.fsnode_callback_data(
                     file_id=fsnode.file_id,
                     page=self.page,
@@ -91,7 +94,10 @@ class _FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
         :return: InlineKeyboardBuilder with pagination buttons.
         """
         if not hasattr(self.actions, "PAG_BACK") or not hasattr(self.actions, "PAG_NEXT"):
-            msg = "Pagination actions such as 'PAG_BACK' and 'PAG_NEXT' must be defined in the CallbackData's IntEnum."
+            msg = (
+                "Pagination actions such as 'PAG_BACK' and 'PAG_NEXT' "
+                "must be defined in the CallbackData's actions."
+            )
             raise AttributeError(msg)
 
         builder = InlineKeyboardBuilder()

@@ -28,7 +28,13 @@ def menu_router() -> Router:
     router.callback_query.outer_middleware.register(NextcloudMD())
 
     router.message.register(logout, Command("logout"), AuthorizedFilter())
-    router.callback_query.register(logout_confirm, LogoutData.filter(F.action == LogoutActions.CONFIRM))
-    router.callback_query.register(logout_cancel, LogoutData.filter(F.action == LogoutActions.DENY))
+    router.callback_query.register(
+        logout_confirm,
+        LogoutData.filter(F.action == LogoutActions.CONFIRM),
+    )
+    router.callback_query.register(
+        logout_cancel,
+        LogoutData.filter(F.action == LogoutActions.DENY),
+    )
 
     return router

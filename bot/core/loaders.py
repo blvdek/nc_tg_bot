@@ -20,7 +20,11 @@ session = None
 if settings.tg.api_server:
     session = AiohttpSession(api=TelegramAPIServer.from_base(settings.tg.api_server))
 
-bot = Bot(token=settings.tg.token, default=DefaultBotProperties(parse_mode=ParseMode.HTML), session=session)
+bot = Bot(
+    token=settings.tg.token,
+    default=DefaultBotProperties(parse_mode=ParseMode.HTML),
+    session=session,
+)
 
 _storage = (
     RedisStorage(

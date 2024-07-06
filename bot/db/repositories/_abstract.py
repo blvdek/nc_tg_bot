@@ -43,7 +43,12 @@ class _Repository(_AbstractRepository[T], ABC):
     async def get_by_id(self, ident: int) -> T | None:
         return await self._session.get(self._model_cls, ident)
 
-    async def get_many(self, limit: int = 100, order_by: Any = None, **filters: Any) -> Sequence[Base]:
+    async def get_many(
+        self,
+        limit: int = 100,
+        order_by: Any = None,
+        **filters: Any,
+    ) -> Sequence[Base]:
         statement = select(self._model_cls).where(**filters).limit(limit)
         if order_by:
             statement = statement.order_by(order_by)

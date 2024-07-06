@@ -1,8 +1,4 @@
-"""Exception for Nextcloud factory."""
-
-
-class ClassNotFoundError(ValueError):
-    """Called when a class is not found by the class factory."""
+"""Exception for Nextcloud services."""
 
 
 class FsNodeNotFoundError(ValueError):

@@ -4,7 +4,7 @@ from typing import Self
 
 from nc_py_api import AsyncNextcloud, FsNode
 
-from bot.nextcloud.factory import FactorySubject
+from bot.nextcloud._base import BaseService
 
 
 class BaseTrashbinService:
@@ -71,7 +71,7 @@ class BaseTrashbinService:
         return size
 
 
-class TrashbinService(FactorySubject[BaseTrashbinService], BaseTrashbinService):
+class TrashbinService(BaseService[BaseTrashbinService], BaseTrashbinService):
     """Implementation of the Trashbin service."""
 
     @classmethod

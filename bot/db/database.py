@@ -1,4 +1,4 @@
-"""Creates an asynchronous SQLAlchemy engine and session maker based on the application's database URL configuration."""
+"""Creates an asynchronous SQLAlchemy engine and session maker."""
 
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 

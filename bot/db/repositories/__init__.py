@@ -1,4 +1,5 @@
-"""Repository interfaces and implementations for accessing and manipulating data in the database."""
+"""Repository interfaces and implementations."""
+
 from ._abstract import _AbstractRepository, _Repository
 from ._user import _UserRepository
 
