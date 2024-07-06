@@ -93,7 +93,7 @@ Enhancement suggestions are tracked as [GitHub issues](https://github.com/blvdek
 ```bash
 cd nc_tg_bot
 ```
-5. Setup environment:
+5. Install dependencies using [Poetry](https://python-poetry.org "python package manager"):
 ```bash
 poetry install
 ```
@@ -106,21 +106,20 @@ vi .env
 ```bash
 pre-commit install
 ```
-8. 1. You can run bot with your changes using docker compose:
-```bash
-docker compose -f docker-compose.build.yaml build
-docker compose -f docker-compose.build.yaml up
-```
-8. 2. Or without docker compose:
-  - Run db in any way convenient to you.
-  - Make migrations:
-```bash
-make migrate
-```
-  - Run bot:
-```bash
-poetry run python -m bot
-```
+8. - You can run bot with your changes using docker compose:
+  ```bash
+  docker compose -f docker-compose.build.yaml build
+  docker compose -f docker-compose.build.yaml up
+  ```
+ - Or without docker compose:
+    * Make migrations:
+    ```bash
+    make migrate
+    ```
+    * Run bot:
+    ```bash
+    poetry run python -m bot
+    ```
 9. Run tests to check that everything works:
 ```bash
 poetry run python -m pytest

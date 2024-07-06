@@ -54,37 +54,37 @@ poetry run python -m bot
 
 To launch the bot you only need a token bot, database, Redis and Nextcloud settings, everything else can be left out. For more information, see `.env.example`.
 
-| Name                     | Description                                                                                 |
-| ------------------------ | ------------------------------------------------------------------------------------------- |
-| `APPNAME`                | Name of the application.                                                                 |
-| `LOGGING`                | Logging level.                                                                           |
-| `TG__TOKEN`              | Token used to authenticate the bot with the Telegram API.                                                                  |
-| `TG__PAGE_SIZE`          | Page size for pagination for Telegram API.                                     |
-| `TG__MAX_UPLOAD_SIZE`    | Maximum size of a file that can be uploaded.                          |
+| Name                       | Description                                                                                 |
+| -------------------------- | ------------------------------------------------------------------------------------------- |
+| `APPNAME`                  | Name of the application.                                                                    |
+| `LOGGING`                  | Logging level.                                                                              |
+| `TG__TOKEN`                | Token used to authenticate the bot with the Telegram API.                                   |
+| `TG__PAGE_SIZE`            | Page size for pagination for Telegram API.                                                  |
+| `TG__MAX_UPLOAD_SIZE`      | Maximum size of a file that can be uploaded.                                                |
 | `TG__DROP_PENDING_UPDATES` | Whether to drop pending updates on bot restart.                                             |
-| `TG__API_SERVER`          | The URL of the self-hosted Telegram API server.                                        |
-| `NC__PROTOCOL`           | Protocol used to communicate with the Nextcloud server.                                          |
-| `NC__HOST`               | Hostname of the Nextcloud server.                                                   |
-| `NC__PORT`               | Port number on which the Nextcloud server listens.                                           |
-| `NC__PUBLIC_PROTOCOL`    | Public protocol.                                                          |
-| `NC__PUBLIC_HOST`        | Public hostname.                                                        |
-| `NC__CHUNK_SIZE`         | Maximum size of file chunks for uploads.                                                        |
-| `WEBHOOK__HOST`          | The hostname of webhook server.                                                 |
-| `WEBHOOK__PORT`          | The port number on which the webhook server listens.                                                         |
-| `WEBHOOK__URL`           | The base URL for the webhook endpoint.                                                                        |
-| `WEBHOOK__PATH`          | The path under which the webhook endpoint is accessible.                                                                      |
-| `WEBHOOK__SECRET`        | A secret token used for webhook verification.                                   |
-| `REDIS__HOST`            | Hostname of the Redis server.                                               |
-| `REDIS__DB`              | Database number within Redis to connect to.                                                    |
-| `REDIS__PORT`            | Port number on which the Redis server listens.                                                     |
-| `REDIS__USER`            | Uername for Redis authentication.                                     |
-| `REDIS__PASSWORD`        | Password for Redis authentication.                                        |
-| `REDIS__STATE_TTL`       | Time-to-live for state data in Redis.                                          |
-| `REDIS__DATA_TTL`        | Time-to-live for operational data in Redis.                                            |
-| `DB__HOST`               | The hostname of the database server.                                           |
-| `DB__USER`               | The username for database authentication.                                    |
-| `DB__DB`                 | The name of the database.                                                          |
-| `DB__PASSWORD`           | The password for database authentication.                                   |
-| `DB__PORT`               | The port number on which the database server listens.                                                   |
-| `DB__DRIVER`             | The database driver to use.                                     |
-| `DB__DATABASE_SYSTEM`    | The type of database system.                                      |
+| `TG__API_SERVER`           | The URL of the self-hosted Telegram API server.                                             |
+| `NC__PROTOCOL`             | Protocol used to communicate with the Nextcloud server.                                     |
+| `NC__HOST`                 | Hostname of the Nextcloud server.                                                           |
+| `NC__PORT`                 | Port number on which the Nextcloud server listens.                                          |
+| `NC__PUBLIC_PROTOCOL`      | Public protocol.                                                                            |
+| `NC__PUBLIC_HOST`          | Public hostname.                                                                            |
+| `NC__CHUNK_SIZE`           | Maximum size of file chunks for uploads.                                                    |
+| `WEBHOOK__HOST`            | The hostname of webhook server.                                                             |
+| `WEBHOOK__PORT`            | The port number on which the webhook server listens.                                        |
+| `WEBHOOK__URL`             | The base URL for the webhook endpoint.                                                      |
+| `WEBHOOK__PATH`            | The path under which the webhook endpoint is accessible.                                    |
+| `WEBHOOK__SECRET`          | A secret token used for webhook verification.                                               |
+| `REDIS__HOST`              | Hostname of the Redis server.                                                               |
+| `REDIS__DB`                | Database number within Redis to connect to.                                                 |
+| `REDIS__PORT`              | Port number on which the Redis server listens.                                              |
+| `REDIS__USER`              | Uername for Redis authentication.                                                           |
+| `REDIS__PASSWORD`          | Password for Redis authentication.                                                          |
+| `REDIS__STATE_TTL`         | Time-to-live for state data in Redis.                                                       |
+| `REDIS__DATA_TTL`          | Time-to-live for operational data in Redis.                                                 |
+| `DB__HOST`                 | The hostname of the database server.                                                        |
+| `DB__USER`                 | The username for database authentication.                                                   |
+| `DB__DB`                   | The name of the database.                                                                   |
+| `DB__PASSWORD`             | The password for database authentication.                                                   |
+| `DB__PORT`                 | The port number on which the database server listens.                                       |
+| `DB__DRIVER`               | The database driver to use.                                                                 |
+| `DB__DATABASE_SYSTEM`      | The type of database system.                                                                |
