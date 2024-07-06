@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="https://raw.githubusercontent.com/blvdek/nc_tg_bot/tests/assets/logo.png" width="250" alt="NcPyApi logo">
+</p>
+
 <h1 align="center"><em>Nextcloud Telegram Bot</em></h1>
 
 <p align="center">
