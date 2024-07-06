@@ -1,4 +1,5 @@
 """Router with fsnode menu messages."""
+
 from aiogram import F, Router
 from aiogram.types import ContentType
 from aiogram_i18n import LazyFilter
@@ -8,7 +9,15 @@ from .cancel import cancel_callback, cancel_message
 from .delete import delete, delete_confirm
 from .download import download
 from .menu import menu
-from .new import incorrectly_mkdir, mkdir, mkdir_start, new, upload, upload_incorrectly, upload_start
+from .new import (
+    incorrectly_mkdir,
+    mkdir,
+    mkdir_start,
+    new,
+    upload,
+    upload_incorrectly,
+    upload_start,
+)
 from .pag import pag
 from .select import select
 from bot.filters import AuthorizedFilter, FromUserFilter
@@ -83,7 +92,9 @@ def fsnode_menu_router() -> Router:
     # Pagination block.
     router.callback_query.register(
         pag,
-        FsNodeMenuData.filter(F.action.in_({FsNodeMenuActions.PAG_BACK, FsNodeMenuActions.PAG_NEXT})),
+        FsNodeMenuData.filter(
+            F.action.in_({FsNodeMenuActions.PAG_BACK, FsNodeMenuActions.PAG_NEXT}),
+        ),
         FromUserFilter(FsNodeMenuData),
     )
 

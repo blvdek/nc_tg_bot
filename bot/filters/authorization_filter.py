@@ -1,4 +1,5 @@
 """Authorization filter."""
+
 from aiogram.filters import BaseFilter
 from aiogram.types import Message, TelegramObject
 from aiogram_i18n import I18nContext
@@ -10,7 +11,8 @@ class AuthorizedFilter(BaseFilter):
     """Filter to check if the user is authorized.
 
     This filter is used to verify whether the sender of a message is an authorized user.
-    If the user is not authorized in Nextcloud, the bot sends a notification and blocks the execution of the command.
+    If the user is not authorized in Nextcloud, the bot sends a notification and blocks the
+    execution of the command.
     """
 
     async def __call__(self, event: TelegramObject, uow: UnitOfWork, i18n: I18nContext) -> bool:

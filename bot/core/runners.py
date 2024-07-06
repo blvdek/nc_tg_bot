@@ -10,7 +10,7 @@ from aiohttp import web
 
 from bot.core.config import settings
 from bot.handlers import routers
-from bot.middlewares import LocaleManager
+from bot.middlewares import LocaleManager, QueryMsgMD
 
 
 async def _set_bot_menu(bot: Bot) -> None:
@@ -19,7 +19,9 @@ async def _set_bot_menu(bot: Bot) -> None:
             menu_button=MenuButtonWebApp(
                 type=MenuButtonType.WEB_APP,
                 text="Nextcloud",
-                web_app=WebAppInfo(url=f"{settings.nc.public_protocol}://{settings.nc.public_host}"),
+                web_app=WebAppInfo(
+                    url=f"{settings.nc.public_protocol}://{settings.nc.public_host}",
+                ),
             ),
         )
 
@@ -35,8 +37,8 @@ async def _set_bot_menu(bot: Bot) -> None:
 async def on_startup(dispatcher: Dispatcher, bot: Bot) -> None:
     """Initializes the bot by setting up handlers, middleware, and registering bot commands.
 
-    :param dispatcher: The Aiogram dispatcher instance used to manage updates and route them to the appropriate handler.
-    :param bot: The Aiogram bot instance representing the Telegram bot.
+    :param dispatcher: Aiogram dispatcher instance.
+    :param bot: Aiogram bot instance.
     """
     loggers.dispatcher.info("Bot starting...")
 
@@ -45,8 +47,12 @@ async def on_startup(dispatcher: Dispatcher, bot: Bot) -> None:
     for router in routers:
         dispatcher.include_router(router())
 
-    i18n_middleware = I18nMiddleware(core=FluentRuntimeCore(path="./bot/locales/{locale}/"), manager=LocaleManager())
+    i18n_middleware = I18nMiddleware(
+        core=FluentRuntimeCore(path="./bot/locales/{locale}/"),
+        manager=LocaleManager(),
+    )
     i18n_middleware.setup(dispatcher=dispatcher)
+    dispatcher.callback_query.middleware.register(QueryMsgMD())
 
     loggers.dispatcher.info("Bot started.")
 
@@ -54,8 +60,8 @@ async def on_startup(dispatcher: Dispatcher, bot: Bot) -> None:
 async def on_shutdown(dispatcher: Dispatcher, bot: Bot) -> None:
     """Performs necessary cleanup when the bot is shutting down.
 
-    :param dispatcher: The Aiogram dispatcher instance used to manage updates and route them to the appropriate handler.
-    :param bot: The Aiogram bot instance representing the Telegram bot.
+    :param dispatcher: Aiogram dispatcher instance.
+    :param bot: Aiogram bot instance.
     """
     loggers.dispatcher.info("Bot stopping...")
 
@@ -68,15 +74,24 @@ async def on_shutdown(dispatcher: Dispatcher, bot: Bot) -> None:
     loggers.dispatcher.info("Bot stopped.")
 
 
-async def webhook_startup(dispatcher: Dispatcher, bot: Bot, url: str, secret: str | None = None) -> None:
+async def webhook_startup(
+    dispatcher: Dispatcher,
+    bot: Bot,
+    url: str,
+    secret: str | None = None,
+) -> None:
     """Registers the bot's webhook with Telegram.
 
-    :param dispatcher: The Aiogram dispatcher instance used to manage updates and route them to the appropriate handler.
-    :param bot: The Aiogram bot instance representing the Telegram bot.
+    :param dispatcher: Aiogram dispatcher instance.
+    :param bot: Aiogram bot instance.
     :param url: The base URL for the webhook endpoint.
     :param secret: A secret token used for webhook verification, defaults to None.
     """
-    if await bot.set_webhook(url, allowed_updates=dispatcher.resolve_used_update_types(), secret_token=secret):
+    if await bot.set_webhook(
+        url,
+        allowed_updates=dispatcher.resolve_used_update_types(),
+        secret_token=secret,
+    ):
         loggers.webhook.info(f"Bot webhook successfully set on {url}.")
         return
     loggers.webhook.info(f"Failed to set bot webhook on url {url}.")
@@ -85,7 +100,7 @@ async def webhook_startup(dispatcher: Dispatcher, bot: Bot, url: str, secret: st
 async def webhook_shutdown(bot: Bot) -> None:
     """Deregisters the webhook and closes the bot session.
 
-    :param bot: The Aiogram bot instance representing the Telegram bot.
+    :param bot: Aiogram bot instance.
     """
     if await bot.delete_webhook():
         loggers.webhook.info("Dropped bot webhook.")
@@ -94,11 +109,18 @@ async def webhook_shutdown(bot: Bot) -> None:
     await bot.session.close()
 
 
-async def webhook_run(dp: Dispatcher, bot: Bot, path: str, host: str, port: int, secret: str | None = None) -> None:
+async def webhook_run(
+    dp: Dispatcher,
+    bot: Bot,
+    path: str,
+    host: str,
+    port: int,
+    secret: str | None = None,
+) -> None:
     """Sets up and starts the webhook server for receiving updates via HTTP requests.
 
-    :param dispatcher: The Aiogram dispatcher instance used to manage updates and route them to the appropriate handler.
-    :param bot: The Aiogram bot instance representing the Telegram bot.
+    :param dispatcher: Aiogram dispatcher instance.
+    :param bot: Aiogram bot instance.
     :param path: The path under which the webhook endpoint is accessible.
     :param host: The hostname where the webhook should be hosted
     :param port: The port number on which the webhook server listens.

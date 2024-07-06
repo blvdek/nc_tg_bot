@@ -4,7 +4,7 @@ from typing import Any, Self
 
 from nc_py_api import AsyncNextcloud, FsNode
 
-from bot.nextcloud.factory import FactorySubject
+from bot.nextcloud._base import BaseService
 
 
 class BaseSearchService:
@@ -19,7 +19,7 @@ class BaseSearchService:
         self.fsnodes = fsnodes
 
 
-class SearchService(FactorySubject[BaseSearchService], BaseSearchService):
+class SearchService(BaseService[BaseSearchService], BaseSearchService):
     """Implementation of Nextcloud search service."""
 
     @classmethod

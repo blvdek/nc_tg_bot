@@ -3,6 +3,7 @@
 Abstraction layer over SQLAlchemy sessions, facilitating transactional operations
 across multiple repositories in a single unit of work.
 """
+
 from abc import ABC, abstractmethod
 from types import TracebackType
 from typing import Self
@@ -36,7 +37,7 @@ class _AbstractUnitOfWork(ABC):
 
 
 class UnitOfWork(_AbstractUnitOfWork):
-    """Unit of work implementation, providing actual transaction management and repository instantiation."""
+    """Unit of work implementation."""
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._session_factory = session_factory

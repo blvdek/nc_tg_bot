@@ -1,15 +1,17 @@
 """Trash bin menu handler."""
+
+from typing import cast
+
 from aiogram.types import Message
 from aiogram.types import User as TgUser
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
 
-from bot.handlers._core import get_msg_user, get_trashbin_msg
-from bot.nextcloud import NCSrvFactory
+from bot.handlers._core import get_trashbin_msg
+from bot.nextcloud import TrashbinService
 
 
-@get_msg_user
-async def menu(message: Message, msg_from_user: TgUser, i18n: I18nContext, nc: AsyncNextcloud) -> None:
+async def menu(message: Message, i18n: I18nContext, nc: AsyncNextcloud) -> Message:
     """Trash bin menu.
 
     Trash bin entry point.
@@ -19,8 +21,8 @@ async def menu(message: Message, msg_from_user: TgUser, i18n: I18nContext, nc: A
     :param i18n: Internationalization context.
     :param nc: Nextcloud API client.
     """
-    class_ = NCSrvFactory.get("TrashbinService")
-    srv = await class_.create_instance(nc)
+    msg_from_user = cast(TgUser, message.from_user)
+    srv = await TrashbinService.create_instance(nc)
 
     text, reply_markup = get_trashbin_msg(i18n, srv.trashbin, srv.get_size(), msg_from_user.id)
-    await message.reply(text=text, reply_markup=reply_markup)
+    return await message.reply(text=text, reply_markup=reply_markup)

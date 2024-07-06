@@ -4,12 +4,12 @@ translations_dir := bot/locales
 
 .PHONY: lint
 lint:
-	ruff check $(bot_dir)
-	mypy $(bot_dir) --strict
+	ruff check $(project_dir)
+	mypy $(project_dir) --strict
 
 .PHONY: format
 format:
-	ruff check $(bot_dir) --fix
+	ruff check $(project_dir) --fix
 
 .PHONY: migrate
 migrate:

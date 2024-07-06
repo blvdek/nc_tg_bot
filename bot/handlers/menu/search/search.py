@@ -1,16 +1,19 @@
 """Search handlers."""
+
+from typing import cast
+
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from aiogram.types import User as TgUser
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
 
-from bot.handlers._core import get_msg_text, get_msg_user, get_search_msg
-from bot.nextcloud import NCSrvFactory
+from bot.handlers._core import get_search_msg
+from bot.nextcloud import SearchService
 from bot.states import SearchStatesGroup
 
 
-async def start_search(message: Message, state: FSMContext, i18n: I18nContext) -> None:
+async def start_search(message: Message, state: FSMContext, i18n: I18nContext) -> Message:
     """Initiate search process and ask user for the search text.
 
     Search entry point.
@@ -21,20 +24,15 @@ async def start_search(message: Message, state: FSMContext, i18n: I18nContext) -
     """
     await state.set_state(SearchStatesGroup.SEARCH)
 
-    text = i18n.get("search-enter")
-    await message.reply(text=text)
+    return await message.reply(text=i18n.get("search-enter"))
 
 
-@get_msg_user
-@get_msg_text
 async def search(
     message: Message,
-    msg_from_user: TgUser,
-    msg_text: str,
     state: FSMContext,
     i18n: I18nContext,
     nc: AsyncNextcloud,
-) -> None:
+) -> Message:
     """Search for files in the Nextcloud instance based on the given search text.
 
     :param message: Message object.
@@ -44,10 +42,12 @@ async def search(
     :param i18n: Internationalization context.
     :param nc: Nextcloud API client.
     """
+    msg_from_user = cast(TgUser, message.from_user)
+    msg_text = cast(str, message.text)
+
     await state.clear()
 
-    class_ = NCSrvFactory.get("SearchService")
-    srv = await class_.create_instance(nc, ["like", "name", f"%{message.text}%"])
+    srv = await SearchService.create_instance(nc, ["like", "name", f"%{message.text}%"])
 
     text, reply_markup = get_search_msg(i18n, msg_text, srv.fsnodes, msg_from_user.id)
-    await message.reply(text=text, reply_markup=reply_markup)
+    return await message.reply(text=text, reply_markup=reply_markup)

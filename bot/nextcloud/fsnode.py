@@ -2,14 +2,14 @@
 
 import io
 import pathlib
-from typing import Self
+from typing import BinaryIO, Self
 
 from aiogram.types import BufferedInputFile
 from nc_py_api import AsyncNextcloud, FsNode
 
 from bot.core import settings
+from bot.nextcloud._base import BaseService
 from bot.nextcloud.exceptions import FsNodeNotFoundError
-from bot.nextcloud.factory import FactorySubject
 
 
 class BaseFsNodeService:
@@ -83,7 +83,7 @@ class BaseFsNodeService:
         buff.seek(0)
         return BufferedInputFile(buff.read(), filename=self.fsnode.name)
 
-    async def upload(self, buff: io.BytesIO, name: str) -> FsNode:
+    async def upload(self, buff: BinaryIO, name: str) -> FsNode:
         """Upload a file to the current fsnode.
 
         :param buff: The file to upload.
@@ -104,7 +104,7 @@ class BaseFsNodeService:
         )
 
 
-class RootFsNodeService(FactorySubject[BaseFsNodeService], BaseFsNodeService):
+class RootFsNodeService(BaseService[BaseFsNodeService], BaseFsNodeService):
     """Service for the root fsnode."""
 
     @classmethod
@@ -118,7 +118,7 @@ class RootFsNodeService(FactorySubject[BaseFsNodeService], BaseFsNodeService):
         return cls(nc, fsnodes_list[0], fsnodes_list[1:])
 
 
-class FsNodeService(FactorySubject[BaseFsNodeService], BaseFsNodeService):
+class FsNodeService(BaseService[BaseFsNodeService], BaseFsNodeService):
     """Service for a non root fsnode."""
 
     @classmethod
@@ -140,7 +140,7 @@ class FsNodeService(FactorySubject[BaseFsNodeService], BaseFsNodeService):
         return cls(nc, fsnode, attached_fsnodes)
 
 
-class PrevFsNodeService(FactorySubject[BaseFsNodeService], BaseFsNodeService):
+class PrevFsNodeService(BaseService[BaseFsNodeService], BaseFsNodeService):
     """Service for a fsnode that is the parent of the current fsnode."""
 
     @classmethod

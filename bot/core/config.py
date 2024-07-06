@@ -52,11 +52,11 @@ class Redis(BaseModel):
 
     Redis connection settings are optional and fall back to in-memory storage if not provided.
 
-    :param host: The hostname of the Redis server.
-    :param db: The database number within Redis to connect to, defaults to 1.
-    :param port: The port number on which the Redis server listens, defaults to 6379.
-    :param user: The username for Redis authentication, defaults to None.
-    :param password: The password for Redis authentication, defaults to None.
+    :param host: Hostname of the Redis server.
+    :param db: Database number within Redis to connect to, defaults to 1.
+    :param port: Port number on which the Redis server listens, defaults to 6379.
+    :param user: Uername for Redis authentication, defaults to None.
+    :param password: Password for Redis authentication, defaults to None.
     :param state_ttl: Time-to-live for state data in Redis, defaults to None.
     :param data_ttl: Time-to-live for operational data in Redis, defaults to None.
     """
@@ -73,9 +73,10 @@ class Redis(BaseModel):
 class Webhook(BaseModel):
     """Configuration for a webhook endpoint.
 
-    Webhook settings are optional and are used when the bot is configured to receive updates via a webhook.
+    Webhook settings are optional and are used when the bot is configured
+    to receive updates via a webhook.
 
-    :param host: The hostname where the webhook should be hosted.
+    :param host: The host of webhook.
     :param port: The port number on which the webhook server listens.
     :param url: The base URL for the webhook endpoint.
     :param path: The path under which the webhook endpoint is accessible.
@@ -92,18 +93,18 @@ class Webhook(BaseModel):
 class Nextcloud(BaseModel):
     """Configuration to communicate with a Nextcloud server.
 
-    :param protocol: The protocol used to communicate with the Nextcloud server, defaults to "https".
-    :param host: The hostname of the Nextcloud server.
-    :param port: The port number on which the Nextcloud server listens, defaults to 80.
-    :param chunksize: The maximum size of file chunks for uploads, defaults to 5242880.
-    :param public_protocol: The public protocol used to communicate with the Nextcloud server, defaults to "https".
-    :param public_host: The public hostname of the Nextcloud server.
+    :param protocol: Protocol used to communicate with the Nextcloud server, defaults to "https".
+    :param host: Hostname of the Nextcloud server.
+    :param port: Port number on which the Nextcloud server listens, defaults to 80.
+    :param chunksize: Maximum size of file chunks for uploads, defaults to MIN_CHUNK_SIZE.
+    :param public_protocol: Public protocol, defaults to "https".
+    :param public_host: Public hostname, defaults to None.
     """
 
     protocol: str = "https"
     host: str
     port: int = 80
-    chunksize: int = 5242880
+    chunksize: int = MIN_CHUNK_SIZE
     public_protocol: str | None = "https"
     public_host: str | None
 
@@ -125,10 +126,11 @@ class Nextcloud(BaseModel):
 class Telegram(BaseModel):
     """Configuration specific to the Telegram bot, such as the bot token and upload limits.
 
-    :param token: The token used to authenticate the bot with the Telegram API.
-    :param page_size: The number of items to fetch per request, defaults to 8.
-    :param max_upload_size: The maximum size of a file that can be uploaded, defaults to 20971520.
+    :param token: Token used to authenticate the bot with the Telegram API.
+    :param page_size: Page size for pagination for Telegram API, defaults to 8.
+    :param max_upload_size: Maximum size of a file that can be uploaded, defaults to 20971520.
     :param drop_pending_updates: Whether to drop pending updates on bot restart, defaults to True.
+    :param api_server: The URL of the Telegram API server, defaults to None.
     """
 
     token: str
@@ -150,14 +152,14 @@ class Telegram(BaseModel):
 class Settings(BaseSettings):
     """Configuration in a single object.
 
-    :param model_config: Configuration options for Pydantic settings, including environment file paths.
-    :param appname: The name of the application, defaults to "Nextcloud Telegram Bot".
-    :param logging: The logging level, defaults to "INFO".
+    :param model_config: Configuration options for Pydantic settings.
+    :param appname: Name of the application, defaults to "Nextcloud Telegram Bot".
+    :param logging: Logging level, defaults to "INFO".
     :param telegram: An instance of :class:`Telegram` containing Telegram-specific settings.
     :param nextcloud: An instance of :class:`Nextcloud` containing Nextcloud-specific settings.
-    :param db: An instance of :class:`Database` containing database connection settings.
-    :param redis: An instance of :class:`Redis` containing Redis connection settings, defaults to None.
-    :param webhook: An instance of :class:`Webhook` containing webhook settings, defaults to None.
+    :param db: Containing database connection settings.
+    :param redis: Containing Redis connection settings, defaults to None.
+    :param webhook: Containing webhook settings, defaults to None.
     """
 
     model_config = SettingsConfigDict(

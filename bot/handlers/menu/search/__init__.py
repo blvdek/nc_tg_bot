@@ -27,6 +27,10 @@ def search_router() -> Router:
         FromUserFilter(SearchData),
     )
 
-    router.callback_query.register(select, SearchFsNodeData.filter(), FromUserFilter(SearchFsNodeData))
+    router.callback_query.register(
+        select,
+        SearchFsNodeData.filter(),
+        FromUserFilter(SearchFsNodeData),
+    )
 
     return router
