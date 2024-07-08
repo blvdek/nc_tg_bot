@@ -8,7 +8,7 @@ requires = [
 package-mode = false
 name = "nc-tg-bot"
 version = "0.1.0"
-description = ""
+description = "🤖 Telegram bot for interacting with Nextcloud via Telegram."
 authors = [
   "blvd <blvd@bagoont.ru>",
 ]
@@ -29,8 +29,6 @@ fluent-runtime = "^0.4.0"
 nc-py-api = { git = "https://github.com/cloud-py-api/nc_py_api.git" }
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.2.2"
-pytest-asyncio = "^0.23.7"
 mypy = "^1.10.1"
 ruff = "^0.5.0"
 pre-commit = "^3.7.1"

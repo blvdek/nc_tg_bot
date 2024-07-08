@@ -61,7 +61,7 @@ class Redis(BaseModel):
     :param data_ttl: Time-to-live for operational data in Redis, defaults to None.
     """
 
-    host: str
+    host: str =
     db: int = 1
     port: int = 6379
     user: str | None = None
@@ -90,6 +90,23 @@ class Webhook(BaseModel):
     secret: str | None = None
 
 
+class Overwrite(BaseModel):
+    """Overwrite settings for Nextcloud server.
+
+    It is used to overwrite the default url, for example, if the default url is not accessible
+    from outside, and the user needs access to the link for authorization,
+    than default url will be overwritten by this.
+
+    :param protocol: Protocol used to communicate with the Nextcloud server.
+    :param host: Hostname of the Nextcloud server.
+    :param port: Port number on which the Nextcloud server listens.
+    """
+
+    protocol: str
+    host: str
+    port: int = 80
+
+
 class Nextcloud(BaseModel):
     """Configuration to communicate with a Nextcloud server.
 
@@ -97,16 +114,14 @@ class Nextcloud(BaseModel):
     :param host: Hostname of the Nextcloud server.
     :param port: Port number on which the Nextcloud server listens, defaults to 80.
     :param chunksize: Maximum size of file chunks for uploads, defaults to MIN_CHUNK_SIZE.
-    :param public_protocol: Public protocol, defaults to "https".
-    :param public_host: Public hostname, defaults to None.
+    :param overwrite: Overwrite settings for Nextcloud server, defaults to None.
     """
 
     protocol: str = "https"
-    host: str
+    host: str = ""
     port: int = 80
     chunksize: int = MIN_CHUNK_SIZE
-    public_protocol: str | None = "https"
-    public_host: str | None
+    overwrite: Overwrite | None = None
 
     @property
     def url(self) -> str:

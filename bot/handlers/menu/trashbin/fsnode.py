@@ -35,7 +35,6 @@ async def select(
 
 async def delete(
     query: CallbackQuery,
-    query_msg: Message,
     callback_data: TrashbinFsNodeData,
     i18n: I18nContext,
     nc: AsyncNextcloud,
@@ -43,10 +42,11 @@ async def delete(
     """Delete a file from the trash bin.
 
     :param query: Callback query object.
-    :param query_msg: Message object associated with the query.
     :param callback_data: Callback data object containing the necessary data for the trash bin.
     :param i18n: Internationalization context.
     """
+    query_msg = cast(Message, query.message)
+
     srv = await TrashbinService.create_instance(nc)
 
     await srv.delete(callback_data.file_id)
@@ -65,7 +65,6 @@ async def delete(
 
 async def restore(
     query: CallbackQuery,
-    query_msg: Message,
     callback_data: TrashbinFsNodeData,
     i18n: I18nContext,
     nc: AsyncNextcloud,
@@ -73,10 +72,11 @@ async def restore(
     """Restore a file from the trash bin.
 
     :param query: Callback query object.
-    :param query_msg: Message object associated with the query.
     :param callback_data: Callback data object containing the necessary data for the trash bin.
     :param i18n: Internationalization context.
     """
+    query_msg = cast(Message, query.message)
+
     srv = await TrashbinService.create_instance(nc)
 
     await srv.restore(callback_data.file_id)

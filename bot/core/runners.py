@@ -14,13 +14,13 @@ from bot.middlewares import LocaleManager, QueryMsgMD
 
 
 async def _set_bot_menu(bot: Bot) -> None:
-    if settings.nc.public_protocol == "https" and settings.nc.public_host:
+    if settings.nc.overwrite and settings.nc.overwrite.protocol == "https":
         await bot.set_chat_menu_button(
             menu_button=MenuButtonWebApp(
                 type=MenuButtonType.WEB_APP,
                 text="Nextcloud",
                 web_app=WebAppInfo(
-                    url=f"{settings.nc.public_protocol}://{settings.nc.public_host}",
+                    url=f"{settings.nc.overwrite.protocol}://{settings.nc.overwrite.host}:{settings.nc.overwrite.port}",
                 ),
             ),
         )

@@ -1,7 +1,6 @@
 """Authentication in Nextcloud handler."""
 
 from typing import cast
-from urllib.parse import urlparse
 
 from aiogram.types import Message
 from aiogram.types import User as TgUser
@@ -11,6 +10,7 @@ from nc_py_api import AsyncNextcloud, NextcloudException
 from bot.core import settings
 from bot.db import UnitOfWork
 from bot.db.models import User
+from bot.handlers._core import overwrite_url
 from bot.keyboards import menu_board
 
 AUTH_TIMEOUT = 60 * 20
@@ -43,14 +43,8 @@ async def auth(
         return await message.reply(text=i18n.get("only-private"))
 
     init = await nc.loginflow_v2.init(user_agent=settings.appname)
-    url = init.login
 
-    if settings.nc.public_host:
-        parsed_url = urlparse(url)
-        url = parsed_url._replace(
-            scheme=settings.nc.public_protocol,
-            netloc=settings.nc.public_host,
-        ).geturl()
+    url = overwrite_url(init.login)
 
     if not url.startswith("https"):
         url = f"<code>{url}</code>"

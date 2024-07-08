@@ -5,16 +5,24 @@
 <h1 align="center"><em>Nextcloud Telegram Bot</em></h1>
 
 <p align="center">
-  <a href="https://github.com/donBarbos/telegram-bot-template/actions/workflows/linters.yml"><img src="https://img.shields.io/github/actions/workflow/status/blvdek/nc_tg_bot/linters.yml?label=linters" alt="Linters Status"></a>
-  <a href="https://github.com/donBarbos/telegram-bot-template/actions/workflows/docker-image.yml"><img src="https://img.shields.io/github/actions/workflow/status/blvdek/nc_tg_bot/docker-image.yml?label=docker%20image" alt="Docker Build Status"></a>
+  <a href="https://github.com/blvdek/telegram-bot-template/actions/workflows/docker-image.yml"><img src="https://img.shields.io/github/actions/workflow/status/blvdek/nc_tg_bot/docker-image.yml?label=docker%20image" alt="Docker Build Status"></a>
   <a href="https://www.python.org/downloads"><img src="https://img.shields.io/badge/python-3.12%2B-blue" alt="Python"></a>
   <a href="https://github.com/blvdek/nc_tg_bot/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Code style"></a>
 <p>
 
+## 🤖 About Nextcloud Telegram Bot
+
+This Telegram bot simplifies the process of interacting with Nextcloud, allowing users to easily share files without navigating the Nextcloud interface directly.
+
 ## ❓Motivation
 
+I created a Telegram bot to simplify sharing memes on Nextcloud for myself and friends. It provides a user-friendly interface for efficient communication and collaboration. The project streamlines the sharing process and enhances efficiency. This experience will be valuable in future projects involving external service integration with Telegram.
+
+
 ## 🚀 How to Use
+
+> 💡Installation presupposes that Nextcloud is already installed and configured.
 
 ### 🐳 Running in Docker _(recommended method)_
 
@@ -31,7 +39,7 @@ docker compose up -d
 
 ### 💻 Running on Local Machine
 
-- Install dependencies using [Poetry](https://python-poetry.org "python package manager")
+- Install dependencies using [Poetry](https://python-poetry.org "python package manager"):
 ```bash
 poetry install
 ```
@@ -44,12 +52,12 @@ cp .env.exmaple .env
 vi .env
 ```
 
--   make migrations
+-   Make migrations:
 ```bash
 make migrate
 ```
 
-- Start telegram bot.
+- Start telegram bot:
 ```bash
 poetry run python -m bot
 ```
@@ -70,8 +78,9 @@ To launch the bot you only need a token bot, database, Redis and Nextcloud setti
 | `NC__PROTOCOL`             | Protocol used to communicate with the Nextcloud server.                                     |
 | `NC__HOST`                 | Hostname of the Nextcloud server.                                                           |
 | `NC__PORT`                 | Port number on which the Nextcloud server listens.                                          |
-| `NC__PUBLIC_PROTOCOL`      | Public protocol.                                                                            |
-| `NC__PUBLIC_HOST`          | Public hostname.                                                                            |
+| `NC__OVERWRITE__PROTOCOL`  | External accessible protocol.                                                               |
+| `NC__OVERWRITE__HOST`      | External accessible hostname.                                                               |
+| `NC__OVERWRITE__PORT`      | External accessible hostname.                                                               |
 | `NC__CHUNK_SIZE`           | Maximum size of file chunks for uploads.                                                    |
 | `WEBHOOK__HOST`            | The hostname of webhook server.                                                             |
 | `WEBHOOK__PORT`            | The port number on which the webhook server listens.                                        |
@@ -92,3 +101,106 @@ To launch the bot you only need a token bot, database, Redis and Nextcloud setti
 | `DB__PORT`                 | The port number on which the database server listens.                                       |
 | `DB__DRIVER`               | The database driver to use.                                                                 |
 | `DB__DATABASE_SYSTEM`      | The type of database system.                                                                |
+
+
+## ☁️ Docker and Nextcloud
+
+To use the Nextcloud Telegram bot with Nextcloud, you can create a Docker Compose file that runs on the same Docker network as Nextcloud. This allows the bot to communicate with Nextcloud internally.
+
+To do this, you need to set the NC__PROTOCOL and NC__HOST environment variables in your Docker Compose file. These variables are used for internal communication between the bot and Nextcloud.
+
+If the internal and external host and port are different, you can set the NC__EXT_HOST and NC__EXT_PORT variables. These variables are used for the external access link that the bot will send.
+
+If your NC__PROTOCOL and NC__HOST are already accessible from outside, you don't need to specify NC__EXT_HOST and NC__EXT_PORT. In this case, the bot will use NC__PROTOCOL and NC__HOST as the external access points.
+
+Here's an example of how you can configure this in your Docker Compose file:
+
+```docker
+services:
+
+...
+
+# For example, here is an NGINX container that receives an ssl certificate 
+# and indicates that the domain "example.com" points to the Nextcloud container.
+
+...
+
+  nextcloud:
+    image: nextcloud
+    ports:
+      - 8080:80
+    volumes:
+      - nextcloud-data:/var/www/html
+    networks:
+      - nextcloud-network
+
+...
+
+volumes:
+  nextcloud-data:
+
+networks:
+  nextcloud-network:
+    name: nextcloud-network
+    driver: bridge
+```
+
+Docker compose file with bot:
+
+```docker
+services:
+
+...
+
+  bot:
+    image: bagoont/nc_tg_bot
+    restart: always
+    env_file: .env
+    environment:
+      NC__HOST: "nextcloud"
+      NC__OVERWRITE__PROTOCOL: "https"
+      NC__OVERWRITE__HOST: "example.com"
+      NC__OVERWRITE__PORT: 80
+    volumes:
+      - data:/var/www/html
+    network:
+      - nextcloud-host-network
+
+...
+
+volumes:
+  data:
+
+networks:
+  nextcloud-host-network:
+    name: nextcloud-network
+    external: true
+```
+
+## ⚙️ Tech Stack
+- [poetry](https://python-poetry.org/) — development workflow.
+- [docker](https://www.docker.com/) — to automate deployment.
+- [postgres](https://www.postgresql.org/) — powerful, open source object-relational database system.
+- [asyncpg](https://github.com/MagicStack/asyncpg) — a fast PostgreSQL Database Client Library for Python/asyncio.
+- [alembic](https://github.com/sqlalchemy/alembic) — a database migrations tool for SQLAlchemy. 
+- [redis](https://redis.io/) — in-memory data structure store used as a cache and FSM.
+- [aiogram](https://aiogram.dev/) — asynchronous framework for Telegram Bot API.
+- [aiogram_i18n](https://github.com/aiogram/i18n) — middleware for Telegram bot internationalization.
+- [fluent-runtime](https://projectfluent.org/) — a localization system.
+- [pydantic-settings](https://github.com/pydantic/pydantic-settings) — settings management using pydantic.
+- [sqlalchemy](https://www.sqlalchemy.org/) — object-relational mapping (ORM) library that provides a set of high-level API for interacting with relational databases
+- [uvloop](https://github.com/MagicStack/uvloop) — ultra fast asyncio event loop. 
+- [nc-py-api](https://github.com/cloud-py-api/nc_py_api) — Nextcloud Python framework.
+- [mypy](https://www.mypy-lang.org/) — optional static typing for Python.
+- [ruff](https://docs.astral.sh/ruff/) — an extremely fast Python linter and code formatter, written in Rust. 
+- [pre-commit](https://pre-commit.com/) — a framework for managing and maintaining multi-language pre-commit hooks. 
+
+
+## ⭐ Support
+
+
+## ❗ More information
+
+- [Contribute](https://github.com/blvdek/nc_tg_bot/blob/main/.github/CONTRIBUTING.md)
+  - [Discussions](https://github.com/blvdek/nc_tg_bot/discussions)
+  - [Issues](https://github.com/blvdek/nc_tg_bot/issues)

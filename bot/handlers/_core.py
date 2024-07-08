@@ -1,4 +1,5 @@
-from typing import Any, NotRequired, TypedDict, TypeVar, Unpack
+from typing import Any, TypeVar
+from urllib.parse import urlparse
 
 from aiogram.types import InlineKeyboardMarkup
 from aiogram_i18n import I18nContext
@@ -9,6 +10,16 @@ from bot.keyboards import FsNodeMenuBoard, SearchBoard, TrashbinBoard
 from bot.utils import MIME_SYMBOLS
 
 R = TypeVar("R")
+
+
+def overwrite_url(url: str) -> str:
+    if not settings.nc.overwrite:
+        return url
+    parsed_url = urlparse(url)
+    return parsed_url._replace(
+        scheme=settings.nc.overwrite.protocol,
+        netloc=f"{settings.nc.overwrite.host}:{settings.nc.overwrite.port}",
+    ).geturl()
 
 
 def get_human_readable_bytes(num: float, suffix: str = "B") -> str:
@@ -105,17 +116,12 @@ def get_trashbin_msg(
     return text, reply_markup
 
 
-class GetSeachMsgArgs(TypedDict):
-    page: NotRequired[int]
-    page_size: NotRequired[int]
-
-
 def get_search_msg(
     i18n: I18nContext,
     query: str,
     fsnodes: list[FsNode],
     from_user_id: int,
-    **kwargs: Unpack[GetSeachMsgArgs],
+    **kwargs: Any,
 ) -> tuple[str, InlineKeyboardMarkup | None]:
     if fsnodes == []:
         text = i18n.get("search-empty")

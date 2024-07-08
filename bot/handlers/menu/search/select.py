@@ -14,7 +14,6 @@ from bot.nextcloud.exceptions import FsNodeNotFoundError
 
 async def select(
     query: CallbackQuery,
-    query_msg: Message,
     callback_data: SearchFsNodeData,
     i18n: I18nContext,
     nc: AsyncNextcloud,
