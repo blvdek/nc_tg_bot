@@ -61,7 +61,7 @@ class Redis(BaseModel):
     :param data_ttl: Time-to-live for operational data in Redis, defaults to None.
     """
 
-    host: str =
+    host: str
     db: int = 1
     port: int = 6379
     user: str | None = None
