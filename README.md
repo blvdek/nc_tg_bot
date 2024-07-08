@@ -5,6 +5,7 @@
 <h1 align="center"><em>Nextcloud Telegram Bot</em></h1>
 
 <p align="center">
+  <a href="https://hub.docker.com/r/bagoont/nc_tg_bot"><img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/bagoont/nc_tg_bot?logo=docker"></a>
   <a href="https://www.python.org/downloads"><img src="https://img.shields.io/badge/python-3.12%2B-blue" alt="Python"></a>
   <a href="https://github.com/blvdek/nc_tg_bot/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Code style"></a>
