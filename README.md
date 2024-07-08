@@ -5,7 +5,7 @@
 <h1 align="center"><em>Nextcloud Telegram Bot</em></h1>
 
 <p align="center">
-  <a href="https://github.com/blvdek/telegram-bot-template/actions/workflows/docker-image.yml"><img src="https://img.shields.io/github/actions/workflow/status/blvdek/nc_tg_bot/docker-image.yml?label=docker%20image" alt="Docker Build Status"></a>
+  <a href="https://github.com/blvdek/nc_tg_bot/actions/workflows/docker-image.yaml"><img src="https://img.shields.io/github/actions/workflow/status/blvdek/nc_tg_bot/docker-image.yml?label=docker%20image" alt="Docker Build Status"></a>
   <a href="https://www.python.org/downloads"><img src="https://img.shields.io/badge/python-3.12%2B-blue" alt="Python"></a>
   <a href="https://github.com/blvdek/nc_tg_bot/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Code style"></a>
@@ -120,7 +120,7 @@ services:
 
 ...
 
-# For example, here is an NGINX container that receives an ssl certificate 
+# For example, here is an NGINX container that receives an ssl certificate
 # and indicates that the domain "example.com" points to the Nextcloud container.
 
 ...
@@ -182,18 +182,18 @@ networks:
 - [docker](https://www.docker.com/) — to automate deployment.
 - [postgres](https://www.postgresql.org/) — powerful, open source object-relational database system.
 - [asyncpg](https://github.com/MagicStack/asyncpg) — a fast PostgreSQL Database Client Library for Python/asyncio.
-- [alembic](https://github.com/sqlalchemy/alembic) — a database migrations tool for SQLAlchemy. 
+- [alembic](https://github.com/sqlalchemy/alembic) — a database migrations tool for SQLAlchemy.
 - [redis](https://redis.io/) — in-memory data structure store used as a cache and FSM.
 - [aiogram](https://aiogram.dev/) — asynchronous framework for Telegram Bot API.
 - [aiogram_i18n](https://github.com/aiogram/i18n) — middleware for Telegram bot internationalization.
 - [fluent-runtime](https://projectfluent.org/) — a localization system.
 - [pydantic-settings](https://github.com/pydantic/pydantic-settings) — settings management using pydantic.
 - [sqlalchemy](https://www.sqlalchemy.org/) — object-relational mapping (ORM) library that provides a set of high-level API for interacting with relational databases
-- [uvloop](https://github.com/MagicStack/uvloop) — ultra fast asyncio event loop. 
+- [uvloop](https://github.com/MagicStack/uvloop) — ultra fast asyncio event loop.
 - [nc-py-api](https://github.com/cloud-py-api/nc_py_api) — Nextcloud Python framework.
 - [mypy](https://www.mypy-lang.org/) — optional static typing for Python.
-- [ruff](https://docs.astral.sh/ruff/) — an extremely fast Python linter and code formatter, written in Rust. 
-- [pre-commit](https://pre-commit.com/) — a framework for managing and maintaining multi-language pre-commit hooks. 
+- [ruff](https://docs.astral.sh/ruff/) — an extremely fast Python linter and code formatter, written in Rust.
+- [pre-commit](https://pre-commit.com/) — a framework for managing and maintaining multi-language pre-commit hooks.
 
 
 ## ⭐ Support
