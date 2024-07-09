@@ -6,7 +6,6 @@ from typing import cast
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
-from aiogram.types import User as TgUser
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
 
@@ -45,7 +44,6 @@ async def cancel_callback(
         i18n,
         srv.fsnode,
         srv.attached_fsnodes,
-        query.from_user.id,
         page=callback_data.page,
     )
     with suppress(TelegramBadRequest):
@@ -66,8 +64,6 @@ async def cancel_message(
     :param i18n: Internationalization context.
     :param nc: AsyncNextcloud.
     """
-    msg_from_user = cast(TgUser, message.from_user)
-
     data = await state.get_data()
 
     try:
@@ -81,5 +77,5 @@ async def cancel_message(
     menu_text = i18n.get("cancel")
     await message.reply(text=menu_text, reply_markup=menu_reply_markup)
 
-    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes, msg_from_user.id)
+    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes)
     return await message.reply(text=text, reply_markup=reply_markup)

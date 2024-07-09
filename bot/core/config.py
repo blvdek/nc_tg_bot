@@ -118,7 +118,7 @@ class Nextcloud(BaseModel):
     """
 
     protocol: str = "https"
-    host: str = ""
+    host: str
     port: int = 80
     chunksize: int = MIN_CHUNK_SIZE
     overwrite: Overwrite | None = None

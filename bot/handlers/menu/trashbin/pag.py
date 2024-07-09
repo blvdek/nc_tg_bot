@@ -31,11 +31,5 @@ async def pag(
 
     srv = await TrashbinService.create_instance(nc)
 
-    text, reply_markup = get_trashbin_msg(
-        i18n,
-        srv.trashbin,
-        srv.get_size(),
-        query.from_user.id,
-        page=page,
-    )
+    text, reply_markup = get_trashbin_msg(i18n, srv.trashbin, srv.get_size(), page=page)
     return await query_msg.edit_text(text=text, reply_markup=reply_markup)

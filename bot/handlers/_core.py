@@ -57,7 +57,6 @@ def get_fsnode_msg(
     i18n: I18nContext,
     fsnode: FsNode,
     attached_fsnodes: list[FsNode],
-    from_user_id: int,
     **kwargs: Any,
 ) -> tuple[str, InlineKeyboardMarkup]:
     text = i18n.get(
@@ -74,7 +73,6 @@ def get_fsnode_msg(
     reply_markup = FsNodeMenuBoard(
         fsnode=fsnode,
         attached_fsnodes=attached_fsnodes,
-        from_user_id=from_user_id,
         **kwargs,
     ).get_kb()
     return text, reply_markup
@@ -84,7 +82,6 @@ def get_trashbin_msg(
     i18n: I18nContext,
     trashbin: list[FsNode],
     trashbin_size: int,
-    from_user_id: int,
     **kwargs: Any,
 ) -> tuple[str, InlineKeyboardMarkup | None]:
     if trashbin == []:
@@ -110,7 +107,6 @@ def get_trashbin_msg(
     text = f"{trashbin_text}\n{fsnodes_text}"
     reply_markup = TrashbinBoard(
         fsnodes=trashbin,
-        from_user_id=from_user_id,
         **kwargs,
     ).get_kb()
     return text, reply_markup
@@ -120,7 +116,6 @@ def get_search_msg(
     i18n: I18nContext,
     query: str,
     fsnodes: list[FsNode],
-    from_user_id: int,
     **kwargs: Any,
 ) -> tuple[str, InlineKeyboardMarkup | None]:
     if fsnodes == []:
@@ -137,7 +132,6 @@ def get_search_msg(
     reply_markup = SearchBoard(
         query=query,
         fsnodes=fsnodes,
-        from_user_id=from_user_id,
         **kwargs,
     ).get_kb()
     return text, reply_markup

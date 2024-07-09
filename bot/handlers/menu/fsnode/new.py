@@ -5,7 +5,6 @@ from typing import cast
 from aiogram import Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Document, Message
-from aiogram.types import User as TgUser
 from aiogram_i18n import I18nContext, LazyProxy
 from nc_py_api import AsyncNextcloud
 
@@ -38,11 +37,7 @@ async def new(
     except FsNodeNotFoundError:
         return await query_msg.edit_text(text=i18n.get("fsnode-not-found"))
 
-    reply_markup = fsnode_new_board(
-        fsnode=srv.fsnode,
-        from_user_id=query.from_user.id,
-        page=callback_data.page,
-    )
+    reply_markup = fsnode_new_board(fsnode=srv.fsnode, page=callback_data.page)
     return await query_msg.edit_text(
         text=i18n.get("fsnode-new", name=srv.fsnode.name),
         reply_markup=reply_markup,
@@ -187,7 +182,6 @@ async def mkdir(
     :param i18n: Internationalization context.
     :param nc: AsyncNextcloud.
     """
-    msg_from_user = cast(TgUser, message.from_user)
     msg_text = cast(str, message.text)
 
     data = await state.get_data()
@@ -205,7 +199,7 @@ async def mkdir(
 
     await state.clear()
 
-    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes, msg_from_user.id)
+    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes)
     return await message.reply(text=text, reply_markup=reply_markup)
 
 

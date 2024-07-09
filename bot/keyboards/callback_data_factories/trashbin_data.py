@@ -1,4 +1,5 @@
 """Data for trash bin keyboards."""
+
 from enum import IntEnum
 
 from aiogram.filters.callback_data import CallbackData
@@ -23,13 +24,11 @@ class TrashbinFsNodeData(CallbackData, prefix="trashbin_fsnode"):
     :param action:
     :param file_id: The ID of the file.
     :param page: The page number.
-    :param from_user_id: Telegram user ID.
     """
 
     action: TrashbinFsNodeActions = TrashbinFsNodeActions.SELECT
     file_id: str
     page: int
-    from_user_id: int
 
 
 class TrashbinActions(IntEnum):
@@ -53,9 +52,7 @@ class TrashbinData(CallbackData, prefix="trashbin"):
     :param action:
     :param file_id: The ID of the file.
     :param page: The page number.
-    :param from_user_id: Telegram user ID.
     """
 
     action: TrashbinActions
     page: int
-    from_user_id: int

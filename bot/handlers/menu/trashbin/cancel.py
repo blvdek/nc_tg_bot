@@ -32,7 +32,6 @@ async def cancel_callback(
         i18n,
         srv.trashbin,
         srv.get_size(),
-        query.from_user.id,
         page=callback_data.page,
     )
     return await query_msg.edit_text(text=text, reply_markup=reply_markup)

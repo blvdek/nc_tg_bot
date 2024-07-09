@@ -34,7 +34,7 @@ async def select(
     except FsNodeNotFoundError:
         return await query_msg.answer(text=i18n.get("fsnode-not-found"))
 
-    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes, query.from_user.id)
+    text, reply_markup = get_fsnode_msg(i18n, srv.fsnode, srv.attached_fsnodes)
     msg = await query_msg.answer(text=text, reply_markup=reply_markup)
 
     await query.answer()

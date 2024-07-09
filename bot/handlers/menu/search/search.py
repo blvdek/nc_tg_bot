@@ -4,7 +4,6 @@ from typing import cast
 
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
-from aiogram.types import User as TgUser
 from aiogram_i18n import I18nContext
 from nc_py_api import AsyncNextcloud
 
@@ -36,18 +35,15 @@ async def search(
     """Search for files in the Nextcloud instance based on the given search text.
 
     :param message: Message object.
-    :param msg_from_user: User who sent the message.
-    :param msg_text: Text of the message, as well as the search text.
     :param state: State machine context.
     :param i18n: Internationalization context.
     :param nc: Nextcloud API client.
     """
-    msg_from_user = cast(TgUser, message.from_user)
     msg_text = cast(str, message.text)
 
     await state.clear()
 
     srv = await SearchService.create_instance(nc, ["like", "name", f"%{message.text}%"])
 
-    text, reply_markup = get_search_msg(i18n, msg_text, srv.fsnodes, msg_from_user.id)
+    text, reply_markup = get_search_msg(i18n, msg_text, srv.fsnodes)
     return await message.reply(text=text, reply_markup=reply_markup)

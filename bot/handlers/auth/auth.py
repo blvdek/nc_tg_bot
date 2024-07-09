@@ -39,9 +39,6 @@ async def auth(
     if await uow.users.get_by_id(msg_from_user.id):
         return await message.reply(text=i18n.get("already-authorized"), reply_markup=menu_board())
 
-    if message.chat.type != "private":
-        return await message.reply(text=i18n.get("only-private"))
-
     init = await nc.loginflow_v2.init(user_agent=settings.appname)
 
     url = overwrite_url(init.login)

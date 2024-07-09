@@ -35,11 +35,7 @@ async def delete(
     except FsNodeNotFoundError:
         return await query_msg.edit_text(text=i18n.get("fsnode-not-found"))
 
-    reply_markup = fsnode_delete_board(
-        fsnode=srv.fsnode,
-        from_user_id=query.from_user.id,
-        page=callback_data.page,
-    )
+    reply_markup = fsnode_delete_board(fsnode=srv.fsnode, page=callback_data.page)
     return await query_msg.edit_text(
         text=i18n.get("fsnode-delete", name=srv.fsnode.name),
         reply_markup=reply_markup,
@@ -74,7 +70,6 @@ async def delete_confirm(
         i18n,
         prev_srv.fsnode,
         prev_srv.attached_fsnodes,
-        query.from_user.id,
         page=callback_data.page,
     )
     with suppress(TelegramBadRequest):

@@ -37,7 +37,6 @@ class TrashbinBoard(_FsNodeBaseBoard):
                 callback_data=TrashbinData(
                     action=TrashbinActions.CLEANUP,
                     page=self.page,
-                    from_user_id=self.from_user_id,
                 ).pack(),
             ),
         )
@@ -45,12 +44,10 @@ class TrashbinBoard(_FsNodeBaseBoard):
 
 
 def trashbin_cleanup_board(
-    from_user_id: int,
     page: int = 0,
 ) -> InlineKeyboardMarkup:
     """Build keyboard for cleanup action.
 
-    :param from_user_id: Telegram user ID.
     :param page: Page number.
     :return: InlineKeyboardMarkup object.
     """
@@ -62,7 +59,6 @@ def trashbin_cleanup_board(
                     callback_data=TrashbinData(
                         action=TrashbinActions.CLEANUP_CONFIRM,
                         page=page,
-                        from_user_id=from_user_id,
                     ).pack(),
                 ),
                 InlineKeyboardButton(
@@ -70,7 +66,6 @@ def trashbin_cleanup_board(
                     callback_data=TrashbinData(
                         action=TrashbinActions.CANCEL,
                         page=page,
-                        from_user_id=from_user_id,
                     ).pack(),
                 ),
             ],
@@ -78,14 +73,9 @@ def trashbin_cleanup_board(
     )
 
 
-def trashbin_fsnode_board(
-    from_user_id: int,
-    file_id: str,
-    page: int = 0,
-) -> InlineKeyboardMarkup:
+def trashbin_fsnode_board(file_id: str, page: int = 0) -> InlineKeyboardMarkup:
     """Build keyboard for fsnode in trashbin.
 
-    :param from_user_id: Telegram user ID.
     :param file_id: The file id of the fsnode.
     :param page: Page number.
     :return: InlineKeyboardMarkup object.
@@ -98,7 +88,6 @@ def trashbin_fsnode_board(
                     callback_data=TrashbinFsNodeData(
                         action=TrashbinFsNodeActions.DELETE,
                         page=page,
-                        from_user_id=from_user_id,
                         file_id=file_id,
                     ).pack(),
                 ),
@@ -109,7 +98,6 @@ def trashbin_fsnode_board(
                     callback_data=TrashbinFsNodeData(
                         action=TrashbinFsNodeActions.RESTORE,
                         page=page,
-                        from_user_id=from_user_id,
                         file_id=file_id,
                     ).pack(),
                 ),
@@ -120,7 +108,6 @@ def trashbin_fsnode_board(
                     callback_data=TrashbinData(
                         action=TrashbinActions.CANCEL,
                         page=page,
-                        from_user_id=from_user_id,
                     ).pack(),
                 ),
             ],

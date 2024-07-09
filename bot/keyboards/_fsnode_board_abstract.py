@@ -41,14 +41,12 @@ class _FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
     def __init__(
         self,
         fsnodes: list[FsNode],
-        from_user_id: int,
         page: int = 0,
         page_size: int = settings.tg.page_size,
         **kwargs: Any,
     ) -> None:
         self.builder = InlineKeyboardBuilder()
         self.fsnodes = sorted(fsnodes, key=lambda x: x.is_dir, reverse=True)
-        self.from_user_id = from_user_id
         self.page = page
         self.page_size = page_size
         self.kwargs = kwargs
@@ -81,7 +79,6 @@ class _FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
                 callback_data=self.fsnode_callback_data(
                     file_id=fsnode.file_id,
                     page=self.page,
-                    from_user_id=self.from_user_id,
                 ).pack(),
             )
 
@@ -113,7 +110,6 @@ class _FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
                         callback_data=self.actions_callback_data(
                             action=self.actions.PAG_BACK,
                             page=self.page,
-                            from_user_id=self.from_user_id,
                             **self.kwargs,
                         ).pack(),
                     ),
@@ -128,7 +124,6 @@ class _FsNodeBaseBoard(_FsNodeAbstractBoard, ABC):
                         callback_data=self.actions_callback_data(
                             action=self.actions.PAG_NEXT,
                             page=self.page,
-                            from_user_id=self.from_user_id,
                             **self.kwargs,
                         ).pack(),
                     ),

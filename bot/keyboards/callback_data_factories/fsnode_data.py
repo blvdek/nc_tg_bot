@@ -1,4 +1,5 @@
 """Data for keyboards related to the fsnode menu."""
+
 from enum import IntEnum
 
 from aiogram.filters.callback_data import CallbackData
@@ -9,12 +10,10 @@ class FsNodeData(CallbackData, prefix="fsnode"):
 
     :param file_id: The ID of the file.
     :param page: The page number.
-    :param from_user_id: Telegram user ID.
     """
 
     file_id: str
     page: int
-    from_user_id: int
 
 
 class FsNodeMenuActions(IntEnum):
@@ -50,10 +49,8 @@ class FsNodeMenuData(CallbackData, prefix="fsnode_menu"):
     :param action: The action to be performed.
     :param file_id: The ID of the file.
     :param page: The page number of the file.
-    :param from_user_id: Telegram user ID.
     """
 
     action: FsNodeMenuActions
     file_id: str
     page: int
-    from_user_id: int

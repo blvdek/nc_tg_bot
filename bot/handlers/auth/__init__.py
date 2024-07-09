@@ -4,6 +4,7 @@ from aiogram import Router
 from aiogram.filters.command import Command
 
 from .auth import auth
+from bot.filters import OnlyPrivateFilter
 from bot.middlewares import NextcloudMD, UnitOfWorkMD
 
 
@@ -17,6 +18,6 @@ def auth_router() -> Router:
     router.message.outer_middleware(UnitOfWorkMD())
     router.message.outer_middleware(NextcloudMD())
 
-    router.message.register(auth, Command("auth"))
+    router.message.register(auth, Command("auth"), OnlyPrivateFilter())
 
     return router

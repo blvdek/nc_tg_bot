@@ -7,7 +7,7 @@ from .fsnode import fsnode_menu_router
 from .logout import logout, logout_cancel, logout_confirm
 from .search import search_router
 from .trashbin import trashbin_router
-from bot.filters import AuthorizedFilter
+from bot.filters import AuthorizedFilter, OnlyPrivateFilter
 from bot.keyboards.callback_data_factories import LogoutActions, LogoutData
 from bot.middlewares import NextcloudMD, UnitOfWorkMD
 
@@ -27,7 +27,7 @@ def menu_router() -> Router:
     router.callback_query.outer_middleware.register(UnitOfWorkMD())
     router.callback_query.outer_middleware.register(NextcloudMD())
 
-    router.message.register(logout, Command("logout"), AuthorizedFilter())
+    router.message.register(logout, Command("logout"), AuthorizedFilter(), OnlyPrivateFilter())
     router.callback_query.register(
         logout_confirm,
         LogoutData.filter(F.action == LogoutActions.CONFIRM),

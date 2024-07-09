@@ -24,7 +24,7 @@ async def cleanup(
     """
     query_msg = cast(Message, query.message)
 
-    reply_markup = trashbin_cleanup_board(query.from_user.id, callback_data.page)
+    reply_markup = trashbin_cleanup_board(callback_data.page)
     return await query_msg.edit_text(
         text=i18n.get("trashbin-cleanup-start"),
         reply_markup=reply_markup,

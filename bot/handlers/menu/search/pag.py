@@ -33,13 +33,7 @@ async def pag(
     page_num = int(callback_data.page)
     page = page_num + 1 if callback_data.action == SearchActions.PAG_NEXT else page_num - 1
 
-    text, reply_markup = get_search_msg(
-        i18n,
-        callback_data.query,
-        srv.fsnodes,
-        query.from_user.id,
-        page=page,
-    )
+    text, reply_markup = get_search_msg(i18n, callback_data.query, srv.fsnodes, page=page)
     with suppress(TelegramBadRequest):
         msg = await query_msg.edit_text(text=text, reply_markup=reply_markup)
     return msg

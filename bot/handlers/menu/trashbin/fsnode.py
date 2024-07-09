@@ -25,11 +25,7 @@ async def select(
     """
     query_msg = cast(Message, query.message)
 
-    reply_markup = trashbin_fsnode_board(
-        query.from_user.id,
-        callback_data.file_id,
-        callback_data.page,
-    )
+    reply_markup = trashbin_fsnode_board(callback_data.file_id, callback_data.page)
     return await query_msg.edit_text(text=i18n.get("trashbin-fsnode"), reply_markup=reply_markup)
 
 
@@ -57,7 +53,6 @@ async def delete(
         i18n,
         srv.trashbin,
         srv.get_size(),
-        query.from_user.id,
         page=callback_data.page,
     )
     return await query_msg.edit_text(text=text, reply_markup=reply_markup)
@@ -87,7 +82,6 @@ async def restore(
         i18n,
         srv.trashbin,
         srv.get_size(),
-        query.from_user.id,
         page=callback_data.page,
     )
     return await query_msg.edit_text(text=text, reply_markup=reply_markup)

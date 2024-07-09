@@ -8,7 +8,7 @@ from .cleanup import cleanup, cleanup_confirm
 from .fsnode import delete, restore, select
 from .menu import menu
 from .pag import pag
-from bot.filters import AuthorizedFilter, FromUserFilter
+from bot.filters import AuthorizedFilter, OnlyPrivateFilter
 from bot.keyboards.callback_data_factories import (
     TrashbinActions,
     TrashbinData,
@@ -24,7 +24,12 @@ def trashbin_router() -> Router:
     """
     router = Router()
 
-    router.message.register(menu, LazyFilter("trashbin-button"), AuthorizedFilter())
+    router.message.register(
+        menu,
+        LazyFilter("trashbin-button"),
+        AuthorizedFilter(),
+        OnlyPrivateFilter(),
+    )
 
     router.callback_query.register(
         select,
@@ -56,7 +61,6 @@ def trashbin_router() -> Router:
     router.callback_query.register(
         pag,
         TrashbinData.filter(F.action.in_({TrashbinActions.PAG_BACK, TrashbinActions.PAG_NEXT})),
-        FromUserFilter(TrashbinData),
     )
 
     return router

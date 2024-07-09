@@ -16,9 +16,9 @@ class AuthorizedFilter(BaseFilter):
     """
 
     async def __call__(self, event: TelegramObject, uow: UnitOfWork, i18n: I18nContext) -> bool:
-        """Checks if the user is authorized."""
+        """Check if the user is authorized."""
         if not isinstance(event, Message):
-            msg = "This filter is only usable with 'Message' event type."
+            msg = "'AuthorizedFilter' is only usable with 'Message' event type."
             raise TypeError(msg)
         if event.from_user is None:
             msg = "Event object must have the 'from_user' attribute."

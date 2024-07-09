@@ -1,4 +1,5 @@
 """Fsnode keyboards."""
+
 from typing import Any
 
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -15,7 +16,6 @@ class FsNodeMenuBoard(_FsNodeBaseBoard):
 
     :param fsnode: File or directory to perform operations on.
     :param attached_fsnodes: List of files attached to the fsnode.
-    :param from_user_id: Telegram user ID.
     :param kwargs: Additional parameters.
     """
 
@@ -27,16 +27,10 @@ class FsNodeMenuBoard(_FsNodeBaseBoard):
         self,
         fsnode: FsNode,
         attached_fsnodes: list[FsNode],
-        from_user_id: int,
         **kwargs: Any,
     ) -> None:
         self.fsnode = fsnode
-        super().__init__(
-            attached_fsnodes,
-            from_user_id,
-            **kwargs,
-            file_id=self.fsnode.file_id,
-        )
+        super().__init__(attached_fsnodes, **kwargs, file_id=self.fsnode.file_id)
 
     def build_actions_buttons(self) -> InlineKeyboardBuilder:
         """Build buttons for fsnode operations.
@@ -52,7 +46,6 @@ class FsNodeMenuBoard(_FsNodeBaseBoard):
                         action=self.actions.DOWNLOAD,
                         file_id=self.fsnode.file_id,
                         page=self.page,
-                        from_user_id=self.from_user_id,
                     ).pack(),
                 ),
             )
@@ -64,7 +57,6 @@ class FsNodeMenuBoard(_FsNodeBaseBoard):
                         action=self.actions.NEW,
                         file_id=self.fsnode.file_id,
                         page=self.page,
-                        from_user_id=self.from_user_id,
                     ).pack(),
                 ),
             )
@@ -76,7 +68,6 @@ class FsNodeMenuBoard(_FsNodeBaseBoard):
                         action=self.actions.DELETE,
                         file_id=self.fsnode.file_id,
                         page=self.page,
-                        from_user_id=self.from_user_id,
                     ).pack(),
                 ),
             )
@@ -88,7 +79,6 @@ class FsNodeMenuBoard(_FsNodeBaseBoard):
                         action=self.actions.BACK,
                         file_id=self.fsnode.file_id,
                         page=self.page,
-                        from_user_id=self.from_user_id,
                     ).pack(),
                 ),
             )
@@ -96,15 +86,10 @@ class FsNodeMenuBoard(_FsNodeBaseBoard):
         return builder
 
 
-def fsnode_new_board(
-    fsnode: FsNode,
-    from_user_id: int,
-    page: int = 0,
-) -> InlineKeyboardMarkup:
+def fsnode_new_board(fsnode: FsNode, page: int = 0) -> InlineKeyboardMarkup:
     """Build keyboard with file or folder creation variants.
 
     :param fsnode: File or directory to delete.
-    :param from_user_id: Telegram user ID.
     :param page: Page number.
     :return: InlineKeyboardMarkup object.
     """
@@ -117,7 +102,6 @@ def fsnode_new_board(
                         action=FsNodeMenuActions.UPLOAD,
                         file_id=fsnode.file_id,
                         page=page,
-                        from_user_id=from_user_id,
                     ).pack(),
                 ),
                 InlineKeyboardButton(
@@ -126,7 +110,6 @@ def fsnode_new_board(
                         action=FsNodeMenuActions.MKDIR,
                         file_id=fsnode.file_id,
                         page=page,
-                        from_user_id=from_user_id,
                     ).pack(),
                 ),
             ],
@@ -135,9 +118,8 @@ def fsnode_new_board(
                     text=LazyProxy("cancel-button"),
                     callback_data=FsNodeMenuData(
                         action=FsNodeMenuActions.CANCEL,
-                        page=page,
                         file_id=fsnode.file_id,
-                        from_user_id=from_user_id,
+                        page=page,
                     ).pack(),
                 ),
             ],
@@ -145,15 +127,10 @@ def fsnode_new_board(
     )
 
 
-def fsnode_delete_board(
-    fsnode: FsNode,
-    from_user_id: int,
-    page: int = 0,
-) -> InlineKeyboardMarkup:
+def fsnode_delete_board(fsnode: FsNode, page: int = 0) -> InlineKeyboardMarkup:
     """Builds keyboard with confirm and deny buttons for deleting file or directory.
 
     :param fsnode: File or directory to delete.
-    :param from_user_id: Telegram user ID.
     :param page: Page number.
     :return: InlineKeyboardMarkup object.
     """
@@ -164,18 +141,16 @@ def fsnode_delete_board(
                     text=LazyProxy("confirm-button"),
                     callback_data=FsNodeMenuData(
                         action=FsNodeMenuActions.DELETE_CONFIRM,
-                        page=page,
                         file_id=fsnode.file_id,
-                        from_user_id=from_user_id,
+                        page=page,
                     ).pack(),
                 ),
                 InlineKeyboardButton(
                     text=LazyProxy("deny-button"),
                     callback_data=FsNodeMenuData(
                         action=FsNodeMenuActions.CANCEL,
-                        page=page,
                         file_id=fsnode.file_id,
-                        from_user_id=from_user_id,
+                        page=page,
                     ).pack(),
                 ),
             ],
