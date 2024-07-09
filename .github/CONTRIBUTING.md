@@ -15,7 +15,7 @@ Contributions are welcome! Please see the [Table of Contents](#table-of-contents
 
 Before you ask a question, it is best to search for existing [Issues](https://github.com/blvdek/nc_tg_bot/issues) and [Discussions](https://github.com/blvdek/nc_tg_bot/discussions) that might help you. In case you have found a suitable issue or discussion and still need clarification, you can write your question in there. It is also advisable to search the internet for answers first.
 
-- Open an [Issue](https://github.com/blvdek/nc_tg_bot/issues/new).
+- Open an [Issue](https://github.com/blvdek/nc_tg_bot/issues/new) or [Discussions](https://github.com/blvdek/nc_tg_bot/discussions).
 - Provide context and project/platform versions as needed.
 
 ## I Want To Contribute
@@ -28,13 +28,6 @@ Before you ask a question, it is best to search for existing [Issues](https://gi
 - Open an [Issue](https://github.com/blvdek/nc_tg_bot/issues/new?template=BUG_REPORT.md).
 - Provide a clear description of the expected and actual behavior.
 - Describe the reproduction steps and provide context and version information.
-
-### Your First Code Contribution
-
-1. Fork the repository.
-2. Create a new branch.
-3. Clone your forked repository.
-4. Set the current working directory to the root folder of the cloned repository.
 
 ### Your First Code Contribution
 
