@@ -53,11 +53,12 @@ vi .env
 ```bash
 pre-commit install
 ```
-8. - You can run bot with your changes using docker compose:
-  ```bash
-  docker compose -f docker-compose.build.yaml build
-  docker compose -f docker-compose.build.yaml up
-  ```
+8. Run bot:
+  - With docker compose:
+    ```bash
+    make bot-build
+    make bot-run
+    ```
  - Or without docker compose:
 
     * Make migrations:
