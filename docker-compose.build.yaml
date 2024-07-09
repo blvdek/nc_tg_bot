@@ -1,4 +1,12 @@
 services:
+   nextcloud:
+    image: nextcloud
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - nc-data:/var/www/html
+
    redis:
       image: redis:alpine
       restart: on-failure

@@ -13,11 +13,18 @@
 
 ## 🤖 About Nextcloud Telegram Bot
 
-This Telegram bot simplifies the process of interacting with Nextcloud, allowing users to easily share files without navigating the Nextcloud interface directly.
+This Telegram bot simplifies the process of interacting with Nextcloud, allowing users to easily share files without navigating the Nextcloud interface directly. It also provides the following functionalities:
+
+- File management: users can navigate through the file hierarchy and manage files and folders.
+- Trash bin management: users can restore or delete files from the trash bin.
+- Search by name: users can search for files by their name.
+
+Much more can be easily implemented using the nc_py_api and aigoram libraries.
+
 
 ## ❓Motivation
 
-I created a Telegram bot to simplify sharing memes on Nextcloud for myself and friends. It provides a user-friendly interface for efficient communication and collaboration. The project streamlines the sharing process and enhances efficiency. This experience will be valuable in future projects involving external service integration with Telegram.
+I created a Telegram bot to simplify sharing memes on Nextcloud for myself and friends. It provides a user-friendly interface for efficient communication and collaboration. The project streamlines the sharing process and enhances efficiency. This experience will be valuable in my future projects involving external service integration with Telegram.
 
 
 ## 🚀 How to Use
@@ -107,11 +114,13 @@ To launch the bot you only need a token bot, database, Redis and Nextcloud setti
 
 To use the Nextcloud Telegram bot with Nextcloud, you can create a Docker Compose file that runs on the same Docker network as Nextcloud. This allows the bot to communicate with Nextcloud internally.
 
-To do this, you need to set the NC__PROTOCOL and NC__HOST environment variables in your Docker Compose file. These variables are used for internal communication between the bot and Nextcloud.
+To do this, you need to set the NC__PROTOCOL, NC__HOST and NC__PORT environment variables in your Docker Compose file or .env. These variables are used for internal communication between bot and Nextcloud.
 
-If the internal and external host and port are different, you can set the NC__EXT_HOST and NC__EXT_PORT variables. These variables are used for the external access link that the bot will send.
+If the internal and external host are different, you can set the NC__OVERWRITE__PROTOCOL, NC__OVERWRITE__HOST and NC__OVERWRITE__PORT variables. These variables are used for the external access link that the bot will send.
 
-If your NC__PROTOCOL and NC__HOST are already accessible from outside, you don't need to specify NC__EXT_HOST and NC__EXT_PORT. In this case, the bot will use NC__PROTOCOL and NC__HOST as the external access points.
+If your NC__PROTOCOL, NC__HOST and NC__PORT are already accessible from outside, you don't need to specify NC__OVERWRITE__PROTOCOL, NC__OVERWRITE__HOST and NC__OVERWRITE__PORT. In this case, the bot will use NC__PROTOCOL, NC__HOST and NC__PORT as the external access points.
+
+> 💡For example, you set the parameters of the docker internal network for NC__HOST and other default variables, then links of the following type will be created: http://nextcloud:80/... The user will not be able to open such links in browser, but if you specify OVERWRITE, the host will be replaced with OVERWRITE and the links will look like, for example: https://exmaple.com:80/... and the user will already be able to open such links in his browser.
 
 Here's an example of how you can configure this in your Docker Compose file:
 
@@ -197,6 +206,11 @@ networks:
 
 
 ## ⭐ Support
+If you find this project useful, you can support it in the following ways:
+
+- [🌟 Star](https://github.com/blvdek/nc_tg_bot/stargazers) the repository.
+- [💬 Contribute](https://github.com/blvdek/nc_tg_bot/blob/main/.github/CONTRIBUTING.md) to the project.
+- [📣 Share](https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fblvdek%2Fnc_tg_bot&text=Nextcloud%20Telegram%20Bot) this project on social media.
 
 
 ## ❗ More information

@@ -13,7 +13,7 @@ class LocaleManager(BaseManager):
             msg = "Event object must have the 'from_user' attribute."
             raise ValueError(msg)
         if event_from_user.language_code is None:
-            msg = ""
+            msg = "Telegram 'User' must have the 'language_code' attribute."
             raise ValueError(msg)
         return event_from_user.language_code
 

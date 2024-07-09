@@ -13,10 +13,6 @@ help =
 
     <b>Before starting to work with the bot, you need to go through authentication, enter /auth.</b> The site will open inside Telegram if the protocol is secure, otherwise, you will need to manually copy the link and open it in a browser to go through authentication. The time for authentication is limited, about which will be said in the authentication message.
 
-    <b>Safety</b>
-
-    You can use the bot in various chats, but keep in mind that other chat users will see the contents of your folders and various file information that may be confidential. But only the user who called the menu message can press the menu buttons.
-
     ---
 
     After going through authentication, you will get the main menu with various possibilities:
@@ -30,6 +26,8 @@ help =
     <u>{ fsnode-delete-button }:</u> Will call an additional menu where you need to confirm the deletion of the file, in case of confirmation the file will be deleted, in case of refusal you will return to the file management menu.
 
     <u>{ fsnode-download-button }:</u> After pressing, the bot will send you a message with the attached file as a document. If the file size exceeds the set limit in the bot settings (20MB by default), then a link to the file will be sent, which will be valid for 8 hours. Only files, but not directories, can be downloaded.
+
+    <u>{ fsnode-new-button }:</u> Open the file creation menu where you can upload something to Nextcloud or create a folder.
 
     <u>{ fsnode-upload-button }:</u> After pressing, the bot switches to waiting mode for the files you want to upload. Send the files, but keep in mind that only documents will be uploaded. When you finish sending files or change your mind, press the "{ stop-button }" button to return to the file management menu. Then, you will receive a new menu with an updated list of files inside the directory, where the new folder will appear. If you decide not to create a folder, press the "{ cancel-button }".
 

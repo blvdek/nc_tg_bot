@@ -4,6 +4,9 @@ Build dispatcher and bot instance for the Nextcloud Telegram Bot, configuringthe
 storage backend and integrating with the Telegram API.
 """
 
+from collections.abc import Callable
+from typing import Any, cast
+
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.client.session.aiohttp import AiohttpSession
@@ -42,4 +45,4 @@ _storage = (
     else MemoryStorage()
 )
 
-dp = Dispatcher(storage=_storage, _session_maker=session_maker)
+dp = Dispatcher(storage=_storage, _session_maker=cast(Callable[[], Any], session_maker))

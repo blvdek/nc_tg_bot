@@ -48,6 +48,6 @@ fsnode-delete-button = 🔴 Delete
 fsnode-download-button = ⬇️ Download
 fsnode-new-button = 🆕 New
 fsnode-upload-button = ⬆️ Upload
-fsnode-mkdir-button = 🆕 Create folder
+fsnode-mkdir-button = 📁 Create folder
 fsnode-pag-back-button = ⬅️
 fsnode-pag-next-button = ➡️
