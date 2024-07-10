@@ -15,20 +15,28 @@ from bot.handlers import routers
 from bot.middlewares import LocaleManager, QueryMsgMD
 
 
-async def _set_menu_buttom(bot: Bot) -> None:
+async def _set_menu_button(bot: Bot) -> None:
     if settings.nc.overwrite and settings.nc.overwrite.protocol == "https":
-        await bot.set_chat_menu_button(
-            menu_button=MenuButtonWebApp(
-                type=MenuButtonType.WEB_APP,
-                text="Nextcloud",
-                web_app=WebAppInfo(
-                    url=f"{settings.nc.overwrite.protocol}://{settings.nc.overwrite.host}:{settings.nc.overwrite.port}",
-                ),
+        url = f"{settings.nc.overwrite.protocol}://{settings.nc.overwrite.host}:{settings.nc.overwrite.port}"
+    elif settings.nc.protocol == "https":
+        url = f"{settings.nc.protocol}://{settings.nc.host}:{settings.nc.port}"
+    else:
+        return
+
+    await bot.set_chat_menu_button(
+        menu_button=MenuButtonWebApp(
+            type=MenuButtonType.WEB_APP,
+            text="Nextcloud",
+            web_app=WebAppInfo(
+                url=url,
             ),
-        )
+        ),
+    )
 
 
 async def _set_bot_menu(bot: Bot) -> None:
+    await _set_menu_button(bot)
+
     commands = [
         BotCommand(command="help", description="Get message with help text"),
         BotCommand(command="auth", description="Start authentification in Nextcloud"),
