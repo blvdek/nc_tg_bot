@@ -91,7 +91,7 @@ To launch the bot you only need a token bot, database, Redis and Nextcloud setti
 | `NC__CHUNK_SIZE`           | Size of file chunks for uploads and downloads. `Defaults` to 5242880.                                                                               |
 | `WEBHOOK__HOST`            | The host of webhook. `Optional`.                                                                                                                    |
 | `WEBHOOK__PORT`            | The port number on which the webhook server listens. `Optional`.                                                                                    |
-| `WEBHOOK__URL`             | The base URL for the webhook endpoint. `Optional`.                                                                                                  |
+| `WEBHOOK__BASE_URL`        | The base URL for the webhook endpoint. `Optional`.                                                                                                  |
 | `WEBHOOK__PATH`            | The path under which the webhook endpoint is accessible. `Optional`. `Defaults` to "/webhook".                                                      |
 | `WEBHOOK__SECRET`          | A secret token used for webhook verification. `Optional`.                                                                                           |
 | `REDIS__HOST`              | Hostname of the Redis server. `Optional`                                                                                                            |
