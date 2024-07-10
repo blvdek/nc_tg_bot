@@ -78,14 +78,14 @@ class Webhook(BaseModel):
 
     :param host: The host of webhook.
     :param port: The port number on which the webhook server listens.
-    :param url: The base URL for the webhook endpoint.
+    :param base_url: The base URL for the webhook endpoint.
     :param path: The path under which the webhook endpoint is accessible.
     :param secret: A secret token used for webhook verification, defaults to None.
     """
 
     host: str
     port: int
-    url: str
+    base_url: str
     path: str
     secret: str | None = None
 

@@ -1,19 +1,21 @@
 """Functions to handle bot startup, shutdown, and webhook operations."""
 
+import asyncio
+
 from aiogram import Bot, Dispatcher, loggers
 from aiogram.enums import MenuButtonType
 from aiogram.types import BotCommand, MenuButtonWebApp, WebAppInfo
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores.fluent_runtime_core import FluentRuntimeCore
-from aiohttp import web
+from aiohttp.web import Application, AppRunner, TCPSite
 
 from bot.core.config import settings
 from bot.handlers import routers
 from bot.middlewares import LocaleManager, QueryMsgMD
 
 
-async def _set_bot_menu(bot: Bot) -> None:
+async def _set_menu_buttom(bot: Bot) -> None:
     if settings.nc.overwrite and settings.nc.overwrite.protocol == "https":
         await bot.set_chat_menu_button(
             menu_button=MenuButtonWebApp(
@@ -25,6 +27,8 @@ async def _set_bot_menu(bot: Bot) -> None:
             ),
         )
 
+
+async def _set_bot_menu(bot: Bot) -> None:
     commands = [
         BotCommand(command="help", description="Get message with help text"),
         BotCommand(command="auth", description="Start authentification in Nextcloud"),
@@ -74,48 +78,14 @@ async def on_shutdown(dispatcher: Dispatcher, bot: Bot) -> None:
     loggers.dispatcher.info("Bot stopped.")
 
 
-async def webhook_startup(
-    dispatcher: Dispatcher,
-    bot: Bot,
-    url: str,
-    secret: str | None = None,
-) -> None:
-    """Registers the bot's webhook with Telegram.
-
-    :param dispatcher: Aiogram dispatcher instance.
-    :param bot: Aiogram bot instance.
-    :param url: The base URL for the webhook endpoint.
-    :param secret: A secret token used for webhook verification, defaults to None.
-    """
-    if await bot.set_webhook(
-        url,
-        allowed_updates=dispatcher.resolve_used_update_types(),
-        secret_token=secret,
-    ):
-        loggers.webhook.info(f"Bot webhook successfully set on {url}.")
-        return
-    loggers.webhook.info(f"Failed to set bot webhook on url {url}.")
-
-
-async def webhook_shutdown(bot: Bot) -> None:
-    """Deregisters the webhook and closes the bot session.
-
-    :param bot: Aiogram bot instance.
-    """
-    if await bot.delete_webhook():
-        loggers.webhook.info("Dropped bot webhook.")
-    else:
-        loggers.webhook.error("Failed to drop bot webhook.")
-    await bot.session.close()
-
-
 async def webhook_run(
     dp: Dispatcher,
     bot: Bot,
+    base_url: str,
     path: str,
     host: str,
     port: int,
-    secret: str | None = None,
+    secret: str | None,
 ) -> None:
     """Sets up and starts the webhook server for receiving updates via HTTP requests.
 
@@ -126,18 +96,28 @@ async def webhook_run(
     :param port: The port number on which the webhook server listens.
     :param secret: A secret token used for webhook verification, defaults to None.
     """
-    app = web.Application()
+    loggers.dispatcher.info("Register webhook.")
+    url = f"{base_url}{path}"
 
-    SimpleRequestHandler(
+    app = Application()
+
+    await bot.set_webhook(
+        url,
+        allowed_updates=dp.resolve_used_update_types(),
+        secret_token=secret,
+    )
+
+    webhook_requests_handler = SimpleRequestHandler(
         dispatcher=dp,
         bot=bot,
         secret_token=secret,
-    ).register(app, path=path)
-
+    )
+    webhook_requests_handler.register(app, path=path)
     setup_application(app, dp, bot=bot)
 
-    app.update(**dp.workflow_data, bot=bot)
-    dp.startup.register(webhook_startup)
-    dp.shutdown.register(webhook_shutdown)
+    runner = AppRunner(app)
+    await runner.setup()
+    site = TCPSite(runner, host=host, port=port)
+    await site.start()
 
-    web.run_app(app=app, host=host, port=port)
+    await asyncio.Event().wait()

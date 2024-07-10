@@ -67,7 +67,7 @@ lint.isort.no-lines-before = [
   "future",
   "standard-library",
 ]
-lint.pylint.max-args = 6
+lint.pylint.max-args = 7
 
 [tool.mypy]
 python_version = "3.12"

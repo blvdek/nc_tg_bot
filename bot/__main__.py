@@ -19,13 +19,14 @@ async def main() -> None:
         await webhook_run(
             dp,
             bot,
+            settings.webhook.base_url,
             settings.webhook.path,
             settings.webhook.host,
             settings.webhook.port,
             settings.webhook.secret,
         )
-        return
-    await dp.start_polling(bot)
+    else:
+        await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
