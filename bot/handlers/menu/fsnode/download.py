@@ -39,11 +39,11 @@ async def download(
     if srv.fsnode.info.size == 0:
         return await query.answer(text=i18n.get("fsnode-empty"))
 
-    if srv.fsnode.info.size > settings.tg.max_upload_size:
+    if srv.fsnode.info.size > settings.tg.max_download_size:
         text = i18n.get(
             "fsnode-size-limit",
             size=get_human_readable_bytes(srv.fsnode.info.size),
-            size_limit=get_human_readable_bytes(settings.tg.max_upload_size),
+            size_limit=get_human_readable_bytes(settings.tg.max_download_size),
         )
         return await query.answer(text=text)
 

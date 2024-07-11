@@ -5,10 +5,13 @@ of the Nextcloud Telegram Bot. These settings include database connection detail
 configuration, webhook settings, Nextcloud server details, and Telegram bot credentials.
 """
 
-from pydantic import BaseModel, field_validator
+from typing import Self
+
+from pydantic import BaseModel, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
 
+DEFAULT_PORT = 80
 MAX_TG_FILE_SIZE = 2**31
 MIN_CHUNK_SIZE = 5 * 2**20
 MAX_CHUNK_SIZE = MAX_TG_FILE_SIZE
@@ -104,7 +107,7 @@ class Overwrite(BaseModel):
 
     protocol: str
     host: str
-    port: int = 80
+    port: int
 
 
 class Nextcloud(BaseModel):
@@ -144,24 +147,36 @@ class Telegram(BaseModel):
     :param token: Token used to authenticate the bot with the Telegram API.
     :param page_size: Page size for pagination for Telegram API, defaults to 8.
     :param max_upload_size: Maximum size of a file that can be uploaded, defaults to 20971520.
+    :param max_download_size:
     :param drop_pending_updates: Whether to drop pending updates on bot restart, defaults to True.
     :param api_server: The URL of the Telegram API server, defaults to None.
+    :param local_mode: Use local requests if True, defaults to False.
     """
 
     token: str
     page_size: int = 8
     max_upload_size: int = 20971520
+    max_download_size: int = 20971520
     drop_pending_updates: bool = True
     api_server: str | None = None
+    local_mode: bool = False
 
     @field_validator("max_upload_size")
     @classmethod
-    def check_max_upload_size(cls, v: int) -> int:
+    def validate_max_upload_size(cls, v: int) -> int:
         """Validates the max upload size against maximum limit."""
         if v > MAX_TG_FILE_SIZE:
             msg = f"The max size must be less than {MAX_TG_FILE_SIZE}."
             raise ValueError(msg)
         return v
+
+    @model_validator(mode="after")
+    def validate_local_mode(self) -> Self:
+        """Checks if the `local_mode` field is True and if the `api_server` field is None."""
+        if self.local_mode and self.api_server is None:
+            msg = "Local mode requires API server to be set."
+            raise ValueError(msg)
+        return self
 
 
 class Settings(BaseSettings):

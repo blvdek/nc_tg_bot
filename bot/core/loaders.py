@@ -7,7 +7,7 @@ storage backend and integrating with the Telegram API.
 from collections.abc import Callable
 from typing import Any, cast
 
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, loggers
 from aiogram.client.default import DefaultBotProperties
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.client.telegram import TelegramAPIServer
@@ -21,7 +21,12 @@ from bot.db import session_maker
 
 session = None
 if settings.tg.api_server:
-    session = AiohttpSession(api=TelegramAPIServer.from_base(settings.tg.api_server))
+    loggers.dispatcher.info("Bot works with self-hosted API server.")
+    if settings.tg.local_mode:
+        loggers.dispatcher.info("Work with API in local mode.")
+    session = AiohttpSession(
+        api=TelegramAPIServer.from_base(settings.tg.api_server, is_local=settings.tg.local_mode),
+    )
 
 bot = Bot(
     token=settings.tg.token,
