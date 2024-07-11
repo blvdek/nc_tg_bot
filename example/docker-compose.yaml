@@ -1,0 +1,88 @@
+services:
+  nextcloud:
+    image: nextcloud
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - nextcloud-data:/var/www/html
+
+  api-backend:
+    image: aiogram/telegram-bot-api
+    environment:
+      TELEGRAM_LOCAL: 1
+      TELEGRAM_API_ID: "<api-id>"
+      TELEGRAM_API_HASH: "<api-hash>"
+    volumes:
+      - telegram-bot-api-data:/var/lib/telegram-bot-api
+
+  api:
+    image: nginx:alpine
+    restart: on-failure
+    depends_on:
+      - api-backend
+    volumes:
+      - telegram-bot-api-data:/var/lib/telegram-bot-api
+      - ./nginx:/etc/nginx/conf.d/
+
+  redis:
+    image: redis:alpine
+    restart: on-failure
+    volumes:
+        - redis-data:/redis_data
+
+  db:
+    image: postgres:alpine
+    restart: on-failure
+    env_file: ../.env
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "postgres"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  bot:
+    image: bagoont/nc_tg_bot
+    restart: always
+    environment:
+      TG__TOKEN: "<token>"
+      TG__MAX_UPLOAD_SIZE: 104857600 #100Mb
+      TG__MAX_DOWNLOAD_SIZE: 104857600 #100Mb
+      TG__API_SERVER: "http://api"
+      TG__LOCAL_MODE: True
+
+      NC__PROTOCOL: "http"
+      NC__HOST: "nextcloud"
+      NC__PORT: 80
+
+      NC__OVERWRITE__PROTOCOL: "https"
+      NC__OVERWRITE__HOST: "<nextcloud-domain>"
+      NC__OVERWRITE__PORT: 443
+
+      DB__HOST: "db"
+      DB__USER: "postgres"
+      DB__DB: "postgres"
+      DB__PASSWORD: "postgres"
+
+      REDIS__HOST: "redis"
+
+      WEBHOOK__HOST: "bot"
+      WEBHOOK__PORT: 8000
+      WEBHOOK__BASE_URL: "<webhook-url>"
+      WEBHOOK__PATH: "/webhook"
+
+    ports:
+      - 8000:8000
+    depends_on:
+      - api
+      - redis
+      - db
+    volumes:
+      - telegram-bot-api-data:/var/lib/telegram-bot-api
+
+volumes:
+  db-data:
+  redis-data:
+  telegram-bot-api-data:
+  nextcloud-data:

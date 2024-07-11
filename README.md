@@ -31,9 +31,11 @@ I created a Telegram bot to simplify sharing memes on Nextcloud for myself and f
 
 > 💡Installation presupposes that Nextcloud is already installed and configured.
 
+There is an [example](https://github.com/blvdek/nc_tg_bot/tree/main/example) in this repository, you can use it as a guide.
+
 - First of all, you need to clone the repository and go to it:
 ```bash
-git clone https://github.com/blvdek/nc_tg_bot.git 
+git clone https://github.com/blvdek/nc_tg_bot.git
 cd nc_tg_bot
 ```
 
@@ -107,8 +109,8 @@ To launch the bot you only need a token bot, database, Redis and Nextcloud setti
 | `REDIS__PORT`              | 6379                     | Port number on which the Redis server listens. `Optional`. `Defaults` to 6379.                                                                 |
 | `REDIS__USER`              | "redis"                  | Uername for Redis authentication. `Optional`.                                                                                                  |
 | `REDIS__PASSWORD`          | "redis"                  | Password for Redis authentication. `Optional`.                                                                                                 |
-| `REDIS__STATE_TTL`         |                          | Time-to-live for state data in Redis. `Optional`.                                                                                              |
-| `REDIS__DATA_TTL`          |                          | Time-to-live for operational data in Redis. `Optional`.                                                                                        |
+| `REDIS__STATE_TTL`         | 3600                     | Time-to-live for state data in Redis. `Optional`.                                                                                              |
+| `REDIS__DATA_TTL`          | 3600                     | Time-to-live for operational data in Redis. `Optional`.                                                                                        |
 | `DB__HOST`                 | "db"                     | The hostname of the database server.                                                                                                           |
 | `DB__USER`                 | "postgres"               | The username for database authentication.                                                                                                      |
 | `DB__PASSWORD`             | "postgres"               | The password for database authentication.                                                                                                      |

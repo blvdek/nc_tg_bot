@@ -3,6 +3,7 @@
 from typing import cast
 
 from aiogram import Bot
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Document, Message
 from aiogram_i18n import I18nContext, LazyProxy
@@ -123,7 +124,11 @@ async def upload(  # noqa: PLR0911
     if tg_file_obj.file_path is None:
         return await message.reply(text=i18n.get("fsnode-upload-error"))
 
-    buff = await bot.download_file(tg_file_obj.file_path, chunk_size=settings.nc.chunksize)
+    try:
+        buff = await bot.download_file(tg_file_obj.file_path, chunk_size=settings.nc.chunksize)
+    except TelegramBadRequest:
+        return await message.reply(text=i18n.get("fsnode-upload-error"))
+
     if buff is None:
         return await message.reply(text=i18n.get("fsnode-upload-error"))
 

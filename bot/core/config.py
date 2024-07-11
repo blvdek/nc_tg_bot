@@ -11,8 +11,8 @@ from pydantic import BaseModel, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
 
-DEFAULT_PORT = 80
 MAX_TG_FILE_SIZE = 2**31
+DEFAULT_SIZE_LIMIT = 20 * 2**20
 MIN_CHUNK_SIZE = 5 * 2**20
 MAX_CHUNK_SIZE = MAX_TG_FILE_SIZE
 
@@ -122,7 +122,7 @@ class Nextcloud(BaseModel):
 
     protocol: str = "https"
     host: str
-    port: int = 80
+    port: int = 443
     chunksize: int = MIN_CHUNK_SIZE
     overwrite: Overwrite | None = None
 
@@ -146,8 +146,10 @@ class Telegram(BaseModel):
 
     :param token: Token used to authenticate the bot with the Telegram API.
     :param page_size: Page size for pagination for Telegram API, defaults to 8.
-    :param max_upload_size: Maximum size of a file that can be uploaded, defaults to 20971520.
-    :param max_download_size:
+    :param max_upload_size: Maximum size of a file that can be uploaded, defaults to
+        DEFAULT_SIZE_LIMIT.
+    :param max_download_size: Maximum size of a file that can be downloaded, defaults to
+        DEFAULT_SIZE_LIMIT.
     :param drop_pending_updates: Whether to drop pending updates on bot restart, defaults to True.
     :param api_server: The URL of the Telegram API server, defaults to None.
     :param local_mode: Use local requests if True, defaults to False.
@@ -155,8 +157,8 @@ class Telegram(BaseModel):
 
     token: str
     page_size: int = 8
-    max_upload_size: int = 20971520
-    max_download_size: int = 20971520
+    max_upload_size: int = DEFAULT_SIZE_LIMIT
+    max_download_size: int = DEFAULT_SIZE_LIMIT
     drop_pending_updates: bool = True
     api_server: str | None = None
     local_mode: bool = False
