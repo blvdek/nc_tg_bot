@@ -73,41 +73,43 @@ poetry run python -m bot
 
 To launch the bot you only need a token bot, database, Redis and Nextcloud settings, everything else can be left out. For more information, see `.env.example`.
 
-| Name                       | Description                                                                                                                                         |
-| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `APPNAME`                  | Name of the application that will be displayed on the Nextcloud authorization page. `Defaults` to "Nextcloud Telegram Bot".                         |
-| `LOGGING`                  | Logging level. `Possible values:` "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL". `Defaults` to "INFO".                                            |
-| `TG__TOKEN`                | Telegram token that can be obtained from Bot Father in Telegram.                                                                                    |
-| `TG__PAGE_SIZE`            | Page size for pagination for fsnodes on inline keyboard. `Defaults` to 8.                                                                           |
-| `TG__MAX_UPLOAD_SIZE`      | Maximum size of a file that can be uploaded in Telegram. Can be increased when using the self-hosted Telegram api. `Defaults` to 20971520.          |
-| `TG__DROP_PENDING_UPDATES` | Whether to drop pending updates on bot restart. `Defaults` to True.                                                                                 |
-| `TG__API_SERVER`           | The URL of the self-hosted Telegram API server. `Optional`.                                                                                         |
-| `NC__PROTOCOL`             | Protocol used to communicate with the Nextcloud server. `Defaults` to "https".                                                                      |
-| `NC__HOST`                 | Hostname of the Nextcloud server.                                                                                                                   |
-| `NC__PORT`                 | Port number on which the Nextcloud server listens. `Defaults` to 80.                                                                                |
-| `NC__OVERWRITE__PROTOCOL`  | Overwrites the NC__PROTOCOL used to communicate with the Nextcloud server in links to Nextcloud sent by the bot. `Optional`. `Defaults` to "https". |
-| `NC__OVERWRITE__HOST`      | Overwrites the NC__HOST used to communicate with the Nextcloud server in links to Nextcloud sent by the bot. `Optional`.                            |
-| `NC__OVERWRITE__PORT`      | Overwrites the NC__PORT used to communicate with the Nextcloud server in links to Nextcloud sent by the bot. `Optional`. `Defaults` to 80.          |
-| `NC__CHUNK_SIZE`           | Size of file chunks for uploads and downloads. `Defaults` to 5242880.                                                                               |
-| `WEBHOOK__HOST`            | The host of webhook. `Optional`.                                                                                                                    |
-| `WEBHOOK__PORT`            | The port number on which the webhook server listens. `Optional`.                                                                                    |
-| `WEBHOOK__BASE_URL`        | The base URL for the webhook endpoint. `Optional`.                                                                                                  |
-| `WEBHOOK__PATH`            | The path under which the webhook endpoint is accessible. `Optional`. `Defaults` to "/webhook".                                                      |
-| `WEBHOOK__SECRET`          | A secret token used for webhook verification. `Optional`.                                                                                           |
-| `REDIS__HOST`              | Hostname of the Redis server. `Optional`                                                                                                            |
-| `REDIS__DB`                | Database number within Redis to connect to. `Optional`. `Defaults` to 1.                                                                            |
-| `REDIS__PORT`              | Port number on which the Redis server listens. `Optional`. `Defaults` to 6379.                                                                      |
-| `REDIS__USER`              | Uername for Redis authentication. `Optional`.                                                                                                       |
-| `REDIS__PASSWORD`          | Password for Redis authentication. `Optional`.                                                                                                      |
-| `REDIS__STATE_TTL`         | Time-to-live for state data in Redis. `Optional`.                                                                                                   |
-| `REDIS__DATA_TTL`          | Time-to-live for operational data in Redis. `Optional`.                                                                                             |
-| `DB__HOST`                 | The hostname of the database server.                                                                                                                |
-| `DB__USER`                 | The username for database authentication.                                                                                                           |
-| `DB__PASSWORD`             | The password for database authentication.                                                                                                           |
-| `DB__DB`                   | The name of the database.                                                                                                                           |
-| `DB__PORT`                 | The port number on which the database server listens. `Defaults` to 5432.                                                                           |
-| `DB__DRIVER`               | The database driver to use. `Defaults` to "asyncpg".                                                                                                |
-| `DB__DATABASE_SYSTEM`      | The type of database system. `Default`s to "postgresql".                                                                                            |
+| Name                       | Example                  | Description                                                                                                                                    |
+| -------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `APPNAME`                  | "Nextcloud Telegram Bot" | Name of the application that will be displayed on the Nextcloud authorization page. `Defaults` to "Nextcloud Telegram Bot".                    |
+| `LOGGING`                  | "INFO"                   | Logging level. `Possible values:` "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL". `Defaults` to "INFO".                                       |
+| `TG__TOKEN`                |                          | Telegram token that can be obtained from Bot Father in Telegram.                                                                               |
+| `TG__PAGE_SIZE`            | 8                        | Page size for pagination for fsnodes on inline keyboard. `Defaults` to 8.                                                                      |
+| `TG__MAX_UPLOAD_SIZE`      | 20971520                 | Maximum size of a file that can be uploaded in Telegram. Can be increased when using the self-hosted Telegram api. `Defaults` to 20971520.     |
+| `TG__MAX_UPLOAD_SIZE`      | 20971520                 | Maximum size of a file that can be downloaded from Telegram. Can be increased when using the self-hosted Telegram api. `Defaults` to 20971520. |
+| `TG__DROP_PENDING_UPDATES` | True                     | Whether to drop pending updates on bot restart. `Defaults` to True.                                                                            |
+| `TG__API_SERVER`           | "http://api"             | The URL of the self-hosted Telegram API server. `Optional`.                                                                                    |
+| `TG__LOCAL_MODE`           | True                     | Use local requests to self-hosted Telegram API if True, defaults to False.. `Optional`.                                                        |
+| `NC__PROTOCOL`             | "https"                  | Protocol used to communicate with the Nextcloud server. `Defaults` to "https".                                                                 |
+| `NC__HOST`                 | "nextcloud"              | Hostname of the Nextcloud server.                                                                                                              |
+| `NC__PORT`                 | 443                      | Port number on which the Nextcloud server listens. `Defaults` to 443.                                                                          |
+| `NC__OVERWRITE__PROTOCOL`  | "https"                  | Overwrites the NC__PROTOCOL used to communicate with the Nextcloud server in links to Nextcloud sent by the bot. `Optional`.                   |
+| `NC__OVERWRITE__HOST`      | "cloud.example.com"      | Overwrites the NC__HOST used to communicate with the Nextcloud server in links to Nextcloud sent by the bot. `Optional`.                       |
+| `NC__OVERWRITE__PORT`      | 443                      |Overwrites the NC__PORT used to communicate with the Nextcloud server in links to Nextcloud sent by the bot. `Optional`.                        |
+| `NC__CHUNK_SIZE`           | 5242880                  | Size of file chunks for uploads and downloads. `Defaults` to 5242880.                                                                          |
+| `WEBHOOK__HOST`            | "bot"              |     | The host of webhook. `Optional`.                                                                                                               |
+| `WEBHOOK__PORT`            | 8000                     | The port number on which the webhook server listens. `Optional`.                                                                               |
+| `WEBHOOK__BASE_URL`        | "https://wh.example.com" | The base URL for the webhook endpoint. `Optional`.                                                                                             |
+| `WEBHOOK__PATH`            | "/webhook"               | The path under which the webhook endpoint is accessible. `Optional`.                                                                           |
+| `WEBHOOK__SECRET`          |                          | A secret token used for webhook verification. `Optional`.                                                                                      |
+| `REDIS__HOST`              | "redis"                  | Hostname of the Redis server. `Optional`                                                                                                       |
+| `REDIS__DB`                | 1                        | Database number within Redis to connect to. `Optional`. `Defaults` to 1.                                                                       |
+| `REDIS__PORT`              | 6379                     | Port number on which the Redis server listens. `Optional`. `Defaults` to 6379.                                                                 |
+| `REDIS__USER`              | "redis"                  | Uername for Redis authentication. `Optional`.                                                                                                  |
+| `REDIS__PASSWORD`          | "redis"                  | Password for Redis authentication. `Optional`.                                                                                                 |
+| `REDIS__STATE_TTL`         |                          | Time-to-live for state data in Redis. `Optional`.                                                                                              |
+| `REDIS__DATA_TTL`          |                          | Time-to-live for operational data in Redis. `Optional`.                                                                                        |
+| `DB__HOST`                 | "db"                     | The hostname of the database server.                                                                                                           |
+| `DB__USER`                 | "postgres"               | The username for database authentication.                                                                                                      |
+| `DB__PASSWORD`             | "postgres"               | The password for database authentication.                                                                                                      |
+| `DB__DB`                   | "postgres"               | The name of the database.                                                                                                                      |
+| `DB__PORT`                 | 5432                     | The port number on which the database server listens. `Defaults` to 5432.                                                                      |
+| `DB__DRIVER`               | "asyncpg"                | The database driver to use. `Defaults` to "asyncpg".                                                                                           |
+| `DB__DATABASE_SYSTEM`      | "postgresql"             | The type of database system. `Default`s to "postgresql".                                                                                       |
 
 
 ## ☁️ Docker and Nextcloud
