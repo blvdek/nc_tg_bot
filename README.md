@@ -31,6 +31,12 @@ I created a Telegram bot to simplify sharing memes on Nextcloud for myself and f
 
 > 💡Installation presupposes that Nextcloud is already installed and configured.
 
+- First of all, you need to clone the repository and go to it:
+```bash
+git clone https://github.com/blvdek/nc_tg_bot.git 
+cd nc_tg_bot
+```
+
 ### 🐳 Running in Docker _(recommended method)_
 
 - Create and edit .env file:
