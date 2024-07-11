@@ -11,7 +11,7 @@
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Code style"></a>
 <p>
 
-## 🤖 About Nextcloud Telegram Bot
+## 🤖 About [Nextcloud Telegram Bot](https://github.com/blvdek/nc_tg_bot)
 
 This Telegram bot simplifies the process of interacting with Nextcloud, allowing users to easily share files without navigating the Nextcloud interface directly. It also provides the following functionalities:
 
@@ -19,7 +19,7 @@ This Telegram bot simplifies the process of interacting with Nextcloud, allowing
 - Trash bin management: users can restore or delete files from the trash bin.
 - Search by name: users can search for files by their name.
 
-Much more can be easily implemented using the nc_py_api and aigoram libraries.
+Much more can be easily implemented using the [nc_py_api](https://github.com/cloud-py-api/nc_py_api) and [aigoram](https://github.com/aiogram/aiogram) libraries.
 
 
 ## ❓Motivation
