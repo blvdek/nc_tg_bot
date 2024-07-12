@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/blvdek/nc_tg_bot/main/assets/logo.png" width="250" alt="NcPyApi logo">
+    <img src="https://raw.githubusercontent.com/blvdek/nc_tg_bot/main/assets/logo.png" width="250" alt="nc_tg_bot logo">
 </p>
 
 <h1 align="center"><em>Nextcloud Telegram Bot</em></h1>
@@ -29,9 +29,9 @@ I created a Telegram bot to simplify sharing memes on Nextcloud for myself and f
 
 ## 🚀 How to Use
 
-> 💡Installation presupposes that Nextcloud is already installed and configured.
+*There is an [example](https://github.com/blvdek/nc_tg_bot/tree/main/example) in this repository, you can use it as a guide.*
 
-There is an [example](https://github.com/blvdek/nc_tg_bot/tree/main/example) in this repository, you can use it as a guide.
+> 💡Installation presupposes that Nextcloud is already installed and configured.
 
 - First of all, you need to clone the repository and go to it:
 ```bash

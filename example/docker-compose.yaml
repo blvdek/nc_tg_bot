@@ -9,6 +9,7 @@ services:
 
   api-backend:
     image: aiogram/telegram-bot-api
+    restart: on-failure
     environment:
       TELEGRAM_LOCAL: 1
       TELEGRAM_API_ID: "<api-id>"
@@ -75,6 +76,7 @@ services:
     ports:
       - 8000:8000
     depends_on:
+      - nextcloud
       - api
       - redis
       - db

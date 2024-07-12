@@ -15,9 +15,9 @@ Let's take a look at each service:
 
 - **bot**: Nextcloud telegram bot. You can see the description of the environment variables in the [README.md](https://github.com/blvdek/nc_tg_bot/blob/main/README.md) of this repository or in the [.env.example](https://github.com/blvdek/nc_tg_bot/blob/main/.env.example).
 
-You need the <nextcloud-domain> point to port 8080 of the Nextcloud service and the domain from <webhook-url> point to the bot's webhook on port 8000.
+You need the `<nextcloud-domain>` point to port 8080 of the Nextcloud service and the domain from `<webhook-url>` point to the bot's webhook on port 8000.
 
 After all preparations run:
-```docker
+```bash
 docker compose up
 ```

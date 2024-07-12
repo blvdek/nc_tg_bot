@@ -2,7 +2,8 @@
 .git
 .github/
 .*ignore
-tests/
+assets/
+example/
 Makefile
 README.md
 LICENSE
